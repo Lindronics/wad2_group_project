@@ -1,0 +1,9 @@
+WHATS ON DOT COM
+
+Website that shows current (imminent) events that are close to the user using google maps api integration.
+
+User profiles for making an event
+
+Friend relationship for seeing private events.
+
+TBC
