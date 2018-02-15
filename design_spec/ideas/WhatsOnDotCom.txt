@@ -1,4 +1,4 @@
-WHATS ON DOT COM
+# WHATS ON DOT COM
 
 Website that shows current (imminent) events that are close to the user using google maps api integration.
 
