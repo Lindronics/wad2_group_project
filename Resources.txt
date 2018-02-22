@@ -1,0 +1,2 @@
+https://developers.google.com/maps/solutions/store-locator/clothing-store-locator
+Example on how to use google maps api in a way pertinent to us
