@@ -7,12 +7,13 @@ from django.contrib.auth.models import User
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     description = models.CharField(max_length=1024, blank=True, null=True)
+    profile_picture = models.ImageField(upload_to="profile_images", blank=True)
 
     # Foreign keys
-    follows = models.ManyToManyField("this", blank=True)
+    follows = models.ManyToManyField("self", blank=True)
 
     def __str__(self):
-        return self.user
+        return self.user.username
 
 # CATEGORY:
 # Event category
@@ -21,6 +22,9 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name_plural = "Categories"
 
 # TAG:
 # Tags for events
@@ -38,13 +42,14 @@ class Event(models.Model):
     date_time = models.DateTimeField()
     slug = models.SlugField(unique=True)
     location_info = models.CharField(max_length=128)
+    event_picture = models.ImageField(upload_to="event_images", blank=True)
 
     # perhaps it makes more sense to split the address into different fields?
     address = models.CharField(max_length=1024)
 
     # Foreign keys
-    hosts = models.ManyToManyField(UserProfile)
-    interested = models.ManyToManyField(UserProfile)
+    host = models.ManyToManyField(UserProfile, related_name="host")
+    interested = models.ManyToManyField(UserProfile, related_name="interested", blank=True)
     category = models.ForeignKey(Category)
     tags = models.ManyToManyField(Tag, blank=True)
 
