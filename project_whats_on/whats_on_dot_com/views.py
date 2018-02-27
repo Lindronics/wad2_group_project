@@ -1,3 +1,7 @@
 from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseRedirect
 
-# Create your views here.
+# INDEX
+# home page
+def index(request):
+    return HttpResponse("test")
