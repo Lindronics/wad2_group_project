@@ -1,0 +1,8 @@
+# Files we want to exclude from tracking by Git.
+
+# Any .pyc file in the project: they're generated locally by the interpreter anyway and otherwise add to clutter and bulk.
+**/*.pyc
+
+# For those working with an Intellij IDE, we want to avoid tracking unnecessary dirs others may not have.
+.idea/
+.vcs/
