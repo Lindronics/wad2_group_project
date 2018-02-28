@@ -1,2 +1,29 @@
 <!DOCTYPE html>
+{% load staticfiles %}
 
+<html lang="en">
+<head>
+    <title>
+        {% block title_block %}
+            What's On
+        {% endblock %}
+    </title>
+</head>
+
+<body>
+    <div id="banner">
+        <!-- Placeholder for top bar as in design concepts. -->
+        <nav id="navbar">
+            <a href="{% url 'events' %}">Events</a>
+            | <a href="{% url 'profiles' %}">Profiles</a>
+            | <a href="{% url 'add_event'%}">Add Event</a>
+            <div id="loginbar">
+            </div>
+        </nav>
+    </div>
+    
+    {% block body_block %}
+        <!-- Override this block for page content! -->
+    {% endblock %}
+</body>
+</html>
