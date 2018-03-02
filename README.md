@@ -1,9 +1,16 @@
 # wad2_group_project
+*WhatsOnDotCom*
 
+Find what's on where and when: event pages with extroversion!
 ## VIRTUALENV DEPENDENCIES
-Python version: python3.6
+| Package | Version |
+| ----------|---------|
+| Python |3.6|
+|django |1.11.7|
+|pillow|latest|
+|django-registration-redux|latest|
+|django-bootstrap-toolkit|latest|
 
-django 1.11.7
-pillow
-django-registration-redux
-django-bootstrap-toolkit
+## Ticketing System
+For task proposal, prioritisation and delegation.
+https://trello.com/b/jJL3jFgb
