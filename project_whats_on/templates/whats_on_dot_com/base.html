@@ -5,7 +5,6 @@
 <head>
     <title>
         {% block title_block %}
-            What's On
         {% endblock %}
     </title>
 </head>
@@ -24,6 +23,13 @@
     
     {% block body_block %}
         <!-- Override this block for page content! -->
+    {% endblock %}
+
+    {% block footer_block %}
+        <br /><hr />
+        <i>
+            Presentation not indicative of final form. Only represents general planned structure.
+        </i>
     {% endblock %}
 </body>
 </html>
