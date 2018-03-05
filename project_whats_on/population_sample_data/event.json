@@ -1,0 +1,9 @@
+[
+    {   "name":"Viper wednesday",
+        "description":"usual mayhem",
+        "address":"viper",
+        "hosts":[{"username":"mercedes"}],
+        "category":"club",
+        "tags":[{"name":"a"}, {"name":"b"}]
+    }
+]
