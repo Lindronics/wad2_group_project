@@ -1,2 +1,5 @@
 # DATABASE
 *.sqlite3
+
+# MIGRATIONS
+whats_on_dot_com/migrations

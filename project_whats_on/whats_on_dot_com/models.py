@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 # Contains profile information, is linked to django User model
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
+    forename = models.CharField(max_length=128, blank=True, null=True)
+    surname = models.CharField(max_length=128, blank=True, null=True)
     description = models.CharField(max_length=1024, blank=True, null=True)
     profile_picture = models.ImageField(upload_to="profile_images", blank=True)
 
@@ -40,7 +42,7 @@ class Event(models.Model):
     name = models.CharField(max_length=128)
     description = models.CharField(max_length=1024, blank=True, null=True)
     date_time = models.DateTimeField()
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
     location_info = models.CharField(max_length=128)
     event_picture = models.ImageField(upload_to="event_images", blank=True)
 

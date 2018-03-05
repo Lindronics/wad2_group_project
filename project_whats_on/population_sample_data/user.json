@@ -1,10 +1,23 @@
 [
     {   "username":"mercedes",
         "password":"12345678",
-        "email":"a@a.com", 
+        "email":"a@a.com",
+        "forename":"Mercedes",
+        "surname":"M",
+        "follows":[], 
         "description":"Mercedes is a 20-year-old promoter for a local club in Glasgow. For her job she must be on all social media platforms informing people in the area, of any special events hosted at her place of work. However, Mercedes is really fed up of handing out leaflets at the start of every year for people who are new to Glasgow. Because they are new and don’t know any venues, it would be much simpler if she could list social events on an app for everyone to see rather than doing strenuous manual labour."},
     {   "username":"ken", 
         "password":"12345678",
         "email":"a@a.com", 
-        "description":"Ken is an 18 year old foreign exchange student from Amsterdam. He hasn’t many friends in Glasgow and doesn’t know what events are happening for freshers. He also finds it hard to communicate with people because of the language barrier and as a result got lost on the way to the club because of some poor directions. Ken would like a way to see socials that are happening soon so he can get to know people and what’s more he would like a map to guide him to the place so he wouldn’t get lost."}
+        "forename":"Ken",
+        "surname":"K",
+        "follows":[{"username":"mercedes"}],
+        "description":"Ken is an 18 year old foreign exchange student from Amsterdam. He hasn’t many friends in Glasgow and doesn’t know what events are happening for freshers. He also finds it hard to communicate with people because of the language barrier and as a result got lost on the way to the club because of some poor directions. Ken would like a way to see socials that are happening soon so he can get to know people and what’s more he would like a map to guide him to the place so he wouldn’t get lost."},
+    {   "username":"sam", 
+        "password":"12345678",
+        "email":"a@a.com",
+        "forename":"Sam",
+        "surname":"S", 
+        "follows":[{"username":"mercedes"}, {"username":"mercedes"}],
+        "description":"Sam is a member of several clubs and societies but doesn’t use Facebook that often and is quite forgetful so he regular misses events as they are only publicised on the relevant society’s event page. He wants to be able to see all the events for all the societies he is a part of easily in one place without having to look at multiple Facebook pages and scroll through them for events."}
 ]

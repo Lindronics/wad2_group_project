@@ -32,6 +32,8 @@ def populate():
     for e in events:
         add_event(e)
 
+    print("Population successful!")
+
 
 def add_category(category):
     c = Category.objects.get_or_create(name=category["name"])[0]
@@ -42,25 +44,35 @@ def add_tag(tag):
     print("Tag added: %s" % t.name)
 
 def add_user(user):
-    u = User.objects.get(username=user["username"])
-    if u:
+    try:
+        u = User.objects.get(username=user["username"])
         print("Existing user deleted: %s" % u)
         u.delete()
+    except:
+        pass
+        
     u = User.objects.create_user(user["username"], user["email"], user["password"])
     p = UserProfile.objects.get_or_create(user=u)[0]
     p.description = user["description"]
+    p.forename = user["forename"]
+    p.surname = user["surname"]
+    for f in user["follows"]:
+        p.follows.add(UserProfile.objects.get(user__username=f["username"]))
     p.save()
     print("User added: %s" % u.username)
 
 def add_event(event):
+    # This will throw a RuntimeWarning during population, which can be ignored for now.
     time = datetime.now()
-    e = Event.objects.get_or_create(name=event["name"], date_time=time, category=Category.objects.get(name=event["category"]), slug=slugify(event["name"]) + str(time))[0]
+    e = Event.objects.get_or_create(name=event["name"], date_time=time, category=Category.objects.get(name=event["category"]))[0]
     e.description = event["description"]
     e.address = event["address"]
     for host in event["hosts"]: 
         e.host.add(UserProfile.objects.get(user__username=host["username"]))
     for tag in event["tags"]:
         e.tags.add(Tag.objects.get(name=tag["name"]))
+    for profile in event["interested"]:
+        e.interested.add(UserProfile.objects.get(user__username=profile["username"]))
     e.save()
     print("Event added: %s" % e.name)
 

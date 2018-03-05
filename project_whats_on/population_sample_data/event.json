@@ -3,7 +3,24 @@
         "description":"usual mayhem",
         "address":"viper",
         "hosts":[{"username":"mercedes"}],
-        "category":"club",
+        "interested":[{"username":"ken"}],
+        "category":"Club",
         "tags":[{"name":"a"}, {"name":"b"}]
+    },
+    {   "name":"SWITCH",
+        "description":"yada yada yada",
+        "address":"hive",
+        "hosts":[{"username":"mercedes"}, {"username":"ken"}],
+        "interested":[{"username":"mercedes"}],
+        "category":"Club",
+        "tags":[{"name":"a"}, {"name":"b"}, {"name":"c"}]
+    },
+    {   "name":"Bus trip to the highlands",
+        "description":"Destination is Fort William",
+        "address":"Buchanan Bus Station",
+        "hosts":[{"username":"sam"}],
+        "interested":[{"username":"mercedes"}, {"username":"ken"}],
+        "category":"Trip",
+        "tags":[{"name":"a"}]
     }
 ]
