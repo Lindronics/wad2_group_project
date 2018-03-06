@@ -45,9 +45,14 @@ class Event(models.Model):
     slug = models.SlugField(unique=True, blank=True, null=True)
     location_info = models.CharField(max_length=128)
     event_picture = models.ImageField(upload_to="event_images", blank=True)
+    number_followers = models.IntegerField(default=0)
 
     # perhaps it makes more sense to split the address into different fields?
-    address = models.CharField(max_length=1024)
+    address = models.CharField(max_length=128)
+    city = models.CharField(max_length=128)
+    post_code = models.CharField(max_length=9)
+    latitude = models.FloatField(blank=True, null=True)
+    longtitude = models.FloatField(blank=True, null=True)
 
     # Foreign keys
     host = models.ManyToManyField(UserProfile, related_name="host")
