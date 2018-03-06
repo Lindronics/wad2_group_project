@@ -15,4 +15,5 @@ def add_event(request):
 def profiles(request):
     return render(request, 'whats_on_dot_com/profiles.html', {})
 
-
+def map_test(request):
+    return render(request, '/map_test.html', {})
