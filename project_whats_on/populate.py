@@ -67,6 +67,10 @@ def add_event(event):
     e = Event.objects.get_or_create(name=event["name"], date_time=time, category=Category.objects.get(name=event["category"]))[0]
     e.description = event["description"]
     e.address = event["address"]
+    e.location_info = event["location_info"]
+    e.city = event["city"]
+    e.post_code = event["post_code"]
+    e.number_followers = event["number_followers"]
     for host in event["hosts"]: 
         e.host.add(UserProfile.objects.get(user__username=host["username"]))
     for tag in event["tags"]:
