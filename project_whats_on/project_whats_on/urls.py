@@ -25,6 +25,5 @@ class MyRegistrationView(RegistrationView):
 urlpatterns = [
     url(r"^admin/", admin.site.urls),
     url(r"^accounts/", include("registration.backends.simple.urls")),
-    url(r'^accounts/register/$', MyRegistrationView.as_view(), name='registration_register'),
     url(r"^", include("whats_on_dot_com.urls")),# Match to start of urls used in the whats_on_dot_com app
 ]

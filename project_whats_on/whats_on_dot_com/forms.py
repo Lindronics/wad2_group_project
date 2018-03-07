@@ -26,5 +26,15 @@ class NewEventForm(forms.ModelForm):
 class FilterEventsForm(forms.ModelForm):
     search_term = forms.CharField(max_length=128)
     
+# Set up profile for registered account
+class ProfileSetupForm(forms.ModelForm):
+    forename = forms.CharField(max_length=128)
+    surname = forms.CharField(max_length=128)
+    description = forms.CharField(max_length=1024)
 
+    # TODO picture upload broken atm
+    profile_picture = forms.ImageField(required=False)
 
+    class Meta:
+        model = UserProfile 
+        fields = ("forename", "surname", "description", "profile_picture")

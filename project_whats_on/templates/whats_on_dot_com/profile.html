@@ -1,3 +1,6 @@
 {% extends 'whats_on_dot_com/base.html' %}
 
 <!-- Put basic structure for a user profile made relevant with a context dictionary here. -->
+{% block body_block %}
+    <a href="{% url 'profile_setup' %}">Change profile values</a>
+{% endblock %}
