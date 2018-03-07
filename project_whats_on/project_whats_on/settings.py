@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'whats_on_dot_com',
+    'registration',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -124,3 +125,16 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [STATIC_DIR, ]
+
+# Django registration redux
+
+# If True, users can register 
+REGISTRATION_OPEN = True 
+# activation window 
+ACCOUNT_ACTIVATION_DAYS = 7 
+# If True, the user will be automatically logged in. 
+REGISTRATION_AUTO_LOGIN = True 
+# The page users will arrive at after they successfully log in 
+LOGIN_REDIRECT_URL = '/' 
+# The page users are directed to if they are not logged in, and are trying to access pages requiring authentication 
+LOGIN_URL = '/accounts/login/'
