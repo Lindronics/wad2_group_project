@@ -7,6 +7,5 @@ urlpatterns = [
     url(r"^event/add$", views.add_event, name="add_event"),
     url(r"^profiles$", views.profiles, name="profiles"),
     url(r"^events$", views.events, name="events"),
-    url(r"^accounts/", include("registration.backends.simple.urls")),
     url(r"^$", views.index, name="index"),  # Provide a redirect to the events page: <hostname>/ maps to <hostname>/events
 ]

@@ -17,3 +17,4 @@ db.sqlite3
 ### General ###
 # For those working with an Intellij IDE, we want to avoid tracking unnecessary dirs others may not have.
 .idea/
+**/.vscode/
