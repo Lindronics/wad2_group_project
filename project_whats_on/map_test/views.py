@@ -16,4 +16,4 @@ def profiles(request):
     return render(request, 'whats_on_dot_com/profiles.html', {})
 
 def map_test(request):
-    return render(request, '/map_test.html', {})
+    return render(request, 'map_test/map_test.html', {})
