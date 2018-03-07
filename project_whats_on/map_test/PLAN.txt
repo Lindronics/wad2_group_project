@@ -1,0 +1,20 @@
+Example:
+php use sql to get all relevant markers based on passed in lat long
+outputs that as XML
+
+My imp:
+use django python to get relevant markers based on passed in lat long
+outputs as JSON
+https://developers.google.com/maps/documentation/javascript/importing_data
+
+JSON will work as long as json file is on same domain as script
+Question:
+Where does the XML doc returned by php in the example stored
+
+NB / TODO:
+NB about sql statement: To search by kilometers instead of miles, replace 3959 with 6371.
+When user loads webpage grab user loc or default to glasgow
+
+resources:
+https://developers.google.com/maps/documentation/javascript/importing_data
+https://developers.google.com/maps/documentation/javascript/examples/geocoding-simple
