@@ -2,32 +2,39 @@
 {% load staticfiles %}
 
 <html lang="en">
+<link rel="stylesheet" type="text/css" href="{% static "baseNav.css" %}"/>
 <head>
+    
     <title>
         {% block title_block %}
         {% endblock %}
     </title>
+
+    
 </head>
 
 <body>
-    <div id="banner">
+
+	<div>
         <!-- Placeholder for top bar as in design concepts. -->
-        <nav id="navbar">
-            <a href="{% url 'events' %}">Events</a>
-            | <a href="{% url 'profiles' %}">Profiles</a>
-            | <a href="{% url 'add_event'%}">Add Event</a>
-            <div id="loginbar">
+        <ul id="navbar">
+            <li><a href="{% url 'events' %}">Events</a></li>
+            <li><a href="{% url 'profiles' %}">Profiles</a></li>
+            <li><a href="{% url 'add_event'%}">Add Event</a></li>
+            <div id="login">
                 {% if user.is_authenticated %}
                     Signed in as {{ user.username }}
-                    | <a href="{%url 'auth_logout' %}">Logout</a>
+                    <li><a href="{%url 'auth_logout' %}">Logout</a></li>
                 {% else %}
-                    | <a href="{%url 'auth_login' %}">Login</a>
-                    | <a href="{%url 'registration_register' %}">Register</a>
+                    <li><a href="{%url 'auth_login' %}">Login</a></li>
+                    <li><a href="{%url 'registration_register' %}">Register</a></li>
                 {% endif %} 
             </div>
-        </nav>
-    </div>
-    
+        </ul>
+	</div>
+    	<br>
+
+
     {% block body_block %}
         <!-- Override this block for page content! -->
     {% endblock %}

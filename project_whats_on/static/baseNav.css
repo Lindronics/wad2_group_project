@@ -1,0 +1,39 @@
+
+#navbar {
+
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    position: fixed;
+    top: 0;
+    width: 100%;
+
+
+}
+
+#navbar li {
+    float: left;
+    color:white
+    
+}
+
+#navbar a {
+    display: block;
+    color: white;
+    text-align: left;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-family: "Helvetica";
+}
+
+#navbar a:hover{
+	background-color:#b2b9ba;
+    color:black;
+
+}
+
+#login li {
+float:right;
+}
