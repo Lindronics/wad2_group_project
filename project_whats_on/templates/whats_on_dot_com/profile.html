@@ -1,6 +1,11 @@
 {% extends 'whats_on_dot_com/base.html' %}
+{% load staticfiles %}
 
-<!-- Put basic structure for a user profile made relevant with a context dictionary here. -->
+{% block title_block %}
+    What's On - Profile "{{user.username}}"
+{% endblock %}
+
 {% block body_block %}
-    <a href="{% url 'profile_setup' %}">Change profile values</a>
+        <p><a href="{% url 'profile_setup' %}">Change profile values</a></p>
+    
 {% endblock %}

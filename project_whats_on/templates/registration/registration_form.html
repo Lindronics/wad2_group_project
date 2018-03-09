@@ -1,21 +1,20 @@
 <!-- Work in progress -->
 
 {% extends "whats_on_dot_com/base.html" %} 
-{% block head_block %} 
-    Register 
-{% endblock %} 
+
+{% block title_block %}
+    Register
+{% endblock %}
 
 {% block body_block %} 
-{% load staticfiles %}
+    {% load staticfiles %}
 
-<!-- Bootstrap core CSS -->
-<link href="http://v4-alpha.getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="http://v4-alpha.getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<!-- Custom styles for this template {% static 'css/signin.css' %}-->
-<link href="{% static 'css/login.css' %}" rel="stylesheet">
-</head>
-    
-<body>
+    <!-- Custom styles for this template {% static 'css/signin.css' %}-->
+    <link href="{% static 'css/login.css' %}" rel="stylesheet">
+
 
     <div class="container">
         <form role="form" method="post" action="." class="form-sigin"> 
@@ -50,5 +49,4 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="http://v4-alpha.getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
-</body>
 {% endblock %}

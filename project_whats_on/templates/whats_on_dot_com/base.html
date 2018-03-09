@@ -4,7 +4,6 @@
 <html lang="en">
 <link rel="stylesheet" type="text/css" href="{% static "css/baseNav.css" %}"/>
 <head>
-    
     <title>
         {% block title_block %}
         {% endblock %}
@@ -16,15 +15,14 @@
 <body>
 
 	<div>
-        <!-- Placeholder for top bar as in design concepts. -->
         <ul id="navbar">
             <li><a href="{% url 'events' %}">Events</a></li>
             <li><a href="{% url 'profiles' %}">Profiles</a></li>
             <li><a href="{% url 'add_event'%}">Add Event</a></li>
             <div id="login">
                 {% if user.is_authenticated %}
-                    Signed in as {{ user.username }}
                     <li><a href="{%url 'auth_logout' %}">Logout</a></li>
+                    <li><a href="{% url 'profile' %}">Signed in as {{ user.username }}</a></li>
                 {% else %}
                     <li><a href="{%url 'auth_login' %}">Login</a></li>
                     <li><a href="{%url 'registration_register' %}">Register</a></li>
