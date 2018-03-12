@@ -9,7 +9,9 @@
         "hosts":[{"username":"mercedes"}],
         "interested":[{"username":"ken"}],
         "category":"Club",
-        "tags":[{"name":"a"}, {"name":"b"}]
+        "tags":[{"name":"a"}, {"name":"b"}],
+		"latitude":55.875732,
+		"longitude":-4.282302
     },
     {   "name":"SWITCH",
         "description":"yada yada yada",
@@ -21,7 +23,9 @@
         "hosts":[{"username":"mercedes"}, {"username":"ken"}],
         "interested":[{"username":"mercedes"}],
         "category":"Club",
-        "tags":[{"name":"a"}, {"name":"b"}, {"name":"c"}]
+        "tags":[{"name":"a"}, {"name":"b"}, {"name":"c"}],
+		"latitude":55.872761,
+		"longitude":-4.284739
     },
     {   "name":"Bus trip to the highlands",
         "description":"Destination is Fort William",
@@ -33,6 +37,8 @@
         "hosts":[{"username":"sam"}],
         "interested":[{"username":"mercedes"}, {"username":"ken"}],
         "category":"Trip",
-        "tags":[{"name":"a"}]
+        "tags":[{"name":"a"}],
+		"latitude":55.864972,
+		"longitude":-4.250782
     }
 ]

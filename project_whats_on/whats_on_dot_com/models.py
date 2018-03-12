@@ -52,13 +52,16 @@ class Event(models.Model):
     city = models.CharField(max_length=128)
     post_code = models.CharField(max_length=9)
     latitude = models.FloatField(blank=True, null=True)
-    longtitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
 
     # Foreign keys
     host = models.ManyToManyField(UserProfile, related_name="host")
     interested = models.ManyToManyField(UserProfile, related_name="interested", blank=True)
     category = models.ForeignKey(Category)
     tags = models.ManyToManyField(Tag, blank=True)
+
+    class Meta:
+        db_table = 'Event'
 
     def __str__(self):
         return self.name

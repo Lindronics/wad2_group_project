@@ -71,6 +71,8 @@ def add_event(event):
     e.city = event["city"]
     e.post_code = event["post_code"]
     e.number_followers = event["number_followers"]
+    e.latitude = event["latitude"]
+    e.longitude = event["longitude"]
     for host in event["hosts"]: 
         e.host.add(UserProfile.objects.get(user__username=host["username"]))
     for tag in event["tags"]:

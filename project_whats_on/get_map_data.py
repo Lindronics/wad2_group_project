@@ -1,10 +1,17 @@
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE","project_whats_on.settings")
 
+
 import django
-django.setup()
+
+from django.apps import apps
+from django.conf import settings
+
+if not apps.ready and not settings.configured:
+    django.setup()
 
 from whats_on_dot_com.models import *
+#from django.contrib.auth.models import User
 
 #What I want to do in SQL
 #SELECT id, ( 3959 * acos( cos( radians(37) ) * cos( radians( lat ) )
@@ -17,13 +24,19 @@ def extract_query():
     #ideally convert as raw sql is somewhat more vulnerable
     #see here for details https://docs.djangoproject.com/en/2.0/topics/db/sql/
     "Change the distance 25 to a variable thats passed in"
-    query = Events.objects.raw('SELECT id, ( 3959 * acos( cos( radians(37) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(-122) ) + sin( radians(37) ) * sin( radians( lat ) ) ) ) AS distance FROM markers HAVING distance < 25 ORDER BY distance')
+    "Change following hard coded search loc to passed in users loc"
+    search_lat = 55.8
+    search_long = -4.2
+    #query = Event.objects.raw('SELECT id, ( 3959 * acos( cos( radians(37) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(-122) ) + sin( radians(37) ) * sin( radians( lat ) ) ) ) AS distance FROM Event HAVING distance < 25 ORDER BY distance')
+    for event in Event.objects.raw('SELECT id, ( 3959 * acos( cos( radians(%s) ) * cos( radians( latitude ) ) * cos( radians( %s ) - radians(search_long) ) + sin( radians(37) ) * sin( radians( lat ) ) ) ) AS distance FROM Event HAVING distance < 25 ORDER BY distance', [search_lat, search_long]):
+        print (event)
 
+    #test = Event.objects.raw('SELECT * FROM Event')
     #Use raw sql query to extract relevant events
     #write events to json
     #
     #test
-    print query
+    #print (test)
 
     #Cant use php with django
     #so use python instead
