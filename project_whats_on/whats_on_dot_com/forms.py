@@ -8,12 +8,12 @@ from django.contrib.auth.models import User
 
 # Used for creating a new event
 class NewEventForm(forms.ModelForm):
-    name = forms.CharField(max_length=128, help_text="Please enter the name of your event.")
-    description = forms.CharField(max_length=1024, help_text="Please enter a description for your event.")
-    date_time = forms.DateTimeField()
-    address = forms.CharField(max_length=128, help_text="Address")
-    location_info = forms.CharField(max_length=128, help_text="Additional location information")
-    event_picture = forms.ImageField()
+    name = forms.CharField(label = 'Event Name', max_length=128, help_text="Please enter the name of your event.")
+    description = forms.CharField(label = 'Description', max_length=1024, help_text="Please enter a description for your event.")
+    date_time = forms.DateTimeField(label = 'Date Time', )
+    address = forms.CharField(label = 'Address', max_length=128, help_text="Address")
+    location_info = forms.CharField(label = 'Location Info', max_length=128, help_text="Additional location information")
+    event_picture = forms.ImageField(label = 'Picture', )
     
     # TODO implement selecting hosts, category, tags when creating event
     # ideally in a dropdown menu
