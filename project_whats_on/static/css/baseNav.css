@@ -1,6 +1,5 @@
 
 #navbar {
-
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -9,14 +8,11 @@
     position: fixed;
     top: 0;
     width: 100%;
-
-
 }
 
 #navbar li {
     float: left;
     color:white
-    
 }
 
 #navbar a {
@@ -31,9 +27,14 @@
 #navbar a:hover{
 	background-color:#b2b9ba;
     color:black;
-
 }
 
 #login li {
 float:right;
+}
+
+#navbar img {
+    padding: 4px;
+    width: 35px;
+    height: 35px;
 }
