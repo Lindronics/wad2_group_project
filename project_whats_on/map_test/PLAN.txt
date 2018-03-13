@@ -18,3 +18,4 @@ When user loads webpage grab user loc or default to glasgow
 resources:
 https://developers.google.com/maps/documentation/javascript/importing_data
 https://developers.google.com/maps/documentation/javascript/examples/geocoding-simple
+https://developers.google.com/maps/solutions/store-locator/clothing-store-locator

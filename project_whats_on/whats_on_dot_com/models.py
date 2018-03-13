@@ -1,6 +1,8 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
+from django.contrib.gis.geos import GEOSGeometry
+from django.contrib.gis.db import models
 
 # USER PROFILE:
 # Contains profile information, is linked to django User model
@@ -53,6 +55,7 @@ class Event(models.Model):
     post_code = models.CharField(max_length=9)
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
+    lat-lng = models.PointField(null=False, blank=False, srid=4326, verbose_name="Exact Location")
 
     # Foreign keys
     host = models.ManyToManyField(UserProfile, related_name="host")
