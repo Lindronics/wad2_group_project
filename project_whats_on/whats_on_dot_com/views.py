@@ -34,15 +34,17 @@ def add_event(request):
 
 # PROFILES (profiles list including search etc.)
 def profiles(request):
-    return render(request, 'whats_on_dot_com/profiles.html', {})
+    user_profiles = UserProfile.objects.all()
+    return render(request, 'whats_on_dot_com/profiles.html', {"profiles":user_profiles})
 
 # ABOUT (about page with project information)
 def about(request):
     return render(request, 'whats_on_dot_com/about.html')
 
 # PROFILE (page for personal profile overview)
-def profile(request):
-    return render(request, 'whats_on_dot_com/profile.html')
+def profile(request, username):
+    user_profile = UserProfile.objects.get(user__username=username)
+    return render(request, 'whats_on_dot_com/profile.html', {"profile":user_profile})
 
 # PROFILE_SETUP (changing profile values such as name, description)
 @login_required

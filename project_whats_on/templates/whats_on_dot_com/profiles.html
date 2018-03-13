@@ -5,3 +5,34 @@
 {% block title_block %}
     What's On - Profiles
 {% endblock %}
+
+{% block body_block %}
+    <h1>Profile list</h1>
+    {% if profiles %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Forename</th>
+                        <th>Surname</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in profiles %} 
+                        <tr>
+                            <td>{{p.user.username}}</td>
+                            <td>{{p.forename}}</td>
+                            <td>{{p.surname}}</td>
+                            <td>{{p.description}}</td>
+                            <td><a href="{% url 'profile' p.user.username %}">Details</a></td>
+                        </tr> 
+                    {% endfor %} 
+                </tbody>
+            </table>
+        </div>
+    {% else %} 
+        <strong>No profiles present.</strong>
+    {% endif %}
+{% endblock %}

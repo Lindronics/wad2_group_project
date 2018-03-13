@@ -2,10 +2,21 @@
 {% load staticfiles %}
 
 {% block title_block %}
-    What's On - Profile "{{user.username}}"
+    What's On - "{{profile.user.username}}"
 {% endblock %}
 
 {% block body_block %}
-        <p><a href="{% url 'profile_setup' %}">Change profile values</a></p>
+
+    <div>
+        <h1> {{profile.user.username}} </h1>
+    </div>
+    <hr/>
+    {{profile.forename}} {{profile.surname}}
+
+    <div>
+        {% if user.username == profile.user.username %}
+            <p><a href="{% url 'profile_setup' %}">Change profile values</a></p>
+        {% endif %}
+    </div>
     
 {% endblock %}
