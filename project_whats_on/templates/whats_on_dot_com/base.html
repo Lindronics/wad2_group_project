@@ -38,11 +38,13 @@
 	</div>
     	<br>
 
-    <div class="container">
-        {% block body_block %}
-            <!-- Override this block for page content! -->
-        {% endblock %}
-    </div>
+    <main role="main">
+        <div class="container">
+            {% block body_block %}
+                <!-- Override this block for page content! -->
+            {% endblock %}
+        </div>
+    </main>
 
     <div class="container">
         {% block footer_block %}

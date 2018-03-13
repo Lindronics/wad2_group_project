@@ -1,6 +1,6 @@
 [
     {   "name":"Viper wednesday",
-        "description":"usual mayhem",
+        "description":"Join the iconic Glasgow West End club for the usual mayhem.",
         "number_followers":1,
         "address":"500 Great Western Road",
         "city":"Glasgow",
@@ -12,7 +12,7 @@
         "tags":[{"name":"a"}, {"name":"b"}]
     },
     {   "name":"SWITCH",
-        "description":"yada yada yada",
+        "description":"They say you know you're ugly if you can't pull in HIVE.",
         "number_followers":1,
         "address":"Oakfield Ln",
         "city":"Glasgow",
@@ -24,7 +24,7 @@
         "tags":[{"name":"a"}, {"name":"b"}, {"name":"c"}]
     },
     {   "name":"Bus trip to the highlands",
-        "description":"Destination is Fort William",
+        "description":"Destination of this trip is Fort William.",
         "number_followers":2,
         "address":"Buchanan Bus Station",
         "city":"Glasgow",

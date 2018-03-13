@@ -14,6 +14,10 @@ def events(request):
     events = Event.objects.all()
     return render(request, 'whats_on_dot_com/events.html', {"events":events})
 
+# EVENT PAGE (event details page)
+def event_page(request, event_pk):
+    return render(request, "whats_on_dot_com/event_page.html")
+
 # ADD EVENT (for adding a new event)
 @login_required
 def add_event(request):
