@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from whats_on_dot_com.models import User, UserProfile
+from whats_on_dot_com.models import User, UserProfile, Event
 
 from whats_on_dot_com.forms import NewEventForm, ProfileSetupForm
 
@@ -11,7 +11,12 @@ def index(request):
 
 # EVENTS (events page with events in grid list)
 def events(request):
-    return render(request, 'whats_on_dot_com/events.html', {})
+    events = Event.objects.all()
+    return render(request, 'whats_on_dot_com/events.html', {"events":events})
+
+# EVENT PAGE (event details page)
+def event_page(request, event_pk):
+    return render(request, "whats_on_dot_com/event_page.html")
 
 # ADD EVENT (for adding a new event)
 @login_required
