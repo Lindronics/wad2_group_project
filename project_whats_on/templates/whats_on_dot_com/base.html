@@ -2,7 +2,14 @@
 {% load staticfiles %}
 
 <html lang="en">
+
+<!-- Bootstrap core CSS -->
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+<!-- Custom CSS -->
 <link rel="stylesheet" type="text/css" href="{% static "css/baseNav.css" %}"/>
+<link rel="stylesheet" type="text/css" href="{% static "css/base.css" %}"/>
+
 <head>
     <title>
         {% block title_block %}
@@ -31,16 +38,25 @@
 	</div>
     	<br>
 
+    <div class="container">
+        {% block body_block %}
+            <!-- Override this block for page content! -->
+        {% endblock %}
+    </div>
 
-    {% block body_block %}
-        <!-- Override this block for page content! -->
-    {% endblock %}
+    <div class="container">
+        {% block footer_block %}
+            <br /><hr />
+            <footer>
+                <p>
+                    &copy; WAD2 Group, code on <b><a href="https://github.com/Lindronics/wad2_group_project">Github</a></b>
+                </p>
+                <i>
+                    Presentation not indicative of final form. Only represents general planned structure.
+                </i>
+            </footer>
+        {% endblock %}
+    </div>
 
-    {% block footer_block %}
-        <br /><hr />
-        <i>
-            Presentation not indicative of final form. Only represents general planned structure.
-        </i>
-    {% endblock %}
 </body>
 </html>
