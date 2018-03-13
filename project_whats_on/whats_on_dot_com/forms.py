@@ -20,7 +20,7 @@ class NewEventForm(forms.ModelForm):
 
     class Meta:
         model = Event
-        exclude = ()
+        exclude = ('number_followers', 'address', 'city', 'post_code', 'latitude', 'longtitude', 'host', 'interested', 'category', 'slug')
 
 # Used for filtering Events on home page
 class FilterEventsForm(forms.ModelForm):

@@ -63,3 +63,13 @@ class Event(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self,*args,**kwargs):
+        self.slug = slugify(self.name)
+        super(Event,self).save(*args,**kwargs)
+
+    def Meta():
+        verbose_name_plural = 'Events'
+
+
+        
+
