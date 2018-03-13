@@ -1,21 +1,39 @@
 {% extends 'whats_on_dot_com/base.html' %}
+{% load staticfiles %}
 
 <!-- Show a list of profiles attending an event. -->
 
 {% block title_block %}
-    What's On - Profiles
+What's On - Profiles
 {% endblock %}
 
 {% block body_block %}
-    <h1>Profile list</h1>
+
+<!-- Custom CSS -->
+<link rel="stylesheet" type="text/css" href="{% static 'css/profiles.css' %}"/>
+
+    <h1>Profiles</h1>
     {% if profiles %}
+        <form lass="form-signin" role="form" method="POST" action=".">
+            <div id="filter_menu">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <input type="checkbox" aria-label="Following"> Following
+                    </span>
+                    <input type="text" class="form-control" placeholder="Search..."/>
+                    <span class="input-group-btn">
+                        <button class="btn btn-secondary" type="button">Go!</button>
+                    </span>
+                </div>
+            </div>
+        </form>
+
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>Username</th>
-                        <th>Forename</th>
-                        <th>Surname</th>
+                        <th>Name</th>
                         <th>Description</th>
                     </tr>
                 </thead>
@@ -23,8 +41,7 @@
                     {% for p in profiles %} 
                         <tr>
                             <td>{{p.user.username}}</td>
-                            <td>{{p.forename}}</td>
-                            <td>{{p.surname}}</td>
+                            <td>{{p.forename}} {{p.surname}}</td>
                             <td>{{p.description}}</td>
                             <td><a href="{% url 'profile' p.user.username %}">Details</a></td>
                         </tr> 

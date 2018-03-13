@@ -6,5 +6,79 @@
 {% endblock %}
 
 {% block body_block %}
-    <p> Welcome to the events page!</p>
+
+<!-- Custom CSS -->
+<link rel="stylesheet" type="text/css" href="{% static 'css/profiles.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/events.css' %}"/>
+
+    <h1>Events</h1>
+    {% if events %}
+        <form lass="form-signin" role="form" method="POST" action=".">
+            <div id="filter_menu">
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <button class="btn btn-secondary" type="button">All events</button>
+                    </span>
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            People
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">a</a>
+                            <a class="dropdown-item" href="#">b</a>
+                            <div role="separator" class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">No filter</a>
+                        </div>
+                    </div>
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Radius
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">a</a>
+                            <a class="dropdown-item" href="#">b</a>
+                            <div role="separator" class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">No filter</a>
+                        </div>
+                    </div>
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Date
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">a</a>
+                            <a class="dropdown-item" href="#">b</a>
+                            <div role="separator" class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">No filter</a>
+                        </div>
+                    </div>
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Category
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">a</a>
+                            <a class="dropdown-item" href="#">b</a>
+                            <div role="separator" class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">No filter</a>
+                        </div>
+                    </div>
+
+
+                        
+                    <input type="text" class="form-control" placeholder="Search..."/>
+                    <span class="input-group-btn">
+                        <button class="btn btn-secondary" type="button">Go!</button>
+                    </span>
+                </div>
+            </div>
+        </form>
+
+
+    {% for e in events %} 
+    {% endfor %} 
+    {% else %} 
+    {% endif %}
+
+    <script src="{% static 'java_script/events' %}"/>
 {% endblock %}
