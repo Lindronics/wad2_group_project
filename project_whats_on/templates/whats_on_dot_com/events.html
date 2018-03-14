@@ -20,48 +20,74 @@
                     <span class="input-group-btn">
                         <button class="btn btn-secondary" type="button">All events</button>
                     </span>
+                    <!-- People filter -->
                     <div class="input-group-btn">
                         <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             People
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">a</a>
-                            <a class="dropdown-item" href="#">b</a>
+                            <div class="dropdown-item">
+                                <input type="checkbox" id="following">
+                                <label for="following">People I follow</label>
+                            </div>
+                            <div class="dropdown-item">
+                                <input type="checkbox" id="followers">
+                                <label for="followers">My followers</label>
+                            </div>
+                            <div class="dropdown-item">
+                                    <input type="checkbox" id="popular_people">
+                                    <label for="popular_people">Popular</label>
+                            </div>
                             <div role="separator" class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">No filter</a>
+                            <a class="dropdown-item" href="#">Remove filter</a>
                         </div>
                     </div>
+                    <!-- Radius filter -->
                     <div class="input-group-btn">
                         <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Radius
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">a</a>
-                            <a class="dropdown-item" href="#">b</a>
+                            <a class="dropdown-item" href="#">1 km</a>
+                            <a class="dropdown-item" href="#">3 km</a>
+                            <a class="dropdown-item" href="#">5 km</a>
+                            <a class="dropdown-item" href="#">10 km</a>
+                            <a class="dropdown-item" href="#">50 km</a>
                             <div role="separator" class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">No filter</a>
+                            <a class="dropdown-item" href="#">Remove filter</a>
                         </div>
                     </div>
+                    <!-- Date filter -->
                     <div class="input-group-btn">
                         <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Date
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">a</a>
-                            <a class="dropdown-item" href="#">b</a>
+                            <a class="dropdown-item" href="#">Today</a>
+                            <a class="dropdown-item" href="#">This week</a>
+                            <a class="dropdown-item" href="#">This month</a>
+                            <a class="dropdown-item" href="#">This year</a>
                             <div role="separator" class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">No filter</a>
+                            <a class="dropdown-item" href="#">Remove filter</a>
                         </div>
                     </div>
+                    <!-- Category filter -->
                     <div class="input-group-btn">
                         <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Category
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">a</a>
-                            <a class="dropdown-item" href="#">b</a>
-                            <div role="separator" class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">No filter</a>
+                            {% if categories %}
+                                {% for c in categories %}
+                                <div class="dropdown-item">
+                                    <input type="checkbox" id="cat_{{c.name}}">
+                                    <label for="cat_{{c.name}}">{{c.name}}</label>
+                                </div>
+                                {% endfor %}
+                            {% else %} 
+                            {% endif %}
+                                <div role="separator" class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Remove filter</a>
                         </div>
                     </div>
 

@@ -29,12 +29,22 @@
     color:black;
 }
 
+#active {
+    font-weight: bold;
+    text-decoration-line: underline;
+    text-decoration-color: white;
+    text-decoration-style: solid;
+}
+
 #login li {
-float:right;
+    float:right;
 }
 
 #navbar img {
-    padding: 4px;
-    width: 35px;
-    height: 35px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 15px;
+    padding-right: 15px;
+    width: 68px;
+    height: 50px;
 }
