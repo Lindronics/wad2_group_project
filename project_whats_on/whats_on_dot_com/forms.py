@@ -53,6 +53,21 @@ class FilterEventsForm(forms.ModelForm):
         model = Event
         fields = ("name",)
 
+class FilterProfilesForm(forms.ModelForm):
+    people_choices = (
+        (1, "People I follow"),
+        (2, "My followers"),
+        (3, "Popular profiles"),
+    )
+
+    user = forms.CharField(max_length=128, required=False)
+    search = forms.CharField(max_length=128, required=False)
+    people = forms.ChoiceField(choices=people_choices, required=False, widget=forms.RadioSelect)
+
+    class Meta:
+        model = UserProfile
+        fields = ("user", )
+
 # Set up profile for registered account
 class ProfileSetupForm(forms.ModelForm):
     forename = forms.CharField(max_length=128)

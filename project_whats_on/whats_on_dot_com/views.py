@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from whats_on_dot_com.models import User, UserProfile, Event, Category
+from django.db.models import Q
 
-from whats_on_dot_com.forms import NewEventForm, ProfileSetupForm, FilterEventsForm
+from whats_on_dot_com.models import User, UserProfile, Event, Category
+from whats_on_dot_com.forms import NewEventForm, ProfileSetupForm, FilterEventsForm, FilterProfilesForm
 
 # INDEX (home page, redirects to events page)
 def index(request):
@@ -57,13 +58,11 @@ def events(request):
                 print(queryset)
                 if queryset:
                     events_buffer = events
-                    events = []
+                    events = Event.objects.all().filter(pk=-1)
                     for p in queryset:
-                        events += events_buffer.filter(interested=p)
-
+                        events = events | events_buffer.filter(interested=p)
         else:
             print(filter_events_form.errors)
-
 
     context_dict = {
         "events":events, 
@@ -99,8 +98,42 @@ def add_event(request):
 
 # PROFILES (profiles list including search etc.)
 def profiles(request):
+    filter_profiles_form = FilterProfilesForm()
+
+    # Initial value of search bar
+    sb = "Search..."
+
+    # Initial queryset
     user_profiles = UserProfile.objects.all()
-    return render(request, 'whats_on_dot_com/profiles.html', {"profiles":user_profiles})
+
+    # If filter request
+    if request.method == "POST":
+        filter_events_form = FilterEventsForm(request.POST)
+
+        if filter_events_form.is_valid():
+            data = filter_events_form.cleaned_data
+
+            # Filter search bar
+            sb = data["search"]
+            if sb:
+                # Search for usernames and real names
+                # TODO sort of a hack ATM to search for combined fore- and surnames
+                splitted = sb.split(" ")
+                if len(splitted) > 1:
+                    user_profiles = user_profiles.filter(forename__icontains=splitted[0]) | user_profiles.filter(surname__icontains=splitted[1])
+                else:
+                    user_profiles = user_profiles.filter(user__username__icontains=sb) | user_profiles.filter(forename__icontains=sb) | user_profiles.filter(surname__icontains=sb)
+
+        else:
+            print(filter_profiles_form.errors)
+
+
+    context_dict = {
+        "profiles":user_profiles, 
+        "search_bar_initial":sb
+    }
+
+    return render(request, 'whats_on_dot_com/profiles.html', context_dict)
 
 # ABOUT (about page with project information)
 def about(request):
