@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from whats_on_dot_com.models import User, UserProfile, Event, Category
 
-from whats_on_dot_com.forms import NewEventForm, ProfileSetupForm
+from whats_on_dot_com.forms import NewEventForm, ProfileSetupForm, FilterEventsForm
 
 # INDEX (home page, redirects to events page)
 def index(request):
@@ -11,9 +11,68 @@ def index(request):
 
 # EVENTS (events page with events in grid list)
 def events(request):
+    filter_events_form = FilterEventsForm()
+
+    # Initial value of search bar
+    sb = "Search..."
+
+    # Initial querysets
     events = Event.objects.all()
     categories = Category.objects.all()
-    return render(request, 'whats_on_dot_com/events.html', {"events":events, "categories":categories})
+
+    # If filter request
+    if request.method == "POST":
+        filter_events_form = FilterEventsForm(request.POST)
+
+        if filter_events_form.is_valid():
+            data = filter_events_form.cleaned_data
+            print(data)
+
+            # Filter search bar
+            if data["search"]:
+                events = events.filter(name__icontains=data["search"])
+                sb = data["search"]
+
+            # Filter categories
+            if data["category"]:
+                events_buffer = events
+                events = []
+                for c in data["category"]:
+                    events += events_buffer.filter(category=c)
+
+            # Filter people
+            # TODO yields strange results for now, will fix later
+            if data["people"]:
+                p = int(data["people"])
+                queryset = []
+                if p == 1:
+                    # People I follow
+                    queryset = UserProfile.objects.get(user=request.user).follows.all()
+                if p == 2:
+                    # My followers
+                    queryset = UserProfile.objects.all().filter(follows=UserProfile.objects.get(user=request.user))
+                if p == 3:
+                    # TODO Popular people 
+                    pass
+                print(queryset)
+                if queryset:
+                    events_buffer = events
+                    events = []
+                    for p in queryset:
+                        events += events_buffer.filter(interested=p)
+
+        else:
+            print(filter_events_form.errors)
+
+
+    context_dict = {
+        "events":events, 
+        "categories":categories, 
+        "filter_events_form":filter_events_form, 
+        "search_bar_initial":sb}
+
+    #print(events)
+    return render(request, 'whats_on_dot_com/events.html', context_dict)
 
 # EVENT PAGE (event details page)
 def event_page(request, event_pk):
