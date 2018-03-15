@@ -11,17 +11,44 @@ from django.conf import settings
 if not apps.ready and not settings.configured:
     django.setup()
 
-
-
 from whats_on_dot_com.models import *
-#from django.contrib.auth.models import User
 
+#https://stackoverflow.com/questions/1916953/filter-zipcodes-by-proximity-in-django-with-the-spherical-law-of-cosines
+'3rd answer down'
+
+def nearby_locations(self, latitude, longitude, radius, max_results=100, use_miles=True):
+    if use_miles:
+        distance_unit = 3959
+    else:
+        distance_unit = 6371
+
+    from django.db import connection, transaction
+    from project_whats_on import settings
+    cursor = connection.cursor()
+    #print(settings.DATABASES['default']['ENGINE'])
+    #if settings.DATABASE_ENGINE == 'sqlite3':
+    if settings.DATABASES['default']['ENGINE'] == 'django.db.backends.sqlite3':
+        connection.connection.create_function('acos', 1, math.acos)
+        connection.connection.create_function('cos', 1, math.cos)
+        connection.connection.create_function('radians', 1, math.radians)
+        connection.connection.create_function('sin', 1, math.sin)
+
+    sql = """SELECT id, (%f * acos( cos( radians(%f) ) * cos( radians( latitude ) ) *
+    cos( radians( longitude ) - radians(%f) ) + sin( radians(%f) ) * sin( radians( latitude ) ) ) )
+    AS distance FROM EVENT WHERE distance < %d
+    ORDER BY distance LIMIT 0 , %d;""" % (distance_unit, latitude, longitude, latitude, int(radius), max_results)
+    cursor.execute(sql)
+    ids = [row[0] for row in cursor.fetchall()]
+
+    return self.filter(id__in=ids)
+
+nearby_locations(self, 55.8, -4.2, 10, 50)
 #What I want to do in SQL
 #SELECT id, ( 3959 * acos( cos( radians(37) ) * cos( radians( lat ) )
 #* cos( radians( lng ) - radians(-122) ) + sin( radians(37) )
 #* sin( radians( lat ) ) ) )
 #AS distance FROM markers HAVING distance < 25 ORDER BY distance;
-
+"""
 def get_queryset():
     #Using raw sql here as is easier than trying to convert
     #ideally convert as raw sql is somewhat more vulnerable
@@ -31,67 +58,17 @@ def get_queryset():
     search_lat = 55.8   #get from form
     search_long = -4.2 #get from form
     desired_dist = 10 #get from form
-    #LETS TRY TO REFACTOR THE RAW SQL INTO DJANGO MODEL STYLE USING PYTHON MATH AS SQL MATH WONT WORK!! YAY
-
-    """
-def distance(origin, destination):
-    lat1, lon1 = origin
-    lat2, lon2 = destination
-    radius = 6371 # km
-
-    dlat = math.radians(lat2-lat1)
-    dlon = math.radians(lon2-lon1)
-    a = math.sin(dlat/2) * math.sin(dlat/2) + math.cos(math.radians(lat1)) \
-        * math.cos(math.radians(lat2)) * math.sin(dlon/2) * math.sin(dlon/2)
-    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
-    d = radius * c
-
-    return d
-    """
-    """
-    if search_lat and search_long:
-        search_lat = float(search_lat)
-        search_long = float(search_long)
-
-        #haversine formula from this github post -
-        "https://gist.github.com/ncole458/5bd5f5c55a63eba6ce2b"
-        #use this for help https://gist.github.com/rochacbruno/2883505
-        R = 6371  # earth radius
-
-        distance = desired_dist  # distance in km
-
-        lat1 = math.radians(search_lat)  # lat in radians
-        long1 = math.radians(search_long)  # long in radians
-
-
-
-        queryset = Event.objects.filter()
-
-        print(lat1, lat2)
-        print(long1, long2)
-        
-        print (queryset)
-
-    """
-    #Trying - https://stackoverflow.com/questions/19703975/django-sort-by-distance/35896358
-
-
+    
     
     #query = Event.objects.raw('SELECT id, ( 3959 * acos( cos( radians(37) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(-122) ) + sin( radians(37) ) * sin( radians( lat ) ) ) ) AS distance FROM Event HAVING distance < 25 ORDER BY distance')
     """
-    for event in Event.objects.raw('SELECT id, ( 3959 * acos( cos( radians(%s) ) * cos( radians( latitude ) ) * cos( radians( %s ) - radians(search_long) ) + sin( radians(37) ) * sin( radians( lat ) ) ) ) AS distance FROM Event HAVING distance < 25 ORDER BY distance', [search_lat, search_long]):
-        print (event)
-    """
-    #test = Event.objects.raw('SELECT * FROM Event')
-    #Use raw sql query to extract relevant events
-    #write events to json
-    #
-    #test
-    #print (test)
 
-    #Cant use php with django
-    #so use python instead
-    #NB: The markers table is the Events table in our implementation
+    #for event in Event.objects.raw('SELECT id, ( 3959 * acos( cos( radians(%s) ) * cos( radians( latitude ) ) * cos( radians( %s ) - radians(search_long) ) + sin( radians(37) ) * sin( radians( lat ) ) ) ) AS distance FROM Event HAVING distance < 25 ORDER BY distance', [search_lat, search_long]):
+     #   print (event)
+
+"""
+
+
     
     #What PHP does in the example :
     #the PHP code first initializes a new XML document and creates the "markers" parent node. It then connects to the database, executes a SELECT * (select all) query on the markers table, and iterates through the results.
@@ -102,3 +79,4 @@ def distance(origin, destination):
 get_queryset()
 
 #Set this up so it takes data from fields as in django example then returns a json thingmy i think
+"""
