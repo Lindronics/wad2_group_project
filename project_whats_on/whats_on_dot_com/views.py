@@ -75,7 +75,17 @@ def events(request):
 
 # EVENT PAGE (event details page)
 def event_page(request, event_pk):
-    return render(request, "whats_on_dot_com/event_page.html")
+    event = Event.objects.get(pk=event_pk)
+    interested = event.interested.all()
+    tags = event.tags.all()
+
+    context_dict = {
+        "event":event, 
+        "interested":interested, 
+        "tags":tags
+    }
+    
+    return render(request, "whats_on_dot_com/event_page.html", context_dict)
 
 # ADD EVENT (for adding a new event)
 @login_required

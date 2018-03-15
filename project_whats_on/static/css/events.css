@@ -38,3 +38,8 @@
   
   .box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
   
+  #events_header{
+    margin-bottom: -25px;
+    margin-top: 10px;
+    font-size: 50pt;
+  }

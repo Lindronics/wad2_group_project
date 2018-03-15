@@ -9,7 +9,7 @@
         "hosts":[{"username":"mercedes"}],
         "interested":[{"username":"ken"}],
         "category":"Club",
-        "tags":[{"name":"a"}, {"name":"b"}]
+        "tags":[{"name":"Tag a"}, {"name":"Tag b"}]
     },
     {   "name":"SWITCH",
         "description":"They say you know you're ugly if you can't pull in HIVE.",
@@ -21,7 +21,7 @@
         "hosts":[{"username":"mercedes"}, {"username":"ken"}],
         "interested":[{"username":"mercedes"}],
         "category":"Club",
-        "tags":[{"name":"a"}, {"name":"b"}, {"name":"c"}]
+        "tags":[{"name":"Tag a"}, {"name":"Tag b"}, {"name":"Tag c"}]
     },
     {   "name":"Bus trip to the highlands",
         "description":"Destination of this trip is Fort William.",
@@ -33,7 +33,7 @@
         "hosts":[{"username":"sam"}],
         "interested":[{"username":"mercedes"}, {"username":"ken"}],
         "category":"Trip",
-        "tags":[{"name":"a"}]
+        "tags":[{"name":"Tag a"}]
     },
     {   "name":"Tim Cook at UofG",
         "description":"The CEO of Apple Inc. coming to University of Glasgow to receive his honourary doctorate.",
@@ -45,7 +45,7 @@
         "hosts":[{"username":"sam"}],
         "interested":[{"username":"mercedes"}, {"username":"ken"}],
         "category":"Academic",
-        "tags":[{"name":"a"}]
+        "tags":[{"name":"Tag a"}]
     },
     {   "name":"GUU 3rd Parliamentary Debate",
         "description":"The World Almighty Distributist League government in power. The bill: THW yada yada.",
@@ -57,7 +57,7 @@
         "hosts":[{"username":"sam"}],
         "interested":[{"username":"mercedes"}, {"username":"ken"}],
         "category":"Academic",
-        "tags":[{"name":"a"}]
+        "tags":[{"name":"Tag a"}]
     },
     {   "name":"Sailing Club AGM",
         "description":"Some random description.",
@@ -69,6 +69,6 @@
         "hosts":[{"username":"sam"}],
         "interested":[{"username":"mercedes"}, {"username":"ken"}],
         "category":"Academic",
-        "tags":[{"name":"a"}]
+        "tags":[{"name":"Tag a"}]
     }
 ]

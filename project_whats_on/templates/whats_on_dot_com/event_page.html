@@ -1,6 +1,80 @@
 {% extends 'whats_on_dot_com/base.html' %}
 
+{% block title_block %}
+    What's On - {{event.name}}
+{% endblock %}
 {% block body_block %}
-    sadgdg
+    <a href="{% url 'events' %}">Back to overview</a>
+    <hr />
+    <div class="jumbotron">
+        <h1>{{event.name}}</h1>
+        <hr />
+        <div class="row">
+            <div class="col-sm-8">
+                <!-- Description -->
+                <div class="card" >
+                    <h4 class="card-header">Description</h4>
+                    <div class="card-block">
+                        <p class="card-text">{{event.description}}</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-sm-6">
+                        <!-- Location -->
+                        <div class="card" >
+                            <h4 class="card-header">Location</h4>
+                            <div class="card-block">
+                                <p class="card-text">{{event.location_info}}</p>
+                                <p class="card-text">{{event.address}}</p>
+                                <p class="card-text">{{event.city}} {{event.post_code}}</p>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <!-- Tags -->
+                        <div class="card" >
+                            <h4 class="card-header">Tags</h4>
+                            <div class="card-block">
+                                {% for t in tags %}
+                                    <a href="#"><span class="badge badge-primary">{{t.name}}</span></a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <!-- Interested profiles -->
+                <div class="card" >
+                    <h4 class="card-header">Profiles</h4>
+                    <div class="card-block">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for p in interested %} 
+                                        <tr>
+                                            <td>{{p.user.username}}</td>
+                                            <td>{{p.forename}} {{p.surname}}</td>
+                                        </tr> 
+                                    {% endfor %} 
+                                </tbody>
+                            </table>
+                        </div>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 <!-- Access via <hostname>/event/<event slug>. Show an individual event page. -->
