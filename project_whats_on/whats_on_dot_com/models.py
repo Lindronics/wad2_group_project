@@ -1,6 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
+import datetime 
 
 # USER PROFILE:
 # Contains profile information, is linked to django User model
@@ -72,8 +73,12 @@ class Event(models.Model):
         print(self.name)
         #IAIN VALIDATION FOR LAT AND LONG GOES HERE
         date = self.date_time
-        if date < datetime.date.today():
-            raise ValidationError(_('Invalid date - renewal in past'))
+        if type(date)==datetime.date:
+            print(type(date))
+            print(type(datetime.date.today()))
+                  
+            if date < datetime.date.today():
+                raise ValidationError(_('Invalid date - renewal in past'))
         return(cleaned_data)
  
 
