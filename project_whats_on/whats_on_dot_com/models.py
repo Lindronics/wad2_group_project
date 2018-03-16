@@ -71,6 +71,12 @@ class Event(models.Model):
     def clean(self):
         cleaned_data = self.cleaned_data
         #IAIN VALIDATION FOR LAT AND LONG GOES HERE
+		
+		
+		
+		date = cleaned_data["date_time"]
+		if date < datetime.date.today():
+            raise ValidationError(_('Invalid date - renewal in past'))
         
  
 
