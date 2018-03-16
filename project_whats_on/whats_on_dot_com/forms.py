@@ -14,6 +14,8 @@ class NewEventForm(forms.ModelForm):
     address = forms.CharField(label = 'Address', max_length=128, help_text="Address")
     location_info = forms.CharField(label = 'Location Info', max_length=128, help_text="Additional location information")
     event_picture = forms.ImageField(label = 'Picture', )
+    tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(), widget=forms.CheckboxSelectMultiple())
+
     
     # TODO implement selecting hosts, category, tags when creating event
     # ideally in a dropdown menu
