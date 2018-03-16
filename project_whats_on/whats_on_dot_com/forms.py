@@ -18,9 +18,12 @@ class NewEventForm(forms.ModelForm):
     # TODO implement selecting hosts, category, tags when creating event
     # ideally in a dropdown menu
 
+
+    
+
     class Meta:
         model = Event
-        exclude = ('number_followers', 'address', 'city', 'post_code', 'latitude', 'longtitude', 'host', 'interested', 'category', 'slug')
+        exclude = ('number_followers', 'latitude', 'longtitude', 'host', 'interested', 'category', 'slug')
 
 # Used for filtering Events on home page
 class FilterEventsForm(forms.ModelForm):

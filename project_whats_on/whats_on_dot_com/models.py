@@ -42,15 +42,13 @@ class Event(models.Model):
     name = models.CharField(max_length=128)
     description = models.CharField(max_length=1024, blank=True, null=True)
     date_time = models.DateTimeField()
-    slug = models.SlugField(unique=True, blank=True, null=True)
+    address = models.CharField(max_length=128)
     location_info = models.CharField(max_length=128)
     event_picture = models.ImageField(upload_to="event_images", blank=True)
-    number_followers = models.IntegerField(default=0)
 
-    # perhaps it makes more sense to split the address into different fields?
-    address = models.CharField(max_length=128)
-    city = models.CharField(max_length=128)
-    post_code = models.CharField(max_length=9)
+    #these are set in the back end
+    number_followers = models.IntegerField(default=0)
+    slug = models.SlugField(unique=True, blank=True, null=True)
     latitude = models.FloatField(blank=True, null=True)
     longtitude = models.FloatField(blank=True, null=True)
 
@@ -70,6 +68,11 @@ class Event(models.Model):
     def Meta():
         verbose_name_plural = 'Events'
 
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        #IAIN VALIDATION FOR LAT AND LONG GOES HERE
+        
+ 
 
         
 

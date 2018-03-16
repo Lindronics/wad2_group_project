@@ -98,8 +98,7 @@ def add_event(request):
 
         if form.is_valid():
             # TODO further code might be necessary to get tags, hosts, category from form
-            event = form.save(commit=True)
-            print("Event added: %s" % event.name)
+            form.save(commit=True)
             return index(request)
         else:
             print(form.errors)
