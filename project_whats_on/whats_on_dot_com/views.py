@@ -73,18 +73,25 @@ def events(request):
     #print(events)
     return render(request, 'whats_on_dot_com/events.html', context_dict)
 
+# EVENTS MAP (map overview of nearby events)
+def events_map(request):
+    return render(request, 'whats_on_dot_com/events_map.html')
+
 # EVENT PAGE (event details page)
 def event_page(request, event_pk):
     event = Event.objects.get(pk=event_pk)
     interested = event.interested.all()
     tags = event.tags.all()
+    host = event.host.all()
+    print(host)
 
     context_dict = {
         "event":event, 
         "interested":interested, 
-        "tags":tags
+        "tags":tags,
+        "host":host,
     }
-    
+
     return render(request, "whats_on_dot_com/event_page.html", context_dict)
 
 # ADD EVENT (for adding a new event)
@@ -150,9 +157,15 @@ def about(request):
     return render(request, 'whats_on_dot_com/about.html')
 
 # PROFILE (page for personal profile overview)
+@login_required
 def profile(request, username):
     user_profile = UserProfile.objects.get(user__username=username)
-    return render(request, 'whats_on_dot_com/profile.html', {"profile":user_profile})
+
+    context_dict = {
+        "profile":user_profile,
+        "following":user_profile.follows.all(),
+    }
+    return render(request, 'whats_on_dot_com/profile.html', context_dict)
 
 # PROFILE_SETUP (changing profile values such as name, description)
 @login_required

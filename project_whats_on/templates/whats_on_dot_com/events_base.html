@@ -16,10 +16,10 @@
     {% block toggle_block %}
         <ul class="nav nav-tabs justify-content-end">
             <li class="nav-item">
-                <a class="nav-link active" href="#">List</a>
+                <a class="nav-link active" href="{% url 'events' %}">List</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Map</a>
+                <a class="nav-link" href="{% url 'events_map' %}">Map</a>
             </li>
         </ul>
     {% endblock %}

@@ -6,17 +6,82 @@
 {% endblock %}
 
 {% block body_block %}
-
-    <div>
-        <h1> {{profile.user.username}} </h1>
-    </div>
-    <hr/>
-    {{profile.forename}} {{profile.surname}}
-
-    <div>
+    <br />
+    <a href="{% url 'profiles' %}">Back to profiles list</a>
+    <hr />
+    <div class="jumbotron">
+        <h1> {{profile.forename}} {{profile.surname}} ({{profile.user.username}})  </h1>
+        <hr />
+        <!-- Description -->
+        <div class="card" >
+            <h4 class="card-header">Profile description</h4>
+            <div class="card-block">
+                <div class="card-text">
+                    {{ profile.description }}
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <!-- Following -->
+            <div class="col-sm-6">
+                <div class="card" >
+                    <h4 class="card-header">Following</h4>
+                    <div class="card-block">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for p in following %} 
+                                        <tr>
+                                            <td>{{p.user.username}}</td>
+                                            <td>{{p.forename}} {{p.surname}}</td>
+                                            <td><a href="{% url 'profile' p.user.username %}"><span class="badge badge-primary">Details</span></a></td>
+                                        </tr> 
+                                    {% endfor %} 
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <!-- Followers -->
+                <div class="card" >
+                    <h4 class="card-header">Followers</h4>
+                    <div class="card-block">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for p in following %} 
+                                        <tr>
+                                            <td>{{p.user.username}}</td>
+                                            <td>{{p.forename}} {{p.surname}}</td>
+                                            <td><a href="{% url 'profile' p.user.username %}"><span class="badge badge-primary">Details</span></a></td>
+                                        </tr> 
+                                    {% endfor %} 
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
         {% if user.username == profile.user.username %}
-            <p><a href="{% url 'profile_setup' %}">Change profile values</a></p>
+            <p><a href="{% url 'profile_setup' %}" type="button" class="btn btn-primary">Change profile information</a></p>
         {% endif %}
-    </div>
+    </div>        
     
 {% endblock %}

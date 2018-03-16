@@ -1,0 +1,21 @@
+{% extends 'whats_on_dot_com/events_base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    What's On - Map
+{% endblock %}
+
+{% block toggle_block %}
+<ul class="nav nav-tabs justify-content-end">
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'events' %}">List</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" href="{% url 'events_map' %}">Map</a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block events_block %}
+    <!-- Insert map here -->
+{% endblock %}
