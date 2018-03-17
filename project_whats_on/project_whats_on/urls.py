@@ -26,7 +26,6 @@ class MyRegistrationView(RegistrationView):
 
 urlpatterns = [
     url(r"^admin/", admin.site.urls),
-	url(r"^map_test/", include('map_test.urls')),
     url(r"^accounts/", include("registration.backends.simple.urls")),
     url(r"^", include("whats_on_dot_com.urls")),# Match to start of urls used in the whats_on_dot_com app
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -76,6 +76,10 @@ def events(request):
 # EVENTS MAP (map overview of nearby events)
 def events_map(request):
     return render(request, 'whats_on_dot_com/events_map.html')
+	
+#delete after main map works
+def map_test(request):
+    return render(request, 'whats_on_dot_com/map_test.html', {})
 
 # EVENT PAGE (event details page)
 def event_page(request, event_pk):
