@@ -1,0 +1,6 @@
+#filter_menu ul{
+    list-style: none;
+  }
+#filter_menu li{
+    float: right;
+}

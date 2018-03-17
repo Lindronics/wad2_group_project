@@ -1,7 +1,79 @@
 {% extends 'whats_on_dot_com/base.html' %}
+{% load staticfiles %}
 
 <!-- Show a list of profiles attending an event. -->
 
 {% block title_block %}
-    What's On - Profiles
+What's On - Profiles
+{% endblock %}
+
+{% block nav_block %}
+    <li><a href="{% url 'events' %}" >Events</a></li>
+    <li id="active"><a href="{% url 'profiles' %}">Profiles</a></li>
+    <li><a href="{% url 'add_event'%}">Add Event</a></li>
+{% endblock %}
+
+{% block body_block %}
+
+<!-- Custom CSS -->
+<link rel="stylesheet" type="text/css" href="{% static 'css/profiles.css' %}"/>
+
+    <h1>Profiles</h1>
+    {% if profiles %}
+        <form lass="form-signin" role="form" method="POST" action="" id="filter_profiles_form">
+            {% csrf_token %}
+            <div id="filter_menu">
+                <div class="input-group">
+                    <!-- People filter -->
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            People
+                        </button>
+                        <div class="dropdown-menu">
+                            {% if filter_profiles_form.people %}
+                                {% for p in filter_profiles_form.people %}
+                                    <div class="dropdown-item">
+                                        {{p}}
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                No people options available.
+                            {% endif %}
+                            <div role="separator" class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Remove filter</a>
+                        </div>
+                    </div>
+                    <!-- Search bar -->                       
+                    <input type="text" class="form-control" placeholder="{{search_bar_initial}}" id="id_search" name="search"/>
+                    <span class="input-group-btn">
+                        <button class="btn btn-secondary" type="submit" name="submit">Go!</button>
+                    </span>
+                </div>
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in profiles %} 
+                        <tr>
+                            <td>{{p.user.username}}</td>
+                            <td>{{p.forename}} {{p.surname}}</td>
+                            <td>{{p.description}}</td>
+                            <td><a href="{% url 'profile' p.user.username %}">Details</a></td>
+                        </tr> 
+                    {% endfor %} 
+                </tbody>
+            </table>
+        </div>
+    {% else %} 
+        <strong>No profiles present.</strong>
+    {% endif %}
 {% endblock %}

@@ -1,0 +1,124 @@
+{% extends 'whats_on_dot_com/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    What's On - Events
+{% endblock %}
+
+{% block body_block %}
+
+<!-- Custom CSS -->
+<link rel="stylesheet" type="text/css" href="{% static 'css/profiles.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/events.css' %}"/>
+
+    <h1 id="events_header">Events</h1>
+
+    {% block toggle_block %}
+        <ul class="nav nav-tabs justify-content-end">
+            <li class="nav-item">
+                <a class="nav-link active" href="{% url 'events' %}">List</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'events_map' %}">Map</a>
+            </li>
+        </ul>
+    {% endblock %}
+    <br />
+    <!-- Filters -->
+    <form class="form" role="form" method="POST" action="" id="filter_events_form">
+        {% csrf_token %}
+        <div id="filter_menu">
+            <div class="input-group">
+                <span class="input-group-btn">
+                    <a href="" class="btn btn-primary" type="button">All events</a>
+                </span>
+                <!-- People filter -->
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        People
+                    </button>
+                    <div class="dropdown-menu">
+                        {% if filter_events_form.people %}
+                            {% for p in filter_events_form.people %}
+                                <div class="dropdown-item">
+                                    {{p}}
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            No people options available.
+                        {% endif %}
+                        <div role="separator" class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Remove filter</a>
+                    </div>
+                </div>
+                <!-- Radius filter -->
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Radius
+                    </button>
+                    <div class="dropdown-menu">
+                        {% if filter_events_form.radius %}
+                            {% for r in filter_events_form.radius %}
+                                <div class="dropdown-item">
+                                    {{r}}
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            No radius options available.
+                        {% endif %}
+                        <div role="separator" class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Remove filter</a>
+                    </div>
+                </div>
+                <!-- Date filter -->
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Date
+                    </button>
+                    <div class="dropdown-menu">
+                        {% if filter_events_form.date %}
+                            {% for d in filter_events_form.date %}
+                                <div class="dropdown-item">
+                                    {{d}}
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            No date options available.
+                        {% endif %}
+                        <div role="separator" class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Remove filter</a>
+                    </div>
+                </div>
+                <!-- Category filter -->
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Category
+                    </button>
+                    <div class="dropdown-menu">
+                        {% if filter_events_form.category %}
+                            {% for c in filter_events_form.category %}
+                            <div class="dropdown-item">
+                                {{c}}
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            No categories available.
+                        {% endif %}
+                        
+                            <div role="separator" class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Remove filter</a>
+                    </div>
+                </div>
+                <!-- Search bar -->                       
+                <input type="text" class="form-control" placeholder="{{search_bar_initial}}" id="id_search" name="search"/>
+                <span class="input-group-btn">
+                    <button class="btn btn-secondary" type="submit" name="submit">Go!</button>
+                </span>
+            </div>
+        </div>
+    </form>
+
+    {% block events_block %}
+        <!-- Events content here -->
+    {% endblock %}
+{% endblock %}

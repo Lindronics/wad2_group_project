@@ -1,5 +1,38 @@
 {% extends 'whats_on_dot_com/base.html' %}
 
-{% block title_block %}
-    What's On - Add an Event
-{% endblock %}
+{% load staticfiles %}
+
+
+	{% block title_block %}
+		Add Event
+	{% endblock %}
+
+	{% block nav_block %}
+		<li><a href="{% url 'events' %}" >Events</a></li>
+		<li><a href="{% url 'profiles' %}">Profiles</a></li>
+		<li id="active"><a href="{% url 'add_event'%}">Add Event</a></li>
+	{% endblock %}
+
+	{% block body_block%}
+		{% if user.is_authenticated %}
+			<h1>Add an Event</h1>
+			<div>
+		 		{% if error %}
+        				<p style="color: red;">
+            					ERROR MESSAGE
+       					</p>
+    				{% endif %}
+			</div>
+			<div>
+			<table border="1">
+				<form id="NewEventForm" method="post" action="/whats_on_dot_com/add_event/">
+					{% csrf_token %}
+					{{ form.as_table }}
+				</form>
+			</table>
+				<input type="submit" name="submit" value="Add Event" />
+			</div>
+		{% else %}
+			You must log in to add an event
+		{% endif %}
+	{% endblock %}
