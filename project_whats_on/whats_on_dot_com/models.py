@@ -48,11 +48,11 @@ class Event(models.Model):
     number_followers = models.IntegerField(default=0)
 
     # perhaps it makes more sense to split the address into different fields?
-    address = models.CharField(max_length=128)
-    city = models.CharField(max_length=128)
-    post_code = models.CharField(max_length=9)
+    address = models.CharField(max_length=512) #store all address info about location needed to find via geocode
+    #city = models.CharField(max_length=128)
+    #post_code = models.CharField(max_length=9)
     latitude = models.FloatField(blank=True, null=True)
-    longtitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
 
     # Foreign keys
     host = models.ManyToManyField(UserProfile, related_name="host")
