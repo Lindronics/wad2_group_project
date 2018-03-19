@@ -39,7 +39,8 @@ def nearby_locations(latitude, longitude, radius, max_results=100, use_miles=Tru
     ORDER BY distance LIMIT 0 , %d;""" % (distance_unit, latitude, longitude, latitude, int(radius), max_results)
     cursor.execute(sql)
     ids = [row[0] for row in cursor.fetchall()]
-
+    #I have ids of all objects
+    #and return the relevant object
     return Event.objects.filter(id__in=ids)
 #calling wrong as 55.8 is assigned to self
 print (nearby_locations(55.8, -4.2, 10, 50))
