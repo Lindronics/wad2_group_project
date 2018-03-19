@@ -80,6 +80,14 @@ def events_map(request):
 #delete after main map works
 def map_test(request):
     return render(request, 'whats_on_dot_com/map_test.html', {})
+	
+#delete after main map works
+def map_test2(request):
+    return render(request, 'whats_on_dot_com/map_test2.html', {})
+	
+#delete after main map works
+def map_test3(request):
+    return render(request, 'whats_on_dot_com/map_test3.html', {})
 
 # EVENT PAGE (event details page)
 def event_page(request, event_pk):
