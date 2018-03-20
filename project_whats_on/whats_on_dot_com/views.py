@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
-from whats_on_dot_com.models import User, UserProfile, Event, Category
+from whats_on_dot_com.models import User, UserProfile, Event, Category, Tag
 from whats_on_dot_com.forms import NewEventForm, ProfileSetupForm, FilterEventsForm, FilterProfilesForm
 
 # INDEX (home page, redirects to events page)
@@ -98,8 +98,8 @@ def add_event(request):
 
         if form.is_valid():
             # TODO further code might be necessary to get tags, hosts, category from form
-            form.save(commit=True)
-            return index(request)
+            form.save()
+            return HttpResponseRedirect(reverse('index'))
         else:
             print(form.errors)
 

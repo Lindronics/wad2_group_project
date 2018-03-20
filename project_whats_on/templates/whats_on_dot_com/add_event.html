@@ -17,20 +17,24 @@
 		{% if user.is_authenticated %}
 			<h1>Add an Event</h1>
 			<div>
-		 		{% if error %}
-        				<p style="color: red;">
-            					ERROR MESSAGE
-       					</p>
-    				{% endif %}
-			</div>
-			<div>
-			<table border="1">
-				<form id="NewEventForm" method="post" action="/whats_on_dot_com/add_event/">
-					{% csrf_token %}
-					{{ form.as_table }}
-				</form>
-			</table>
+				<form action="" method="post" id="event_form">
+				{% csrf_token %}
+				<input id="sam" type="text" name="name" maxlength="100" required /></p>
+				<input id="" type="text" name="description" maxlength="100" required /></p>
+				<input id="" type="text" name="date_time" maxlength="100" required /></p>
+				<input id="" type="text" name="address" maxlength="100" required /></p>
+				<input id="" type="text" name="location_info" maxlength="100" required /></p>
+				<input type="file" name="event_picture" id="id_event_picture" />
+
+				<ul id=event_tags>
+					{% for c in categories %}
+						<p>boaby</p>
+						<li><input type="checkbox" name=c.name value="c.name" id="" />
+					{% endfor %}
+
+
 				<input type="submit" name="submit" value="Add Event" />
+				</form>
 			</div>
 		{% else %}
 			You must log in to add an event

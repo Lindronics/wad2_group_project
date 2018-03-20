@@ -69,18 +69,6 @@ class Event(models.Model):
     def Meta():
         verbose_name_plural = 'Events'
 
-    def clean(self):
-        print(self.name)
-        #IAIN VALIDATION FOR LAT AND LONG GOES HERE
-        date = self.date_time
-        if type(date)==datetime.date:
-            print(type(date))
-            print(type(datetime.date.today()))
-                  
-            if date < datetime.date.today():
-                raise ValidationError(_('Invalid date - renewal in past'))
-        return(cleaned_data)
- 
 
         
 
