@@ -49,22 +49,18 @@ class Event(models.Model):
 
     #these are set in the back end
     number_followers = models.IntegerField(default=0)
-    slug = models.SlugField(unique=True, blank=True, null=True)
     latitude = models.FloatField(blank=True, null=True)
     longtitude = models.FloatField(blank=True, null=True)
 
     # Foreign keys
     host = models.ManyToManyField(UserProfile, related_name="host")
     interested = models.ManyToManyField(UserProfile, related_name="interested", blank=True)
-    category = models.ForeignKey(Category)
+    categories = models.ManyToManyField(Category)
     tags = models.ManyToManyField(Tag, blank=True)
 
     def __str__(self):
         return self.name
 
-    def save(self,*args,**kwargs):
-        self.slug = slugify(self.name)
-        super(Event,self).save(*args,**kwargs)
 
     def Meta():
         verbose_name_plural = 'Events'

@@ -75,6 +75,7 @@ def events(request):
 
 # EVENT PAGE (event details page)
 def event_page(request, event_pk):
+    categories = Categories.object.all()
     event = Event.objects.get(pk=event_pk)
     interested = event.interested.all()
     tags = event.tags.all()
@@ -82,7 +83,8 @@ def event_page(request, event_pk):
     context_dict = {
         "event":event, 
         "interested":interested, 
-        "tags":tags
+        "tags":tags,
+        "categories":categories
     }
     
     return render(request, "whats_on_dot_com/event_page.html", context_dict)
@@ -90,6 +92,7 @@ def event_page(request, event_pk):
 # ADD EVENT (for adding a new event)
 @login_required
 def add_event(request):
+    categories = Category.objects.all()
     form = NewEventForm()
 
     # Get data from form, add to model if valid
@@ -99,11 +102,17 @@ def add_event(request):
         if form.is_valid():
             # TODO further code might be necessary to get tags, hosts, category from form
             form.save()
-            return HttpResponseRedirect(reverse('index'))
+            return HttpResponseRedirect('/')
         else:
             print(form.errors)
 
+        context_dict = {
+        "categories":categories
+        }
+
     return render(request, 'whats_on_dot_com/add_event.html', {"form":form})
+
+    
 
 # PROFILES (profiles list including search etc.)
 def profiles(request):
