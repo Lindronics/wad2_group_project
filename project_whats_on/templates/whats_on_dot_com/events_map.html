@@ -68,6 +68,7 @@
          var geocoder = new google.maps.Geocoder();
          geocoder.geocode({address: address}, function(results, status) {
            if (status == google.maps.GeocoderStatus.OK) {
+		   //replace this function call with call to my python script
             searchLocationsNear(results[0].geometry.location);
            } else {
              alert(address + ' not found');

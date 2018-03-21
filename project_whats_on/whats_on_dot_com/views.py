@@ -2,7 +2,13 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.contrib import messages 
+from django.contrib import messages
+
+#iain funky shit
+import math
+
+#import my script from main document tree
+#from get_events_in_radius import nearby_locations
 
 from whats_on_dot_com.models import User, UserProfile, Event, Category
 from whats_on_dot_com.forms import NewEventForm, ProfileSetupForm, FilterEventsForm, FilterProfilesForm
@@ -33,7 +39,7 @@ def events(request):
             # Filter search bar
             if data["search"]:
                 events = events.filter(name__icontains=data["search"])
-                sb = data["search"]
+                #sb = data["search"]
 
             # Filter categories
             if data["category"]:
@@ -76,19 +82,84 @@ def events(request):
 
 # EVENTS MAP (map overview of nearby events)
 def events_map(request):
+    #COPY PASTING SCRIPT BECAUSE SHIT IS BROKEN AND I WANT IT TO BE NOT
+
+    def nearby_locations(latitude, longitude, radius, max_results=100, use_miles=True):
+        if use_miles:
+            distance_unit = 3959
+        else:
+            distance_unit = 6371
+
+        from django.db import connection, transaction
+        from project_whats_on import settings
+        cursor = connection.cursor()
+        #print(settings.DATABASES['default']['ENGINE'])
+        #if settings.DATABASE_ENGINE == 'sqlite3':
+        if settings.DATABASES['default']['ENGINE'] == 'django.db.backends.sqlite3':
+            connection.connection.create_function('acos', 1, math.acos)
+            connection.connection.create_function('cos', 1, math.cos)
+            connection.connection.create_function('radians', 1, math.radians)
+            connection.connection.create_function('sin', 1, math.sin)
+
+        sql = """SELECT id, (%f * acos( cos( radians(%f) ) * cos( radians( latitude ) ) *
+        cos( radians( longitude ) - radians(%f) ) + sin( radians(%f) ) * sin( radians( latitude ) ) ) )
+        AS distance FROM Whats_On_Dot_Com_Event WHERE distance < %d
+        ORDER BY distance LIMIT 0 , %d;""" % (distance_unit, latitude, longitude, latitude, int(radius), max_results)
+        cursor.execute(sql)
+        ids = [row[0] for row in cursor.fetchall()]
+        #I have ids of all objects
+        #and return the relevant object
+        return Event.objects.filter(id__in=ids)
+
+
+    #think this is where I should put fns that I need to call from template
+    map_pointz = nearby_locations(55.8, -4.2, 10, 50) #temporary hard code to test. Fix to take data from form
+    #print (map_points)
+    map_points = ["test"]
+    #test
+    #test
     return render(request, 'whats_on_dot_com/events_map.html')
 	
 #delete after main map works
 def map_test(request):
-    return render(request, 'whats_on_dot_com/map_test.html', {})
+
+    #C+P CODE CAUSE I A SMART BOY
+
+    def nearby_locations(latitude, longitude, radius, max_results=100, use_miles=True):
+        if use_miles:
+            distance_unit = 3959
+        else:
+            distance_unit = 6371
+
+        from django.db import connection, transaction
+        from project_whats_on import settings
+        cursor = connection.cursor()
+        #print(settings.DATABASES['default']['ENGINE'])
+        #if settings.DATABASE_ENGINE == 'sqlite3':
+        if settings.DATABASES['default']['ENGINE'] == 'django.db.backends.sqlite3':
+            connection.connection.create_function('acos', 1, math.acos)
+            connection.connection.create_function('cos', 1, math.cos)
+            connection.connection.create_function('radians', 1, math.radians)
+            connection.connection.create_function('sin', 1, math.sin)
+
+        sql = """SELECT id, (%f * acos( cos( radians(%f) ) * cos( radians( latitude ) ) *
+        cos( radians( longitude ) - radians(%f) ) + sin( radians(%f) ) * sin( radians( latitude ) ) ) )
+        AS distance FROM Whats_On_Dot_Com_Event WHERE distance < %d
+        ORDER BY distance LIMIT 0 , %d;""" % (distance_unit, latitude, longitude, latitude, int(radius), max_results)
+        cursor.execute(sql)
+        ids = [row[0] for row in cursor.fetchall()]
+        #I have ids of all objects
+        #and return the relevant object
+        return Event.objects.filter(id__in=ids)
 	
-#delete after main map works
-def map_test2(request):
-    return render(request, 'whats_on_dot_com/map_test2.html', {})
-	
-#delete after main map works
-def map_test3(request):
-    return render(request, 'whats_on_dot_com/map_test3.html', {})
+
+    #testing
+    map_points = nearby_locations(55.8, -4.2, 10, 50)
+    #map_points = Event.objects.all()
+    #DUMBASS ME DIDNT REMEMBER TO USE CONTEXT DICT
+    context_dict = {"map_points": map_points}
+    return render(request, 'whats_on_dot_com/map_test.html', context_dict)
+
 
 # EVENT PAGE (event details page)
 def event_page(request, event_pk):
