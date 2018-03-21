@@ -11,8 +11,9 @@ def index(request):
     return HttpResponseRedirect('events')  # Via events url pattern
 
 # EVENTS (events page with events in grid list)
-def events(request):
+def events(request, query=""):
     filter_events_form = FilterEventsForm()
+
 
     # Initial value of search bar
     sb = "Search..."
@@ -30,9 +31,26 @@ def events(request):
             print(data)
 
             # Filter search bar
-            if data["search"]:
-                events = events.filter(name__icontains=data["search"])
-                sb = data["search"]
+            search_term = ""
+            if query:
+                search_term = query
+            elif data["search"]:
+                search_term = data["search"]
+            if search_term:
+                events_buffer = events
+
+                # Consider names
+                events = events_buffer.filter(name__icontains=search_term)
+
+                # Consider tags and hosts
+                for event in events_buffer:
+                    if event.tags.filter(name=search_term).exists() or event.host.filter(user__username=search_term).exists():
+                        events = events | events_buffer.filter(pk=event.pk)
+
+                # Consider categories
+                events = events | events_buffer.filter(category__name__icontains=search_term)
+
+                sb = search_term
 
             # Filter categories
             if data["category"]:
