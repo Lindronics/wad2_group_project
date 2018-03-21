@@ -20,8 +20,13 @@ class NewEventForm(forms.ModelForm):
     
     # TODO implement selecting hosts, category, tags when creating event
     # ideally in a dropdown menu
-
-
+    #VALIDATION GOES HERE. WILL DO A LOT OF THIS TOMORROW
+    def clean(self):
+        cleaned_data = super(NewEventForm,self).clean()
+        date_time = cleaned_data.get('date_time')
+        print(date_time)
+        address = cleaned_data.get('address')
+        
     
 
     class Meta:
