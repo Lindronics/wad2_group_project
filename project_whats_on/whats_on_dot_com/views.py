@@ -12,8 +12,24 @@ def index(request):
 
 # EVENTS (events page with events in grid list)
 def events(request, query=""):
-    filter_events_form = FilterEventsForm()
 
+    def search_bar(events, search_term):
+        events_buffer = events
+
+        # Consider names
+        events = events_buffer.filter(name__icontains=search_term)
+
+        # Consider tags and hosts
+        for event in events_buffer:
+            if event.tags.filter(name=search_term).exists() or event.host.filter(user__username=search_term).exists():
+                events = events | events_buffer.filter(pk=event.pk)
+
+        # Consider categories
+        events = events | events_buffer.filter(category__name__icontains=search_term)
+        return events, search_term 
+
+
+    filter_events_form = FilterEventsForm()
 
     # Initial value of search bar
     sb = "Search..."
@@ -28,29 +44,10 @@ def events(request, query=""):
 
         if filter_events_form.is_valid():
             data = filter_events_form.cleaned_data
-            print(data)
 
-            # Filter search bar
-            search_term = ""
-            if query:
-                search_term = query
-            elif data["search"]:
-                search_term = data["search"]
-            if search_term:
-                events_buffer = events
-
-                # Consider names
-                events = events_buffer.filter(name__icontains=search_term)
-
-                # Consider tags and hosts
-                for event in events_buffer:
-                    if event.tags.filter(name=search_term).exists() or event.host.filter(user__username=search_term).exists():
-                        events = events | events_buffer.filter(pk=event.pk)
-
-                # Consider categories
-                events = events | events_buffer.filter(category__name__icontains=search_term)
-
-                sb = search_term
+            # If search term provided, filter by search bar
+            if data["search"]:
+                events, sb = search_bar(events, data["search"])
 
             # Filter categories
             if data["category"]:
@@ -81,6 +78,11 @@ def events(request, query=""):
                         events = events | events_buffer.filter(interested=p)
         else:
             print(filter_events_form.errors)
+
+    # If GET, check if arguments were passed into the search bar
+    else:
+        if query:
+            events, sb = search_bar(events, query)
 
     context_dict = {
         "events":events, 

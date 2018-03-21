@@ -53,7 +53,7 @@
                             <h4 class="card-header">Tags</h4>
                             <div class="card-block">
                                 {% for t in tags %}
-                                    <a href="#"><span class="badge badge-primary">{{t.name}}</span></a>
+                                    <a href="{% url 'events' t.name %}"><span class="badge badge-primary">{{t.name}}</span></a>
                                 {% endfor %}
                             </div>
                         </div>

@@ -79,6 +79,8 @@
             </div>
         </div>
         <br />
+            <p><a href="{% url 'events' profile.user.username %}" type="button" class="btn btn-primary">Events this profile is hosting</a></p>
+        <br />
         {% if user.username == profile.user.username %}
             <p><a href="{% url 'profile_setup' %}" type="button" class="btn btn-primary">Change profile information</a></p>
         {% endif %}
