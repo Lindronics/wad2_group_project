@@ -8,29 +8,26 @@ from django.contrib.auth.models import User
 
 # Used for creating a new event
 class NewEventForm(forms.ModelForm):
-    name = forms.CharField(max_length=128, help_text="Please enter the name of your event.",required=True)
-    description = forms.CharField(max_length=1024, help_text="Please enter a description for your event.",required=True)
+    name = forms.CharField(max_length=128, help_text="Please enter the name of your event.", required=True)
+    description = forms.CharField(max_length=1024, help_text="Please enter a description for your event.", required=True)
     date_time = forms.DateTimeField(required=True)
-    address = forms.CharField(max_length=128, help_text="Address",required=True)
+    address = forms.CharField(max_length=128, help_text="Address", required=True)
     location_info = forms.CharField(max_length=128, help_text="Additional location information")
     event_picture = forms.ImageField(required=False)
     categories = forms.ModelMultipleChoiceField(queryset=Category.objects.all(), widget=forms.CheckboxSelectMultiple(), required=False)
-    #tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(), widget=forms.CheckboxSelectMultiple(),required=False)
-
     
     # TODO implement selecting hosts, category, tags when creating event
     # ideally in a dropdown menu
-    #VALIDATION GOES HERE. WILL DO A LOT OF THIS TOMORROW
+
     def clean(self):
         cleaned_data = super(NewEventForm,self).clean()
         date_time = cleaned_data.get('date_time')
         print(date_time)
-        address = cleaned_data.get('address')        
-    
+        address = cleaned_data.get('address')
 
     class Meta:
         model = Event
-        exclude = ('number_followers', 'latitude', 'longtitude', 'host', 'interested', 'category','tags')
+        exclude = ('number_followers', 'address', 'city', 'post_code', 'latitude', 'longtitude', 'host', 'interested', 'category', 'slug', 'tags')
 
 # Used for filtering Events on home page
 class FilterEventsForm(forms.ModelForm):

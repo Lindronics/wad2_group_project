@@ -4,6 +4,7 @@
     What's On - {{event.name}}
 {% endblock %}
 {% block body_block %}
+    <br />
     <a href="{% url 'events' %}">Back to overview</a>
     <hr />
     <div class="jumbotron">
@@ -20,6 +21,19 @@
                     </div>
                 </div>
                 <br />
+                <!-- Hosts -->
+                <div class="card" >
+                        <h4 class="card-header">Hosts</h4>
+                        <div class="card-block">
+                            {% if host %}
+                                {% for h in host %}
+                                    <a href="{% url 'profile' h.user.username %}"><span class="badge badge-primary">{{h.user.username}}</span></a>                                {% endfor %}
+                            {% else %}
+                                No hosts.
+                            {% endif %}
+                        </div>
+                    </div>
+                    <br />
                 <div class="row">
                     <div class="col-sm-6">
                         <!-- Location -->
@@ -49,7 +63,7 @@
             <div class="col-sm-4">
                 <!-- Interested profiles -->
                 <div class="card" >
-                    <h4 class="card-header">Profiles</h4>
+                    <h4 class="card-header">Interested</h4>
                     <div class="card-block">
                         <div class="table-responsive">
                             <table class="table table-striped">
@@ -64,6 +78,7 @@
                                         <tr>
                                             <td>{{p.user.username}}</td>
                                             <td>{{p.forename}} {{p.surname}}</td>
+                                            <td><a href="{% url 'profile' p.user.username %}"><span class="badge badge-primary">Details</span></a></td>
                                         </tr> 
                                     {% endfor %} 
                                 </tbody>

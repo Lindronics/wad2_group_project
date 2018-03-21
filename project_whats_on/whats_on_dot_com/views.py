@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib import messages 
 
-from whats_on_dot_com.models import User, UserProfile, Event, Category, Tag
+from whats_on_dot_com.models import User, UserProfile, Event, Category
 from whats_on_dot_com.forms import NewEventForm, ProfileSetupForm, FilterEventsForm, FilterProfilesForm
 
 # INDEX (home page, redirects to events page)
@@ -74,27 +74,46 @@ def events(request):
     #print(events)
     return render(request, 'whats_on_dot_com/events.html', context_dict)
 
+# EVENTS MAP (map overview of nearby events)
+def events_map(request):
+    return render(request, 'whats_on_dot_com/events_map.html')
+	
+#delete after main map works
+def map_test(request):
+    return render(request, 'whats_on_dot_com/map_test.html', {})
+	
+#delete after main map works
+def map_test2(request):
+    return render(request, 'whats_on_dot_com/map_test2.html', {})
+	
+#delete after main map works
+def map_test3(request):
+    return render(request, 'whats_on_dot_com/map_test3.html', {})
+
 # EVENT PAGE (event details page)
 def event_page(request, event_pk):
-    categories = Category.objects.all()
     event = Event.objects.get(pk=event_pk)
     interested = event.interested.all()
     tags = event.tags.all()
+    host = event.host.all()
+    categories = Category.objects.all()
+    print(host)
 
     context_dict = {
         "event":event, 
         "interested":interested, 
         "tags":tags,
-        "categories":categories
+        "host":host,
+        "categories":categories,
     }
-    
+
     return render(request, "whats_on_dot_com/event_page.html", context_dict)
 
 # ADD EVENT (for adding a new event)
 @login_required
 def add_event(request):
-    categories = Category.objects.all()
     form = NewEventForm()
+    categories = Category.objects.all()
 
     # Get data from form, add to model if valid
     if request.method == 'POST':
@@ -102,8 +121,11 @@ def add_event(request):
 
         if form.is_valid():
             # TODO further code might be necessary to get tags, hosts, category from form
-            form.save()
-            return HttpResponseRedirect('/')
+            event = form.save(commit=True)
+            #form.save()
+            print("Event added: %s" % event.name)
+            #return HttpResponseRedirect('/')
+            return index(request)
         else:
             print(form.errors)
 
@@ -112,8 +134,6 @@ def add_event(request):
         }
 
     return render(request, 'whats_on_dot_com/add_event.html', {"form":form})
-
-    
 
 # PROFILES (profiles list including search etc.)
 def profiles(request):
@@ -159,9 +179,15 @@ def about(request):
     return render(request, 'whats_on_dot_com/about.html')
 
 # PROFILE (page for personal profile overview)
+@login_required
 def profile(request, username):
     user_profile = UserProfile.objects.get(user__username=username)
-    return render(request, 'whats_on_dot_com/profile.html', {"profile":user_profile})
+
+    context_dict = {
+        "profile":user_profile,
+        "following":user_profile.follows.all(),
+    }
+    return render(request, 'whats_on_dot_com/profile.html', context_dict)
 
 # PROFILE_SETUP (changing profile values such as name, description)
 @login_required
