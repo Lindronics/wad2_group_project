@@ -25,8 +25,7 @@ class NewEventForm(forms.ModelForm):
         cleaned_data = super(NewEventForm,self).clean()
         date_time = cleaned_data.get('date_time')
         print(date_time)
-        address = cleaned_data.get('address')
-        
+        address = cleaned_data.get('address')        
     
 
     class Meta:
