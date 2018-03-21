@@ -1,11 +1,12 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
+import datetime
 
 # USER PROFILE:
 # Contains profile information, is linked to django User model
 class UserProfile(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     forename = models.CharField(max_length=128, blank=True, null=True)
     surname = models.CharField(max_length=128, blank=True, null=True)
     description = models.CharField(max_length=1024, blank=True, null=True)
@@ -57,7 +58,8 @@ class Event(models.Model):
     # Foreign keys
     host = models.ManyToManyField(UserProfile, related_name="host")
     interested = models.ManyToManyField(UserProfile, related_name="interested", blank=True)
-    category = models.ForeignKey(Category)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    #categories = models.ManyToManyField(Category)
     tags = models.ManyToManyField(Tag, blank=True)
 
     def __str__(self):

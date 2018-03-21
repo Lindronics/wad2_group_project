@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.contrib import messages 
 
 from whats_on_dot_com.models import User, UserProfile, Event, Category
 from whats_on_dot_com.forms import NewEventForm, ProfileSetupForm, FilterEventsForm, FilterProfilesForm
@@ -115,6 +116,7 @@ def event_page(request, event_pk):
     interested = event.interested.all()
     tags = event.tags.all()
     host = event.host.all()
+    categories = Category.objects.all()
     print(host)
 
     context_dict = {
@@ -122,6 +124,7 @@ def event_page(request, event_pk):
         "interested":interested, 
         "tags":tags,
         "host":host,
+        "categories":categories,
     }
 
     return render(request, "whats_on_dot_com/event_page.html", context_dict)
@@ -130,6 +133,7 @@ def event_page(request, event_pk):
 @login_required
 def add_event(request):
     form = NewEventForm()
+    categories = Category.objects.all()
 
     # Get data from form, add to model if valid
     if request.method == 'POST':
@@ -138,10 +142,16 @@ def add_event(request):
         if form.is_valid():
             # TODO further code might be necessary to get tags, hosts, category from form
             event = form.save(commit=True)
+            #form.save()
             print("Event added: %s" % event.name)
+            #return HttpResponseRedirect('/')
             return index(request)
         else:
             print(form.errors)
+
+        context_dict = {
+        "categories":categories
+        }
 
     return render(request, 'whats_on_dot_com/add_event.html', {"form":form})
 
