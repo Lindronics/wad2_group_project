@@ -1,16 +1,13 @@
 {% extends 'whats_on_dot_com/base.html' %}
 
-{% load staticfiles %}
 
+
+
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static "css/addEvent.css" %}"/>
 
 	{% block title_block %}
 		Add Event
-	{% endblock %}
-
-	{% block nav_block %}
-		<li><a href="{% url 'events' %}" >Events</a></li>
-		<li><a href="{% url 'profiles' %}">Profiles</a></li>
-		<li id="active"><a href="{% url 'add_event'%}">Add Event</a></li>
 	{% endblock %}
 
 	{% block body_block%}
