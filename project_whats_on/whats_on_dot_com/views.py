@@ -185,7 +185,7 @@ def map_test(request):
 def event_page(request, event_pk):
     event = Event.objects.get(pk=event_pk)
     interested = event.interested.all()
-    tags = event.tags.all()
+    #tags = event.tags.all()
     host = event.host.all()
     categories = Category.objects.all()
     print(host)
@@ -193,7 +193,7 @@ def event_page(request, event_pk):
     context_dict = {
         "event":event, 
         "interested":interested, 
-        "tags":tags,
+        #"tags":tags,
         "host":host,
         "categories":categories,
     }
@@ -212,11 +212,10 @@ def add_event(request):
 
         if form.is_valid():
             # TODO further code might be necessary to get tags, hosts, category from form
-            event = form.save(commit=True)
-            #form.save()
-            print("Event added: %s" % event.name)
-            #return HttpResponseRedirect('/')
-            return index(request)
+            form.save()
+            #print("Event added: %s" % event.name)
+            return HttpResponseRedirect('/')
+            #return index(request)
         else:
             print(form.errors)
 

@@ -1,30 +1,54 @@
 {% extends 'whats_on_dot_com/base.html' %}
 
-{% load staticfiles %}
 
+
+
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static "css/addEvent.css" %}"/>
 
 	{% block title_block %}
 		Add Event
 	{% endblock %}
 
-	{% block nav_block %}
-		<li><a href="{% url 'events' %}" >Events</a></li>
-		<li><a href="{% url 'profiles' %}">Profiles</a></li>
-		<li id="active"><a href="{% url 'add_event'%}">Add Event</a></li>
-	{% endblock %}
-
 	{% block body_block%}
 		{% if user.is_authenticated %}
 			<h1>Add an Event</h1>
+			</br>
+			
+			<div>
+			{% if form.errors %}
+				<h6>There were some errors in the information you entered. Please correct the following:</h6>
+					{{ form.non_field_errors }}
+				
+					{% for field in form %}
+						{% if field.errors %}<h6>{{ field.errors|striptags }}</h6>{% endif %}
+					{% endfor %}
+					<br>
+					
+			{% endif %}
+			</div>
+
+
+
+
+
+
+
 			<div>
 			
 			<form action="" method="post" id="event_form">
 				{% csrf_token %}
-			<input id="sam" type="text" name="name" maxlength="100" required /></p>
+				<h6>Event name</h6>
+				<input id="" type="text" name="name" maxlength="100" required /></p>
+				<h6>Description</h6>
 				<input id="" type="text" name="description" maxlength="100" required /></p>
+				<h6>date and time in YYYY-MM-DD HH:MM format</h6>
 				<input id="" type="text" name="date_time" maxlength="100" required /></p>
+				<h6>Address</h6>
 				<input id="" type="text" name="address" maxlength="100" required /></p>
+				<h6>Extra address info</h6>
 				<input id="" type="text" name="location_info" maxlength="100" required /></p>
+				<h6>Event picture</h6>
 				<input type="file" name="event_picture" id="id_event_picture" />
 
 				<ul id=event_tags>
@@ -32,6 +56,8 @@
 						<p>boaby</p>
 						<li><input type="checkbox" name=c.name value="c.name" />
 					{% endfor %}
+
+				</br>
 				<input type="submit" name="submit" value="Add Event" />
 				</form>
 			</div>
