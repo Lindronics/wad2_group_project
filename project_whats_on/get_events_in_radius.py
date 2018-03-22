@@ -44,7 +44,7 @@ def nearby_locations(latitude, longitude, radius, max_results=100, use_miles=Tru
     return Event.objects.filter(id__in=ids)
 #calling wrong as 55.8 is assigned to self
 #print (Event.objects.filter(latitude__isnull=False))
-#print (nearby_locations(55.8, -4.2, 10, 50))
+print (nearby_locations(55.8, -4.2, 10, 50))
 
 """
     

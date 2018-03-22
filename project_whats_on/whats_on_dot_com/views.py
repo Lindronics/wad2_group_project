@@ -143,9 +143,9 @@ def events_map(request):
 
 
     #think this is where I should put fns that I need to call from template
-    map_pointz = nearby_locations(55.8, -4.2, 10, 50) #temporary hard code to test. Fix to take data from form
+    #map_pointz = nearby_locations(55.8, -4.2, 10, 50) #temporary hard code to test. Fix to take data from form
     #print (map_points)
-    map_points = ["test"]
+    #map_points = ["test"]
     #test
     #test
     return render(request, 'whats_on_dot_com/events_map.html')

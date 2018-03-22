@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+{% load poll_extras %}
+//removed the doctype thing, if broke add back in
 <html> 
 <head> 
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> 
@@ -11,6 +12,11 @@
 
   <script type="text/javascript">
 	console.log("Length of map_points variable in template", {{ map_points|length }});
+	
+	//temporary test fn to display markers
+	var location_test = [55.8642, -4.2518]
+	var parameter_test = [null, 30, (2018, 6, 16, 12, 30, 10, 0), null, null]
+	var tag_test = [{% search location_test parameter_test %}]
 
     var locations = [
 	{% for Event in map_points %}

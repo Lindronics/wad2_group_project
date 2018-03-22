@@ -47,7 +47,7 @@ class NewEventForm(forms.ModelForm):
         geodata['address'] = result['formatted_address']
         
         latitude = geodata["lat"]
-        longitude =geodata["lng"]
+        longitude = geodata["lng"]
                 
         print(date_time)
         address = cleaned_data.get('address')
