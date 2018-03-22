@@ -6,6 +6,9 @@ from django import forms
 from whats_on_dot_com.models import UserProfile, Category, Tag, Event
 from django.contrib.auth.models import User
 
+#Iain's import to get lat lng from adress string
+import requests
+
 # Used for creating a new event
 class NewEventForm(forms.ModelForm):
     name = forms.CharField(max_length=128, help_text="Please enter the name of your event.", required=True)
@@ -23,6 +26,29 @@ class NewEventForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super(NewEventForm,self).clean()
         date_time = cleaned_data.get('date_time')
+                
+        #Iain's code to get the lat long from the address string
+        GOOGLE_MAPS_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json'
+        #Parameters fro gmaps api request
+        params = {
+        'address': cleaned_data.get('address'),
+        'sensor': 'false',
+        'key': 'AIzaSyAzbpDPFJ4xudZnqIsjLH3ltL9og-Sihsk',
+        }
+        #Do the request and get the response
+        req = requests.get(GOOGLE_MAPS_API_URL, params=params)
+        res = req.json()
+                
+        result = res['results'][0]
+                
+        geodata = dict()
+        geodata['lat'] = result['geometry']['location']['lat']
+        geodata['lng'] = result['geometry']['location']['lng']
+        geodata['address'] = result['formatted_address']
+        
+        latitude = geodata["lat"]
+        longitude =geodata["lng"]
+                
         print(date_time)
         address = cleaned_data.get('address')
 

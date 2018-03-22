@@ -64,6 +64,9 @@
         }
 
        function searchLocations() {
+		 //currently this takes the value in the box created by this script
+		 //need to change form to have 2 search boxes, one for name contains
+		 //and one for area to search
          var address = document.getElementById("addressInput").value;
          var geocoder = new google.maps.Geocoder();
          geocoder.geocode({address: address}, function(results, status) {
@@ -141,6 +144,7 @@
           locationSelect.appendChild(option);
        }
 
+	   
        function downloadUrl(url, callback) {
           var request = window.ActiveXObject ?
               new ActiveXObject('Microsoft.XMLHTTP') :
@@ -156,7 +160,7 @@
           request.open('GET', url, true);
           request.send(null);
        }
-
+		
        function parseXml(str) {
           if (window.ActiveXObject) {
             var doc = new ActiveXObject('Microsoft.XMLDOM');
