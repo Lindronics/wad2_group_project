@@ -17,8 +17,6 @@
                     <h4 class="card-header">Description</h4>
                     <div class="card-block">
                         <p class="card-text">{{event.description}}</p>
-
-                        <a href="{% url 'interested' event.pk %}" class="btn btn-danger">Interested</a>
                     </div>
                 </div>
                 <br />
@@ -26,8 +24,8 @@
                 <div class="card" >
                         <h4 class="card-header">Hosts</h4>
                         <div class="card-block">
-                            {% if host %}
-                                {% for h in host %}
+                            {% if event.host %}
+                                {% for h in event.host.all %}
                                     <a href="{% url 'profile' h.user.username %}"><span class="badge badge-primary">{{h.user.username}}</span></a>                                {% endfor %}
                             {% else %}
                                 No hosts.
@@ -53,9 +51,13 @@
                         <div class="card" >
                             <h4 class="card-header">Tags</h4>
                             <div class="card-block">
-                                {% for t in tags %}
-                                    <a href="{% url 'events' t.name %}"><span class="badge badge-primary">{{t.name}}</span></a>
-                                {% endfor %}
+                                {% if event.tags %}
+                                    {% for t in event.tags.all %}
+                                        <a href="{% url 'events' t.name %}"><span class="badge badge-primary">{{t.name}}</span></a>
+                                    {% endfor %}
+                                {% else %}
+                                    No tags.
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -66,6 +68,12 @@
                 <div class="card" >
                     <h4 class="card-header">Interested</h4>
                     <div class="card-block">
+                        {% if profile in event.interested.all %}
+                            <a href="{% url 'interested' event.pk %}" class="btn btn-danger">Unfollow</a>
+                        {% else %}
+                            <a href="{% url 'interested' event.pk %}" class="btn btn-success">Follow</a>
+                        {% endif %}
+                        <hr />
                         <div class="table-responsive">
                             <table class="table table-striped">
                                 <thead>
@@ -75,7 +83,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for p in interested %} 
+                                    {% for p in event.interested.all %} 
                                         <tr>
                                             <td>{{p.user.username}}</td>
                                             <td>{{p.forename}} {{p.surname}}</td>

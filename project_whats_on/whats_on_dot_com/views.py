@@ -101,7 +101,9 @@ def events(request, query=""):
         "events":events, 
         "categories":categories, 
         "filter_events_form":filter_events_form, 
-        "search_bar_initial":sb}
+        "search_bar_initial":sb,
+        "profile":UserProfile.objects.get(user__username=request.user),
+    }
 
     #print(events)
     return render(request, 'whats_on_dot_com/events.html', context_dict)
@@ -194,14 +196,12 @@ def event_page(request, event_pk):
     tags = event.tags.all()
     host = event.host.all()
     categories = Category.objects.all()
+    profile = UserProfile.objects.get(user__username=request.user)
     print(host)
 
     context_dict = {
         "event":event, 
-        "interested":interested, 
-        "tags":tags,
-        "host":host,
-        "categories":categories,
+        "profile":profile,
     }
 
     return render(request, "whats_on_dot_com/event_page.html", context_dict)
@@ -340,4 +340,5 @@ def interested(request, event_pk):
     e.number_followers = e.interested.all().count()
     e.save()
 
-    return HttpResponseRedirect('/event_details/%s' % event_pk)
+    #return HttpResponseRedirect('/event_details/%s' % event_pk)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

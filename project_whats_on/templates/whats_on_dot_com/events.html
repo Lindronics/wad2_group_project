@@ -28,7 +28,11 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
                                         <a href="{% url 'event_page' e.pk %}" type="button" class="btn btn-secondary">View</a>
-                                        <a href="#" type="button" class="btn btn-primary">Interested</a>
+                                        {% if profile in e.interested.all %}
+                                            <a href="{% url 'interested' e.pk %}" type="button" class="btn btn-danger">Unfollow</a>
+                                        {% else %}
+                                            <a href="{% url 'interested' e.pk %}" type="button" class="btn btn-success">Follow</a>
+                                        {% endif %}
                                     </div>
                                     <small class="text-muted">{{e.number_followers}} interested</small>
                                 </div>
