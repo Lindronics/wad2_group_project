@@ -14,7 +14,8 @@ class NewEventForm(forms.ModelForm):
     address = forms.CharField(max_length=128, help_text="Address", required=True)
     location_info = forms.CharField(max_length=128, help_text="Additional location information")
     event_picture = forms.ImageField(required=False)
-    categories = forms.ModelMultipleChoiceField(queryset=Category.objects.all(), widget=forms.CheckboxSelectMultiple(), required=False)
+    tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(), widget=forms.CheckboxSelectMultiple(), required=False)
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), required=True)
     
     # TODO implement selecting hosts, category, tags when creating event
     # ideally in a dropdown menu
@@ -27,7 +28,7 @@ class NewEventForm(forms.ModelForm):
 
     class Meta:
         model = Event
-        exclude = ('number_followers', 'address', 'city', 'post_code', 'latitude', 'longtitude', 'host', 'interested', 'category', 'slug', 'tags')
+        exclude = ('number_followers', 'address', 'city', 'post_code', 'latitude', 'longtitude', 'host', 'interested', 'slug',)
 
 # Used for filtering Events on home page
 class FilterEventsForm(forms.ModelForm):

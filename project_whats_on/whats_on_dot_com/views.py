@@ -210,26 +210,30 @@ def event_page(request, event_pk):
 @login_required
 def add_event(request):
     form = NewEventForm()
-    categories = Category.objects.all()
 
     # Get data from form, add to model if valid
     if request.method == 'POST':
         form = NewEventForm(request.POST)
-
         if form.is_valid():
-            # TODO further code might be necessary to get tags, hosts, category from form
-            form.save()
-            #print("Event added: %s" % event.name)
-            return HttpResponseRedirect('/')
+
+            print(form.cleaned_data)
+            event = form.save()
+
+            # Add host
+            up = UserProfile.objects.get(user__username=request.user)
+            event.host.add(up)
+            event.save()
+
+            return HttpResponseRedirect('/event_details/%s' % event.pk)
             #return index(request)
         else:
             print(form.errors)
 
-        context_dict = {
-        "categories":categories
-        }
+    context_dict = {
+        "event_form":form,
+    }
 
-    return render(request, 'whats_on_dot_com/add_event.html', {"form":form})
+    return render(request, 'whats_on_dot_com/add_event.html', context_dict)
 
 # PROFILES (profiles list including search etc.)
 def profiles(request):
