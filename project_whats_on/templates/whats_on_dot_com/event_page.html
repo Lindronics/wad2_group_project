@@ -68,12 +68,14 @@
                 <div class="card" >
                     <h4 class="card-header">Interested</h4>
                     <div class="card-block">
-                        {% if profile in event.interested.all %}
-                            <a href="{% url 'interested' event.pk %}" class="btn btn-danger">Unfollow</a>
-                        {% else %}
-                            <a href="{% url 'interested' event.pk %}" class="btn btn-success">Follow</a>
+                        {% if profile %}
+                            {% if profile in event.interested.all %}
+                                <a href="{% url 'interested' event.pk %}" class="btn btn-danger">Unfollow</a>
+                            {% else %}
+                                <a href="{% url 'interested' event.pk %}" class="btn btn-success">Follow</a>
+                            {% endif %}
+                            <hr />
                         {% endif %}
-                        <hr />
                         <div class="table-responsive">
                             <table class="table table-striped">
                                 <thead>
