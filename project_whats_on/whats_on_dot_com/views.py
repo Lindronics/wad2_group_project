@@ -91,6 +91,12 @@ def events(request, query=""):
         if query:
             events, sb = search_bar(events, query)
 
+    # Sort events by popularity
+    try:
+        events = events.order_by('-number_followers')
+    except:
+        pass
+
     context_dict = {
         "events":events, 
         "categories":categories, 
@@ -318,4 +324,20 @@ def profile_setup(request):
 
     return render(request, 'whats_on_dot_com/profile_setup.html', {"profile_setup_form":profile_setup_form})
 
+# INTERESTED (for following or unfollowing an event)
+@login_required
+def interested(request, event_pk):
+    up = UserProfile.objects.get(user__username=request.user)
+    e = Event.objects.get(pk=event_pk)
 
+    # Toggle following status
+    if e.interested.filter(user__username=request.user).exists():
+        e.interested.remove(up)
+    else:
+        e.interested.add(up)
+
+    # Update number of followers
+    e.number_followers = e.interested.all().count()
+    e.save()
+
+    return HttpResponseRedirect('/event_details/%s' % event_pk)

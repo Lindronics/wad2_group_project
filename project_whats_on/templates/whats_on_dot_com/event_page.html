@@ -17,7 +17,8 @@
                     <h4 class="card-header">Description</h4>
                     <div class="card-block">
                         <p class="card-text">{{event.description}}</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+
+                        <a href="{% url 'interested' event.pk %}" class="btn btn-danger">Interested</a>
                     </div>
                 </div>
                 <br />
@@ -43,7 +44,7 @@
                                 <p class="card-text">{{event.location_info}}</p>
                                 <p class="card-text">{{event.address}}</p>
                                 <p class="card-text">{{event.city}} {{event.post_code}}</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                <a href="#" class="btn btn-primary">Show on map</a>
                             </div>
                         </div>
                     </div>
@@ -84,7 +85,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
                     </div>
                 </div>
             </div>
