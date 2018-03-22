@@ -185,7 +185,7 @@ def map_test(request):
 def event_page(request, event_pk):
     event = Event.objects.get(pk=event_pk)
     interested = event.interested.all()
-    #tags = event.tags.all()
+    tags = event.tags.all()
     host = event.host.all()
     categories = Category.objects.all()
     print(host)
@@ -193,7 +193,7 @@ def event_page(request, event_pk):
     context_dict = {
         "event":event, 
         "interested":interested, 
-        #"tags":tags,
+        "tags":tags,
         "host":host,
         "categories":categories,
     }
@@ -271,13 +271,22 @@ def about(request):
 # PROFILE (page for personal profile overview)
 @login_required
 def profile(request, username):
-    user_profile = UserProfile.objects.get(user__username=username)
+    try:
+        user_profile = UserProfile.objects.get(user__username=username)
+        context_dict = {
+            "profile":user_profile,
+            "following":user_profile.follows.all(),
+        }
+        return render(request, 'whats_on_dot_com/profile.html', context_dict)
 
-    context_dict = {
-        "profile":user_profile,
-        "following":user_profile.follows.all(),
-    }
-    return render(request, 'whats_on_dot_com/profile.html', context_dict)
+    except UserProfile.DoesNotExist:
+        print(username, request.user)
+        if username==request.user.username:
+            print("SETUP")
+            return HttpResponseRedirect('/profile/setup')
+        else:
+            print("NO SETUP")
+            return HttpResponseRedirect('/events/')
 
 # PROFILE_SETUP (changing profile values such as name, description)
 @login_required

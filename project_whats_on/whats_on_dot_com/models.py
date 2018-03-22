@@ -58,9 +58,9 @@ class Event(models.Model):
     # Foreign keys
     host = models.ManyToManyField(UserProfile, related_name="host")
     interested = models.ManyToManyField(UserProfile, related_name="interested", blank=True)
-    #category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    categories = models.ManyToManyField(Category)
-    #tags = models.ManyToManyField(Tag, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    #categories = models.ManyToManyField(Category)
+    tags = models.ManyToManyField(Tag, blank=True)
 
     def __str__(self):
         return self.name
