@@ -54,12 +54,7 @@ def events(request, query=""):
 
             # If search term provided, filter by search bar
             if data["search"]:
-<<<<<<< HEAD
                 events, sb = search_bar(events, data["search"])
-=======
-                events = events.filter(name__icontains=data["search"])
-                #sb = data["search"]
->>>>>>> 7a0c56d182d82ff84babccd758c58acbf751f6ad
 
             # Filter categories
             if data["category"]:
