@@ -184,8 +184,8 @@ def map_test(request):
 	
 
     #testing
-    map_points = nearby_locations(55.8, -4.2, 10, 50)
-    #map_points = Event.objects.all()
+    #map_points = nearby_locations(55.8, -4.2, 10, 50)
+    map_points = Event.objects.all()
     #DUMBASS ME DIDNT REMEMBER TO USE CONTEXT DICT
     context_dict = {"map_points": map_points}
     return render(request, 'whats_on_dot_com/map_test.html', context_dict)

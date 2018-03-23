@@ -20,9 +20,15 @@ from datetime import datetime as dt
 
 register = template.Library()
 
+@register.simple_tag
+def test_tag(value):
+    value = int(value)
+    value += 10
+    return value
+
 #this should be a tag not a filter...
 @register.simple_tag
-def search(location, parameters):
+def search(lat, lng, people, radius, year, month, day, hour, minute, category, search_term ):
     #parameters is a list object containing
     #people (can be added at later stage when i get it)
     #radius from the point
@@ -63,16 +69,16 @@ def search(location, parameters):
     #filter for people -TODO
 
     #filter for radius
-    semi_filtered = nearby_locations(location[0], location[1], parameters[1], 100, False)
+    semi_filtered = nearby_locations(lat, lng, radius, 100, False)
 
     #filter for date from now
-    semi_filtered = semi_filtered.filter(date__range=[dt.now(), parameters[2]])
+    semi_filtered = semi_filtered.filter(date__range=[dt.now(), (year, month, day, hour, minute)])
 
     #filter for category - TODO
 
     #filter for name contains
     if not parameters[4] == None:
-        filtered = semi_filtered.filter(name__icontains=parameters[4])
+        filtered = semi_filtered.filter(name__icontains=search_term)
         
     #return final filter
 
