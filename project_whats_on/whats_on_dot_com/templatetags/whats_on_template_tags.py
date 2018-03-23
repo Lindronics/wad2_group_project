@@ -72,13 +72,16 @@ def search(lat, lng, people, radius, year, month, day, hour, minute, category, s
     semi_filtered = nearby_locations(lat, lng, radius, 100, False)
 
     #filter for date from now
-    semi_filtered = semi_filtered.filter(date__range=[dt.now(), (year, month, day, hour, minute)])
+    #construct datetime string
+    dt_string = str(year) + "-" + str(month) + "-" + str(day) + " " + str(hour) + ":" + str(minute)
+
+    semi_filtered = semi_filtered.filter(date_time__range=[dt.now(), dt_string])
 
     #filter for category - TODO
 
     #filter for name contains
-    if not parameters[4] == None:
-        filtered = semi_filtered.filter(name__icontains=search_term)
+    #if not parameters[4] == None:
+     #   filtered = semi_filtered.filter(name__icontains=search_term)
         
     #return final filter
 

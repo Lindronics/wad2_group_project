@@ -45,6 +45,18 @@ def nearby_locations(latitude, longitude, radius, max_results=100, use_miles=Tru
 #calling wrong as 55.8 is assigned to self
 #print (Event.objects.filter(latitude__isnull=False))
 print (nearby_locations(55.8, -4.2, 10, 50))
+from datetime import datetime as dt
+#testing
+year = 2019
+month = 5
+day = 23
+hour = 12
+minute = 30
+dt_string = str(year) + "-" + str(month) + "-" + str(day) + " " + str(hour) + ":" + str(minute)
+print(dt_string)
+#"2018-5-15 12:30"
+#2018-5-12 12:30
+print (Event.objects.filter(date_time__range=[dt.now(), dt_string]))
 
 """
     

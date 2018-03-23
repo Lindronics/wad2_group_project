@@ -14,6 +14,20 @@
 	console.log("Length of map_points variable in template", {{ map_points|length }});
 	
 	
+	//
+	//temporary test fn to display markers
+	var location_test = [55.8642, -4.2518]
+	console.log(location_test.length)
+	var parameter_test = [null, 30, (2018, 6, 16, 12, 30, 10, 0), null, null]
+	console.log(parameter_test.length)
+	
+	var tag_test = [{% test_tag 5 %}]
+	console.log(tag_test)
+	
+	var test_search_date = (2018, 6, 16, 12, 30, 10, 0)
+	
+	var search_test = var tag_test = [{% search 55.8642 -4.2518 null 30 2018 6 16 12 30 null null %}]
+	console.log(search_test)
 	
     var locations = [
 	{% for Event in map_points %}

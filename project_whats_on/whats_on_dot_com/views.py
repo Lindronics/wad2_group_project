@@ -112,7 +112,8 @@ def events(request, query=""):
 
 # EVENTS MAP (map overview of nearby events)
 def events_map(request):
-    #COPY PASTING SCRIPT BECAUSE SHIT IS BROKEN AND I WANT IT TO BE NOT
+
+    #C+P CODE CAUSE I A SMART BOY
 
     def nearby_locations(latitude, longitude, radius, max_results=100, use_miles=True):
         if use_miles:
@@ -140,15 +141,14 @@ def events_map(request):
         #I have ids of all objects
         #and return the relevant object
         return Event.objects.filter(id__in=ids)
+	
 
-
-    #think this is where I should put fns that I need to call from template
-    #map_pointz = nearby_locations(55.8, -4.2, 10, 50) #temporary hard code to test. Fix to take data from form
-    #print (map_points)
-    #map_points = ["test"]
-    #test
-    #test
-    return render(request, 'whats_on_dot_com/events_map.html')
+    #testing
+    map_points = nearby_locations(55.8, -4.2, 10, 50)
+    #map_points = Event.objects.all()
+    #DUMBASS ME DIDNT REMEMBER TO USE CONTEXT DICT
+    context_dict = {"map_points": map_points}
+    return render(request, 'whats_on_dot_com/events_map.html', context_dict)
 	
 #delete after main map works
 def map_test(request):
@@ -184,8 +184,8 @@ def map_test(request):
 	
 
     #testing
-    #map_points = nearby_locations(55.8, -4.2, 10, 50)
-    map_points = Event.objects.all()
+    map_points = nearby_locations(55.8, -4.2, 10, 50)
+    #map_points = Event.objects.all()
     #DUMBASS ME DIDNT REMEMBER TO USE CONTEXT DICT
     context_dict = {"map_points": map_points}
     return render(request, 'whats_on_dot_com/map_test.html', context_dict)

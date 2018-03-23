@@ -63,7 +63,7 @@ def add_user(user):
 
 def add_event(event):
     # This will throw a RuntimeWarning during population, which can be ignored for now.
-    time = dt.now()
+    time = "2018-9-15 12:30"
     e = Event.objects.get_or_create(name=event["name"], date_time=time, category=Category.objects.get(name=event["category"]))[0]
     e.description = event["description"]
     e.address = event["address"]
