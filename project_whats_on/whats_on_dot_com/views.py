@@ -239,6 +239,7 @@ def add_event(request):
     return render(request, 'whats_on_dot_com/add_event.html', context_dict)
 
 # PROFILES (profiles list including search etc.)
+@login_required
 def profiles(request):
     filter_profiles_form = FilterProfilesForm()
 
@@ -250,16 +251,22 @@ def profiles(request):
 
     # If filter request
     if request.method == "POST":
-        filter_events_form = FilterEventsForm(request.POST)
+        filter_profiles_form = FilterProfilesForm(request.POST)
 
-        if filter_events_form.is_valid():
-            data = filter_events_form.cleaned_data
+        if filter_profiles_form.is_valid():
+            data = filter_profiles_form.cleaned_data
+
+            # Filter people
+            if data["people"]:
+                p = int(data["people"])
+                if p == 1:
+                    up = UserProfile.objects.get(user__username=request.user.username)
+                    user_profiles = user_profiles.filter(follows=up)
 
             # Filter search bar
             sb = data["search"]
             if sb:
                 # Search for usernames and real names
-                # TODO sort of a hack ATM to search for combined fore- and surnames
                 splitted = sb.split(" ")
                 if len(splitted) > 1:
                     user_profiles = user_profiles.filter(forename__icontains=splitted[0]) | user_profiles.filter(surname__icontains=splitted[1])
@@ -272,7 +279,8 @@ def profiles(request):
 
     context_dict = {
         "profiles":user_profiles, 
-        "search_bar_initial":sb
+        "search_bar_initial":sb,
+        "filter_profiles_form":filter_profiles_form,
     }
 
     return render(request, 'whats_on_dot_com/profiles.html', context_dict)

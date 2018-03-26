@@ -104,13 +104,12 @@
                         {% else %}
                             No categories available.
                         {% endif %}
-                        
                             <div role="separator" class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Remove filter</a>
                     </div>
                 </div>
                 <!-- Search bar -->                       
-                <input type="text" class="form-control" placeholder="{{search_bar_initial}}" id="id_search" name="search"/>
+                <input type="text" class="form-control" placeholder="{{search_bar_initial}}" id="id_search" name="search" style="z-index:-1;"/>
                 <span class="input-group-btn">
                     <button class="btn btn-secondary" type="submit" name="submit">Go!</button>
                 </span>

@@ -66,9 +66,8 @@ class FilterEventsForm(forms.ModelForm):
         (50, "50 km"),
     )
     people_choices = (
-        (1, "People I follow"),
-        (2, "My followers"),
-        (3, "Popular profiles"),
+        (1, "Friends"),
+        (2, "Everyone"),
     )
     date_choices = (
         (1, "Today"),
@@ -89,14 +88,13 @@ class FilterEventsForm(forms.ModelForm):
 
 class FilterProfilesForm(forms.ModelForm):
     people_choices = (
-        (1, "People I follow"),
-        (2, "My followers"),
-        (3, "Popular profiles"),
+        (1, "Friends"),
+        (2, "Everyone"),
     )
 
     user = forms.CharField(max_length=128, required=False)
     search = forms.CharField(max_length=128, required=False)
-    people = forms.ChoiceField(choices=people_choices, required=False, widget=forms.RadioSelect)
+    people = forms.ChoiceField(choices=people_choices, required=False, initial=2, widget=forms.RadioSelect)
 
     class Meta:
         model = UserProfile

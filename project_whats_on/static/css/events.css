@@ -43,3 +43,7 @@
     margin-top: 10px;
     font-size: 50pt;
   }
+
+  .input-group-btn{
+    z-index: -1;
+  }

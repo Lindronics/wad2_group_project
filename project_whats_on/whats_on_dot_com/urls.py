@@ -5,6 +5,7 @@ from whats_on_dot_com import views
 
 urlpatterns = [
     url(r"^event/add$", views.add_event, name="add_event"),
+    url(r"^about$", views.about, name="about"),
     url(r"^profiles$", views.profiles, name="profiles"),
     url(r"^profiles/(?P<username>[\w\-]+)$", views.profile, name="profile"),
     url(r"^profile/setup$", views.profile_setup, name="profile_setup"),

@@ -1,5 +1,17 @@
 {% extends 'whats_on_dot_com/base.html' %}
+{% load staticfiles %}
 
 {% block title_block %}
     What's On - About
+{% endblock %}
+
+{% block body_block %}
+    <div align="center">
+        <br />
+        <h1>WhatsOn</h1>
+        <hr />
+        <img src="{% static 'logo_large.png' %}" alt="Not available." style="width:40%; height:auto;"/>
+        <hr />
+        This project was put together by Iain Christie, Sam George, Max Kolle, and Niklas Lindorfer.
+    </div>
 {% endblock %}
