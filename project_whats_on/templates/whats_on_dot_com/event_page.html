@@ -15,6 +15,9 @@
                 <!-- Description -->
                 <div class="card" >
                     <h4 class="card-header">Description</h4>
+                    {% if event.event_picture %}
+                        <img class="card-img-top" src="{{event.event_picture.url}}"/>
+                    {% endif %}
                     <div class="card-block">
                         <p class="card-text">{{event.description}}</p>
                     </div>
@@ -66,16 +69,17 @@
             <div class="col-sm-4">
                 <!-- Interested profiles -->
                 <div class="card" >
-                    <h4 class="card-header">Interested</h4>
-                    <div class="card-block">
+                    <h4 class="card-header">
+                        Interested
                         {% if profile %}
                             {% if profile in event.interested.all %}
                                 <a href="{% url 'interested' event.pk %}" class="btn btn-danger">Unfollow</a>
                             {% else %}
                                 <a href="{% url 'interested' event.pk %}" class="btn btn-success">Follow</a>
                             {% endif %}
-                            <hr />
                         {% endif %}
+                    </h4>
+                    <div class="card-block">
                         <div class="table-responsive">
                             <table class="table table-striped">
                                 <thead>

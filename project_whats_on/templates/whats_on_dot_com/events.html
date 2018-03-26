@@ -16,7 +16,7 @@
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
                             {% if e.event_picture %}
-                                <img class="card-img-top" src="{{e.event_picture.url}}" alt="No image provided">
+                                <img class="card-img-top" src="{{e.event_picture.url}}" alt="No image provided" style="width:100%; height:auto">
                             {% else %}
                                 <img class="card-img-top" src="{{ MEDIA_URL }}thumbnail.png" alt="No image provided">    
                             {% endif %}

@@ -67,7 +67,7 @@ What's On - Profiles
                             <td>{{p.user.username}}</td>
                             <td>{{p.forename}} {{p.surname}}</td>
                             <td>{{p.description}}</td>
-                            <td><a href="{% url 'profile' p.user.username %}">Details</a></td>
+                            <td><a href="{% url 'profile' p.user.username %}"><span class="badge badge-primary">Details</span></a></td>
                         </tr> 
                     {% endfor %} 
                 </tbody>
