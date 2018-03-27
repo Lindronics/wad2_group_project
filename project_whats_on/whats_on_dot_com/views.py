@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib import messages
+from django.core.urlresolvers import reverse
 
 #iain funky shit
 import math
@@ -15,7 +16,7 @@ from whats_on_dot_com.forms import NewEventForm, ProfileSetupForm, FilterEventsF
 
 # INDEX (home page, redirects to events page)
 def index(request):
-    return HttpResponseRedirect('events')  # Via events url pattern
+    return HttpResponseRedirect(reverse('events'))  # Via events url pattern
 
 # EVENTS (events page with events in grid list)
 def events(request, query=""):
@@ -218,8 +219,6 @@ def add_event(request):
     if request.method == 'POST':
         form = NewEventForm(request.POST)
         if form.is_valid():
-
-            print(form.cleaned_data)
             event = form.save()
 
             # Add host
@@ -227,8 +226,7 @@ def add_event(request):
             event.host.add(up)
             event.save()
 
-            return HttpResponseRedirect('/event_details/%s' % event.pk)
-            #return index(request)
+            return HttpResponseRedirect(reverse('event_page', args=[event.pk]))
         else:
             print(form.errors)
 
@@ -304,10 +302,10 @@ def profile(request, username):
         print(username, request.user)
         if username==request.user.username:
             print("SETUP")
-            return HttpResponseRedirect('/profile/setup')
+            return HttpResponseRedirect(reverse('profile_setup'))
         else:
             print("NO SETUP")
-            return HttpResponseRedirect('/events/')
+            return HttpResponseRedirect(reverse('events'))
 
 # PROFILE_SETUP (changing profile values such as name, description)
 @login_required
@@ -355,5 +353,5 @@ def interested(request, event_pk):
     e.number_followers = e.interested.all().count()
     e.save()
 
-    #return HttpResponseRedirect('/event_details/%s' % event_pk)
+    # Redirect to where user was coming from
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
