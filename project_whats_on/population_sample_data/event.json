@@ -9,7 +9,8 @@
         "hosts":[{"username":"mercedes"}],
         "interested":[{"username":"ken"}],
         "category":"Club",
-        "tags":[{"name":"Tag a"}, {"name":"Tag b"}]
+        "tags":[{"name":"nightlife"}, {"name":"uni"}],
+        "event_picture":"viper.jpg"
     },
     {   "name":"SWITCH",
         "description":"They say you know you're ugly if you can't pull in HIVE.",
@@ -21,7 +22,8 @@
         "hosts":[{"username":"mercedes"}, {"username":"ken"}],
         "interested":[{"username":"mercedes"}],
         "category":"Club",
-        "tags":[{"name":"Tag a"}, {"name":"Tag b"}, {"name":"Tag c"}]
+        "tags":[{"name":"uni"}, {"name":"nightlife"}],
+        "event_picture":"hive.jpg"
     },
     {   "name":"Bus trip to the highlands",
         "description":"Destination of this trip is Fort William.",
@@ -33,7 +35,8 @@
         "hosts":[{"username":"sam"}],
         "interested":[{"username":"mercedes"}, {"username":"ken"}],
         "category":"Trip",
-        "tags":[{"name":"Tag a"}]
+        "tags":[{"name":"nature"}],
+        "event_picture":"highlands.jpg"
     },
     {   "name":"Tim Cook at UofG",
         "description":"The CEO of Apple Inc. coming to University of Glasgow to receive his honourary doctorate.",
@@ -45,7 +48,8 @@
         "hosts":[{"username":"sam"}],
         "interested":[{"username":"mercedes"}, {"username":"ken"}],
         "category":"Academic",
-        "tags":[{"name":"Tag a"}]
+        "tags":[{"name":"apple"}],
+        "event_picture":"tim_cook.jpg"
     },
     {   "name":"GUU 3rd Parliamentary Debate",
         "description":"The World Almighty Distributist League government in power. The bill: THW yada yada.",
@@ -57,7 +61,8 @@
         "hosts":[{"username":"sam"}],
         "interested":[{"username":"mercedes"}, {"username":"ken"}],
         "category":"Academic",
-        "tags":[{"name":"Tag a"}]
+        "tags":[{"name":"uni"}],
+        "event_picture":"debates.jpg"
     },
     {   "name":"Sailing Club AGM",
         "description":"Some random description.",
@@ -69,6 +74,7 @@
         "hosts":[{"username":"sam"}],
         "interested":[{"username":"mercedes"}, {"username":"ken"}],
         "category":"Academic",
-        "tags":[{"name":"Tag a"}]
+        "tags":[{"name":"uni"}],
+        "event_picture":"sailing.jpg"
     }
 ]

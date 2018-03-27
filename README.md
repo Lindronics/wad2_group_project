@@ -11,6 +11,9 @@ Find what's on where and when: event pages with extroversion!
 |django-registration-redux|latest|
 |django-bootstrap-toolkit|latest|
 |datetime|latest|
+|requests|latest|
+
+Note that the django project is situated in the folder project_whats_on.
 
 ## Ticketing System
 For task proposal, prioritisation and delegation.
