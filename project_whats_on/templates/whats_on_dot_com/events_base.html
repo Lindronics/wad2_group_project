@@ -32,6 +32,7 @@
                 <span class="input-group-btn">
                     <a href="{% url 'events' %}" class="btn btn-primary" type="button">All events</a>
                 </span>
+                {% if user.is_authenticated %}
                 <!-- People filter -->
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -45,12 +46,11 @@
                                 </div>
                             {% endfor %}
                         {% else %}
-                            No people options available.
+                            No people filters available.
                         {% endif %}
-                        <div role="separator" class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Remove filter</a>
                     </div>
                 </div>
+                {% endif %}
                 <!-- Radius filter -->
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -64,10 +64,8 @@
                                 </div>
                             {% endfor %}
                         {% else %}
-                            No radius options available.
+                            No radius filters available.
                         {% endif %}
-                        <div role="separator" class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Remove filter</a>
                     </div>
                 </div>
                 <!-- Date filter -->
@@ -83,10 +81,8 @@
                                 </div>
                             {% endfor %}
                         {% else %}
-                            No date options available.
+                            No date filters available.
                         {% endif %}
-                        <div role="separator" class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Remove filter</a>
                     </div>
                 </div>
                 <!-- Category filter -->
@@ -104,8 +100,6 @@
                         {% else %}
                             No categories available.
                         {% endif %}
-                            <div role="separator" class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Remove filter</a>
                     </div>
                 </div>
                 <!-- Search bar -->                       

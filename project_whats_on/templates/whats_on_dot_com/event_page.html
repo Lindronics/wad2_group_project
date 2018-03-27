@@ -8,7 +8,7 @@
     <a href="{% url 'events' %}">Back to overview</a>
     <hr />
     <div class="jumbotron">
-        <h1>{{event.name}}</h1>
+        <h1><span class="badge badge-primary">{{event.category}}</span> {{event.name}} </h1>
         <hr />
         <div class="row">
             <div class="col-sm-8">
@@ -23,19 +23,38 @@
                     </div>
                 </div>
                 <br />
-                <!-- Hosts -->
-                <div class="card" >
-                        <h4 class="card-header">Hosts</h4>
-                        <div class="card-block">
-                            {% if event.host %}
-                                {% for h in event.host.all %}
-                                    <a href="{% url 'profile' h.user.username %}"><span class="badge badge-primary">{{h.user.username}}</span></a>                                {% endfor %}
-                            {% else %}
-                                No hosts.
-                            {% endif %}
+                <div class="row">
+                    <!-- Hosts -->
+                    <div class="col-sm-6">
+                        <div class="card" >
+                            <h4 class="card-header">Hosts</h4>
+                            <div class="card-block">
+                                {% if event.host %}
+                                    {% for h in event.host.all %}
+                                        <a href="{% url 'profile' h.user.username %}"><span class="badge badge-primary">{{h.user.username}}</span></a>                                {% endfor %}
+                                {% else %}
+                                    No hosts.
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
-                    <br />
+                    
+                    <!-- Time -->
+                    <div class="col-sm-6">
+                        <div class="card" >
+                            <h4 class="card-header">Time</h4>
+                            <div class="card-block">
+                                {% if event.host %}
+                                    {{event.date_time}}
+                                {% else %}
+                                    No time.
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <br />
                 <div class="row">
                     <div class="col-sm-6">
                         <!-- Location -->

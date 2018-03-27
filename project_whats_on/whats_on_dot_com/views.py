@@ -65,25 +65,12 @@ def events(request, query=""):
                     events += events_buffer.filter(category=c)
 
             # Filter people
-            # TODO yields strange results for now, will fix later
             if data["people"]:
                 p = int(data["people"])
-                queryset = []
                 if p == 1:
-                    # People I follow
-                    queryset = UserProfile.objects.get(user=request.user).follows.all()
-                if p == 2:
-                    # My followers
-                    queryset = UserProfile.objects.all().filter(follows=UserProfile.objects.get(user=request.user))
-                if p == 3:
-                    # TODO Popular people 
-                    pass
-                print(queryset)
-                if queryset:
-                    events_buffer = events
-                    events = Event.objects.all().filter(pk=-1)
-                    for p in queryset:
-                        events = events | events_buffer.filter(interested=p)
+                    up = UserProfile.objects.get(user__username=request.user.username)
+                    user_profiles = UserProfile.objects.all().filter(follows=up)
+                    events = events.filter(host__in=user_profiles)
         else:
             print(filter_events_form.errors)
 
