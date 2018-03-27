@@ -19,7 +19,16 @@ def index(request):
     return HttpResponseRedirect(reverse('events'))  # Via events url pattern
 
 # EVENTS (events page with events in grid list)
+#Events page test thing
 def events(request, query=""):
+
+    return events_inherit_from(request, query="")
+
+
+
+
+
+def events_inherit_from(request, query=""):
 
     def search_bar(events, search_term):
         events_buffer = events
@@ -101,81 +110,16 @@ def events(request, query=""):
 # EVENTS MAP (map overview of nearby events)
 def events_map(request):
 
-    #C+P CODE CAUSE I A SMART BOY
-
-    def nearby_locations(latitude, longitude, radius, max_results=100, use_miles=True):
-        if use_miles:
-            distance_unit = 3959
-        else:
-            distance_unit = 6371
-
-        from django.db import connection, transaction
-        from project_whats_on import settings
-        cursor = connection.cursor()
-        #print(settings.DATABASES['default']['ENGINE'])
-        #if settings.DATABASE_ENGINE == 'sqlite3':
-        if settings.DATABASES['default']['ENGINE'] == 'django.db.backends.sqlite3':
-            connection.connection.create_function('acos', 1, math.acos)
-            connection.connection.create_function('cos', 1, math.cos)
-            connection.connection.create_function('radians', 1, math.radians)
-            connection.connection.create_function('sin', 1, math.sin)
-
-        sql = """SELECT id, (%f * acos( cos( radians(%f) ) * cos( radians( latitude ) ) *
-        cos( radians( longitude ) - radians(%f) ) + sin( radians(%f) ) * sin( radians( latitude ) ) ) )
-        AS distance FROM Whats_On_Dot_Com_Event WHERE distance < %d
-        ORDER BY distance LIMIT 0 , %d;""" % (distance_unit, latitude, longitude, latitude, int(radius), max_results)
-        cursor.execute(sql)
-        ids = [row[0] for row in cursor.fetchall()]
-        #I have ids of all objects
-        #and return the relevant object
-        return Event.objects.filter(id__in=ids)
-	
-
-    #testing
-    map_points = nearby_locations(55.8, -4.2, 10, 50)
-    #map_points = Event.objects.all()
-    #DUMBASS ME DIDNT REMEMBER TO USE CONTEXT DICT
-    context_dict = {"map_points": map_points}
+    test = events_inherit_from(request, query="")
+    
+    context_dict = {}
     return render(request, 'whats_on_dot_com/events_map.html', context_dict)
 	
 #delete after main map works
 def map_test(request):
 
-    #C+P CODE CAUSE I A SMART BOY
-
-    def nearby_locations(latitude, longitude, radius, max_results=100, use_miles=True):
-        if use_miles:
-            distance_unit = 3959
-        else:
-            distance_unit = 6371
-
-        from django.db import connection, transaction
-        from project_whats_on import settings
-        cursor = connection.cursor()
-        #print(settings.DATABASES['default']['ENGINE'])
-        #if settings.DATABASE_ENGINE == 'sqlite3':
-        if settings.DATABASES['default']['ENGINE'] == 'django.db.backends.sqlite3':
-            connection.connection.create_function('acos', 1, math.acos)
-            connection.connection.create_function('cos', 1, math.cos)
-            connection.connection.create_function('radians', 1, math.radians)
-            connection.connection.create_function('sin', 1, math.sin)
-
-        sql = """SELECT id, (%f * acos( cos( radians(%f) ) * cos( radians( latitude ) ) *
-        cos( radians( longitude ) - radians(%f) ) + sin( radians(%f) ) * sin( radians( latitude ) ) ) )
-        AS distance FROM Whats_On_Dot_Com_Event WHERE distance < %d
-        ORDER BY distance LIMIT 0 , %d;""" % (distance_unit, latitude, longitude, latitude, int(radius), max_results)
-        cursor.execute(sql)
-        ids = [row[0] for row in cursor.fetchall()]
-        #I have ids of all objects
-        #and return the relevant object
-        return Event.objects.filter(id__in=ids)
-	
-
-    #testing
-    map_points = nearby_locations(55.8, -4.2, 10, 50)
-    #map_points = Event.objects.all()
-    #DUMBASS ME DIDNT REMEMBER TO USE CONTEXT DICT
-    context_dict = {"map_points": map_points}
+    
+    context_dict = {}
     return render(request, 'whats_on_dot_com/map_test.html', context_dict)
 
 
