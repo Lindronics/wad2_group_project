@@ -18,14 +18,11 @@ from django.contrib import admin
 from registration.backends.simple.views import RegistrationView
 from django.conf import settings 
 from django.conf.urls.static import static
-
-# If login successful, redirect user to home page
-class MyRegistrationView(RegistrationView): 
-    def get_success_url(self, user): 
-        return "/whats_on_dot_com/"
+from whats_on_dot_com.regbackend import MyRegistrationView
 
 urlpatterns = [
     url(r"^admin/", admin.site.urls),
+    url(r'^accounts/register/$', MyRegistrationView.as_view(), name='registration_register'),
     url(r"^accounts/", include("registration.backends.simple.urls")),
     url(r"^", include("whats_on_dot_com.urls")),# Match to start of urls used in the whats_on_dot_com app
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

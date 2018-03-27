@@ -293,12 +293,12 @@ def profile(request, username):
         user_profile = UserProfile.objects.get(user__username=username)
         context_dict = {
             "profile":user_profile,
-            "following":user_profile.follows.all(),
         }
+        if request.user:
+            context_dict["this_user"] = UserProfile.objects.get(user__username=request.user.username)
         return render(request, 'whats_on_dot_com/profile.html', context_dict)
 
     except UserProfile.DoesNotExist:
-        print(username, request.user)
         if username==request.user.username:
             print("SETUP")
             return HttpResponseRedirect(reverse('profile_setup'))
@@ -310,7 +310,7 @@ def profile(request, username):
 @login_required
 def profile_setup(request):
     if request.method == 'POST': 
-        profile_setup_form = ProfileSetupForm(data=request.POST)
+        profile_setup_form = ProfileSetupForm(request.POST, request.FILES)
 
         if profile_setup_form.is_valid():
 
@@ -323,10 +323,10 @@ def profile_setup(request):
             profile.forename = data['forename']
             profile.surname = data['surname']
             profile.description = data['description']
-            if 'picture' in request.FILES:
-                print("PICTURE") 
-                profile.profile_picture = request.FILES['picture']
+            profile.profile_picture = data['profile_picture']
             profile.save()
+
+            return(HttpResponseRedirect(reverse('profile', args=[request.user])))
         else:
             # Invalid form!
             print(profile_setup_form.errors)
@@ -334,7 +334,11 @@ def profile_setup(request):
         # Render form if request not post
         profile_setup_form = ProfileSetupForm()
 
-    return render(request, 'whats_on_dot_com/profile_setup.html', {"profile_setup_form":profile_setup_form})
+        context_dict = {
+            "profile_setup_form":profile_setup_form,
+            }
+
+    return render(request, 'whats_on_dot_com/profile_setup.html', context_dict)
 
 # INTERESTED (for following or unfollowing an event)
 @login_required
@@ -351,6 +355,24 @@ def interested(request, event_pk):
     # Update number of followers
     e.number_followers = e.interested.all().count()
     e.save()
+
+    # Redirect to where user was coming from
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+# FOLLOW (for following or unfollowing a profile)
+@login_required
+def follow(request, username):
+    up = UserProfile.objects.get(user__username=request.user)
+    subject = UserProfile.objects.get(user__username=username)
+
+    # Toggle following status
+    if up.follows.filter(user__username=username).exists():
+        up.follows.remove(subject)
+    else:
+        up.follows.add(subject)
+
+    # Update number of followers
+    up.save()
 
     # Redirect to where user was coming from
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
