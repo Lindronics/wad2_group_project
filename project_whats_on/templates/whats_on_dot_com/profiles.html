@@ -58,18 +58,25 @@ What's On - Profiles
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Username</th>
+                        <th>Picture</th>
                         <th>Name</th>
                         <th>Description</th>
+                        <th>Username</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for p in profiles %} 
                         <tr>
-                            <td>{{p.user.username}}</td>
+                            <td>
+                                {% if p.profile_picture %}
+                                    <img class="profile_picture" src="{{p.profile_picture.url}}"/>
+                                {% else %}
+                                    <img class="profile_picture" src="{% static 'avatar.png' %}"/>
+                                {% endif %}
+                            </td>
                             <td>{{p.forename}} {{p.surname}}</td>
                             <td>{{p.description}}</td>
-                            <td><a href="{% url 'profile' p.user.username %}"><span class="badge badge-primary">Details</span></a></td>
+                            <td><h5><a href="{% url 'profile' p.user.username %}"><span class="badge badge-primary">{{p.user.username}}</span></a></h5></td>
                         </tr> 
                     {% endfor %} 
                 </tbody>

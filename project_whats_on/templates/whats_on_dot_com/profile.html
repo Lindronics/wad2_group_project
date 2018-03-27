@@ -6,6 +6,10 @@
 {% endblock %}
 
 {% block body_block %}
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/profiles.css' %}"/>
+
     <br />
     <a href="{% url 'profiles' %}">Back to profiles list</a>
     <hr />
@@ -18,7 +22,6 @@
             <div class="col-sm-7">
                 <!-- Description -->
                 <div class="card" >
-                    <h4 class="card-header">Profile description</h4>
                     {% if profile.profile_picture %}
                         <img class="card-img-top" src="{{profile.profile_picture.url}}"/>
                     {% endif %}
@@ -47,16 +50,23 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Username</th>
+                                            <th>Picture</th>
                                             <th>Name</th>
+                                            <th>Username</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {% for p in profile.follows.all %} 
                                             <tr>
-                                                <td>{{p.user.username}}</td>
+                                                <td>
+                                                    {% if p.profile_picture %}
+                                                        <img class="profile_picture_small" src="{{p.profile_picture.url}}"/>
+                                                    {% else %}
+                                                        <img class="profile_picture_small" src="{% static 'avatar.png' %}"/>
+                                                    {% endif %}
+                                                </td>
                                                 <td>{{p.forename}} {{p.surname}}</td>
-                                                <td><a href="{% url 'profile' p.user.username %}"><span class="badge badge-primary">Details</span></a></td>
+                                                <td><h5><a href="{% url 'profile' p.user.username %}"><span class="badge badge-primary">{{p.user.username}}</span></a><h5></td>
                                             </tr> 
                                         {% endfor %} 
                                     </tbody>
