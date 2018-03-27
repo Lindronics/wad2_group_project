@@ -35,36 +35,30 @@
 			{% endif %}
 			</div>
 
-
-
-
-
-
-
 			<div class="form-group">
-				<form action="" method="post" id="event_form">
+				<form action="" method="post" id="event_form" enctype="multipart/form-data">
 					{% csrf_token %}
 					
 					<label for="id_name">Event name</label>
-					<input class="form-control" id="id_name" type="text" name="name" maxlength="100" required /></p>
+					<input class="form-control" id="id_name" type="text" name="name" maxlength="100" required />
 					
 					<label for="id_description">Description</label>
-					<textarea class="form-control" id="id_description"  name="description" rows="5" required></textarea></p>
+					<textarea class="form-control" id="id_description"  name="description" rows="5" required></textarea>
 					
 					<label for="id_date_time">date and time in YYYY-MM-DD HH:MM format</label>
-					<input class="form-control" id="id_date_time" type="text" name="date_time" maxlength="100" required /></p>
+					<input class="form-control" id="id_date_time" type="text" name="date_time" maxlength="100" required />
 					
 					<label for="id_address">Address</label>
-					<textarea class="form-control" id="id_address" name="address" rows="2" required></textarea></p>
+					<textarea class="form-control" id="id_address" name="address" rows="2" required></textarea>
 					
 					<label for="id_location_info">Extra address info</label>
-					<input class="form-control" id="id_location_info" type="text" name="location_info" maxlength="100" required /></p>
+					<input class="form-control" id="id_location_info" type="text" name="location_info" maxlength="100" required />
 					
 					
 					<label for="id_category">Category</label>
 					<select class="form-control" id="id_category" name="category">
 						{% for c in event_form.category.field.queryset.all %}
-						<option value="{{c.pk}}">{{c}}</option>
+							<option value="{{c.pk}}">{{c}}</option>
 						{% endfor %}
 					</select>
 					
@@ -79,6 +73,9 @@
 						</li>
 						{% endfor %}
 					</ul>
+
+					<label for="id_new_tags">Add new tags (separated by comma)</label>
+					<textarea class="form-control" id="id_new_tags" name="new_tags" rows="3"></textarea>
 					
 					<label for="id_event_picture">Event picture</label>
 					<input class="form-control-file" type="file" name="event_picture" id="id_event_picture" />

@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib import messages
+from django.core.urlresolvers import reverse
 
 #iain funky shit
 import math
@@ -10,12 +11,12 @@ import math
 #import my script from main document tree
 #from get_events_in_radius import nearby_locations
 
-from whats_on_dot_com.models import User, UserProfile, Event, Category
+from whats_on_dot_com.models import User, UserProfile, Event, Category, Tag
 from whats_on_dot_com.forms import NewEventForm, ProfileSetupForm, FilterEventsForm, FilterProfilesForm
 
 # INDEX (home page, redirects to events page)
 def index(request):
-    return HttpResponseRedirect('events')  # Via events url pattern
+    return HttpResponseRedirect(reverse('events'))  # Via events url pattern
 
 # EVENTS (events page with events in grid list)
 def events(request, query=""):
@@ -64,25 +65,12 @@ def events(request, query=""):
                     events += events_buffer.filter(category=c)
 
             # Filter people
-            # TODO yields strange results for now, will fix later
             if data["people"]:
                 p = int(data["people"])
-                queryset = []
                 if p == 1:
-                    # People I follow
-                    queryset = UserProfile.objects.get(user=request.user).follows.all()
-                if p == 2:
-                    # My followers
-                    queryset = UserProfile.objects.all().filter(follows=UserProfile.objects.get(user=request.user))
-                if p == 3:
-                    # TODO Popular people 
-                    pass
-                print(queryset)
-                if queryset:
-                    events_buffer = events
-                    events = Event.objects.all().filter(pk=-1)
-                    for p in queryset:
-                        events = events | events_buffer.filter(interested=p)
+                    up = UserProfile.objects.get(user__username=request.user.username)
+                    user_profiles = UserProfile.objects.all().filter(follows=up)
+                    events = events.filter(host__in=user_profiles)
         else:
             print(filter_events_form.errors)
 
@@ -216,19 +204,28 @@ def add_event(request):
 
     # Get data from form, add to model if valid
     if request.method == 'POST':
-        form = NewEventForm(request.POST)
-        if form.is_valid():
+        form = NewEventForm(request.POST, request.FILES)
 
-            print(form.cleaned_data)
+        if form.is_valid():
             event = form.save()
+            data = form.cleaned_data
+
+            # Add new tags
+            if data["new_tags"]:
+                for raw_tag in data["new_tags"].split(","):
+                    tag = raw_tag.strip()
+                    t = Tag.objects.get_or_create(name=tag)[0]
+                    event.tags.add(t.pk)
+
+            # Add picture
+            event.event_picture = data['event_picture']
 
             # Add host
             up = UserProfile.objects.get(user__username=request.user)
             event.host.add(up)
             event.save()
 
-            return HttpResponseRedirect('/event_details/%s' % event.pk)
-            #return index(request)
+            return HttpResponseRedirect(reverse('event_page', args=[event.pk]))
         else:
             print(form.errors)
 
@@ -304,10 +301,10 @@ def profile(request, username):
         print(username, request.user)
         if username==request.user.username:
             print("SETUP")
-            return HttpResponseRedirect('/profile/setup')
+            return HttpResponseRedirect(reverse('profile_setup'))
         else:
             print("NO SETUP")
-            return HttpResponseRedirect('/events/')
+            return HttpResponseRedirect(reverse('events'))
 
 # PROFILE_SETUP (changing profile values such as name, description)
 @login_required
@@ -355,5 +352,5 @@ def interested(request, event_pk):
     e.number_followers = e.interested.all().count()
     e.save()
 
-    #return HttpResponseRedirect('/event_details/%s' % event_pk)
+    # Redirect to where user was coming from
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
