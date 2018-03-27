@@ -35,14 +35,8 @@
 			{% endif %}
 			</div>
 
-
-
-
-
-
-
 			<div class="form-group">
-				<form action="" method="post" id="event_form">
+				<form action="" method="post" id="event_form" enctype="multipart/form-data">
 					{% csrf_token %}
 					
 					<label for="id_name">Event name</label>
@@ -64,7 +58,7 @@
 					<label for="id_category">Category</label>
 					<select class="form-control" id="id_category" name="category">
 						{% for c in event_form.category.field.queryset.all %}
-						<option value="{{c.pk}}">{{c}}</option>
+							<option value="{{c.pk}}">{{c}}</option>
 						{% endfor %}
 					</select>
 					

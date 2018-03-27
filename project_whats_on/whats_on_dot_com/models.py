@@ -43,15 +43,11 @@ class Event(models.Model):
     name = models.CharField(max_length=128)
     description = models.CharField(max_length=1024, blank=True, null=True)
     date_time = models.DateTimeField()
-    slug = models.SlugField(unique=True, blank=True, null=True)
     location_info = models.CharField(max_length=128)
-    event_picture = models.ImageField(upload_to="event_images", blank=True)
+    event_picture = models.ImageField(upload_to="event_images/", blank=True)
     number_followers = models.IntegerField(default=0)
 
-    # perhaps it makes more sense to split the address into different fields?
     address = models.CharField(max_length=512) #store all address info about location needed to find via geocode
-    #city = models.CharField(max_length=128)
-    #post_code = models.CharField(max_length=9)
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
 

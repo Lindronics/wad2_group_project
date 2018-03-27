@@ -6,7 +6,7 @@ from django import forms
 from whats_on_dot_com.models import UserProfile, Category, Tag, Event
 from django.contrib.auth.models import User
 
-#Iain's import to get lat lng from adress string
+# Iain's import to get lat lng from adress string
 import requests
 
 # Used for creating a new event
@@ -19,23 +19,20 @@ class NewEventForm(forms.ModelForm):
     event_picture = forms.ImageField(required=False)
     tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(), widget=forms.CheckboxSelectMultiple(), required=False)
     category = forms.ModelChoiceField(queryset=Category.objects.all(), required=True)
-    
-    # TODO implement selecting hosts, category, tags when creating event
-    # ideally in a dropdown menu
 
     def clean(self):
         cleaned_data = super(NewEventForm,self).clean()
         date_time = cleaned_data.get('date_time')
                 
-        #Iain's code to get the lat long from the address string
+        # Iain's code to get the lat long from the address string
         GOOGLE_MAPS_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json'
-        #Parameters fro gmaps api request
+        # Parameters fro gmaps api request
         params = {
         'address': cleaned_data.get('address'),
         'sensor': 'false',
         'key': 'AIzaSyAzbpDPFJ4xudZnqIsjLH3ltL9og-Sihsk',
         }
-        #Do the request and get the response
+        # Do the request and get the response
         req = requests.get(GOOGLE_MAPS_API_URL, params=params)
         res = req.json()
                 
@@ -54,7 +51,7 @@ class NewEventForm(forms.ModelForm):
 
     class Meta:
         model = Event
-        exclude = ('number_followers', 'address', 'city', 'post_code', 'latitude', 'longtitude', 'host', 'interested', 'slug',)
+        exclude = ('number_followers', 'address', 'latitude', 'longtitude', 'host', 'interested',)
 
 # Used for filtering Events on home page
 class FilterEventsForm(forms.ModelForm):

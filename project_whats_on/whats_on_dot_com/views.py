@@ -204,9 +204,14 @@ def add_event(request):
 
     # Get data from form, add to model if valid
     if request.method == 'POST':
-        form = NewEventForm(request.POST)
+        form = NewEventForm(request.POST, request.FILES)
+        print("files", request.FILES)
         if form.is_valid():
             event = form.save()
+
+            # Add picture
+            event.event_picture = form.cleaned_data['event_picture']
+            print(form.cleaned_data["event_picture"])
 
             # Add host
             up = UserProfile.objects.get(user__username=request.user)
