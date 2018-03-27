@@ -1,5 +1,6 @@
 {% extends 'whats_on_dot_com/events_base.html' %}
 {% load staticfiles %}
+{% load whats_on_template_tags %}
 
 {% block title_block %}
     What's On - Map
@@ -44,13 +45,15 @@
 
         function initMap() {
 		  var locations = [
-			{% for Event in map_points %}
-			//console.log({{ Event|length }})
+		  //django template tag to query db, feed it data from buttons
+			{% search 55.8642 -4.2518 null 30 2019 6 16 12 30 null null as tag_test%}
+			{% for Event in tag_test %}
+
 			//change to a clickable link that takes to event page rather than just text name of event
 			['<p>{{ Event.name }} </p>', '<p>{{ Event.description }} </p>', {{ Event.latitude }}, {{ Event.longitude }}],
 			{% endfor%}
 			];	
-			console.log("Length of map_points variable in template", {{ map_points|length }});
+			console.log("Length of map_points variable in template", {{ tag_test|length }});
 
           var glasgow = {lat: 55.8642, lng: -4.2518};
           map = new google.maps.Map(document.getElementById('map'), {
