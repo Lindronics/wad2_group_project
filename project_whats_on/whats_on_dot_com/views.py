@@ -9,7 +9,7 @@ import datetime
 #iain funky shit
 import math
 
-#import my script from main document tree
+# import my script from main document tree
 #from get_events_in_radius import nearby_locations
 
 from whats_on_dot_com.models import User, UserProfile, Event, Category, Tag
@@ -57,6 +57,12 @@ def events(request, query=""):
         if filter_events_form.is_valid():
             data = filter_events_form.cleaned_data
 
+            # Filter radius
+            if data["radius"]:
+                # Currently hard coded to Glasgow
+                #events = nearby_locations(55.8, -4.2, int(data["radius"]), 50, False)
+                pass
+
             # If search term provided, filter by search bar
             if data["search"]:
                 events, sb = search_bar(events, data["search"])
@@ -64,9 +70,9 @@ def events(request, query=""):
             # Filter categories
             if data["category"]:
                 events_buffer = events
-                events = []
+                events = Event.objects.filter(pk=-1)
                 for c in data["category"]:
-                    events += events_buffer.filter(category=c)
+                    events = events | events_buffer.filter(category=c)
 
             # Filter people
             if data["people"]:
@@ -87,6 +93,7 @@ def events(request, query=""):
                 elif d == 4: # This year
                     limit += datetime.timedelta(days=365)
                 events = events.exclude(date_time__gt=limit)
+
         else:
             print(filter_events_form.errors)
 
@@ -323,7 +330,7 @@ def profile(request, username):
             return HttpResponseRedirect(reverse('profile_setup'))
         else:
             print("NO SETUP")
-            return HttpResponseRedirect(reverse('events'))
+            return HttpResponseRedirect(reverse('profiles'))
 
 # PROFILE_SETUP (changing profile values such as name, description)
 @login_required
@@ -335,7 +342,7 @@ def profile_setup(request):
 
             # Get current user and profile from request
             user = request.user
-            profile = UserProfile.objects.get_or_create(user = user)[0]
+            profile = UserProfile.objects.get_or_create(user__username = user.username)[0]
             data = profile_setup_form.cleaned_data
             
             # Change attributes
@@ -356,7 +363,7 @@ def profile_setup(request):
     else:
         # Render form if request not post
         profile_setup_form = ProfileSetupForm()
-        up = UserProfile.objects.get(user__username=request.user.username)
+        up = UserProfile.objects.get_or_create(user = request.user)[0]
 
         context_dict = {
             "profile_setup_form":profile_setup_form,
