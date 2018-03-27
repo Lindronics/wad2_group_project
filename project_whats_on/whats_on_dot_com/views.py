@@ -57,12 +57,6 @@ def events(request, query=""):
         if filter_events_form.is_valid():
             data = filter_events_form.cleaned_data
 
-            # Filter radius
-            if data["radius"]:
-                # Currently hard coded to Glasgow
-                #events = nearby_locations(55.8, -4.2, int(data["radius"]), 50, False)
-                pass
-
             # If search term provided, filter by search bar
             if data["search"]:
                 events, sb = search_bar(events, data["search"])
