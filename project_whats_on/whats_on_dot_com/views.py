@@ -11,7 +11,7 @@ import math
 #import my script from main document tree
 #from get_events_in_radius import nearby_locations
 
-from whats_on_dot_com.models import User, UserProfile, Event, Category
+from whats_on_dot_com.models import User, UserProfile, Event, Category, Tag
 from whats_on_dot_com.forms import NewEventForm, ProfileSetupForm, FilterEventsForm, FilterProfilesForm
 
 # INDEX (home page, redirects to events page)
@@ -205,13 +205,19 @@ def add_event(request):
     # Get data from form, add to model if valid
     if request.method == 'POST':
         form = NewEventForm(request.POST, request.FILES)
-        print("files", request.FILES)
+
         if form.is_valid():
             event = form.save()
+            data = form.cleaned_data
+
+            # Add new tags
+            for raw_tag in data["new_tags"].split(","):
+                tag = raw_tag.strip()
+                t = Tag.objects.get_or_create(name=tag)[0]
+                event.tags.add(t.pk)
 
             # Add picture
-            event.event_picture = form.cleaned_data['event_picture']
-            print(form.cleaned_data["event_picture"])
+            event.event_picture = data['event_picture']
 
             # Add host
             up = UserProfile.objects.get(user__username=request.user)

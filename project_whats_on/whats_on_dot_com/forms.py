@@ -18,6 +18,7 @@ class NewEventForm(forms.ModelForm):
     location_info = forms.CharField(max_length=128, help_text="Additional location information")
     event_picture = forms.ImageField(required=False)
     tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(), widget=forms.CheckboxSelectMultiple(), required=False)
+    new_tags = forms.CharField(max_length=1024, required=False)
     category = forms.ModelChoiceField(queryset=Category.objects.all(), required=True)
 
     def clean(self):
@@ -83,6 +84,7 @@ class FilterEventsForm(forms.ModelForm):
         model = Event
         fields = ("name",)
 
+# Filter profiles in profiles list view
 class FilterProfilesForm(forms.ModelForm):
     people_choices = (
         (1, "Friends"),
@@ -103,10 +105,8 @@ class ProfileSetupForm(forms.ModelForm):
     surname = forms.CharField(max_length=128)
     description = forms.CharField(max_length=1024)
 
-    # TODO picture upload broken atm
     profile_picture = forms.ImageField(required=False)
 
     class Meta:
         model = UserProfile 
         fields = ("forename", "surname", "description", "profile_picture")
-
