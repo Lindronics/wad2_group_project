@@ -209,6 +209,11 @@ def add_event(request):
         if form.is_valid():
             event = form.save()
             data = form.cleaned_data
+            
+            #Getting the latitude and longitude
+            latandlong = form.getlatandlong()
+            event.latitude = latandlong[0]
+            event.longitude = latandlong[1]
 
             # Add new tags
             if data["new_tags"]:
