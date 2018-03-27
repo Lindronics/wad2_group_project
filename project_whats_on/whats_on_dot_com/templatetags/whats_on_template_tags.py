@@ -39,6 +39,7 @@ def search(lat, lng, people, radius, year, month, day, hour, minute, category, s
     #radii in km
     #[Null, 30, (YEAR, MONTH, DAY, HOUR, MINUTE, SECOND, MILLISECOND),
     #NULL, (NULL OR STRING)]
+    "Function takes in parameters and applies haversine formula to query points in specified radius from db"
     def nearby_locations(latitude, longitude, radius, max_results=100, use_miles=True):
         if use_miles:
             distance_unit = 3959
@@ -69,6 +70,7 @@ def search(lat, lng, people, radius, year, month, day, hour, minute, category, s
     #filter for people -TODO
 
     #filter for radius
+    test = nearby_locations(lat, lng, radius, 100, False)
     semi_filtered = nearby_locations(lat, lng, radius, 100, False)
 
     #filter for date from now
@@ -80,8 +82,9 @@ def search(lat, lng, people, radius, year, month, day, hour, minute, category, s
     #filter for category - TODO
 
     #filter for name contains
-    #if not parameters[4] == None:
-     #   filtered = semi_filtered.filter(name__icontains=search_term)
+    if not search_term == None:
+        filtered = semi_filtered.filter(name__icontains=search_term)
+
         
     #return final filter
 

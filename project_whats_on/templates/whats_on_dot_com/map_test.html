@@ -13,10 +13,15 @@
   <script type="text/javascript">
 	console.log("Length of map_points variable in template", {{ map_points|length }});
 	
+	{% search 55.8642 -4.2518 null 30 2019 6 16 12 30 null null as tag_test%}
+	//console.log("tag_test", tag_test)
+	console.log("Length of tag_test variable in template", {{ tag_test|length }});
 	
+	console.log("")
 	
     var locations = [
-	{% for Event in map_points %}
+	//map_points contains hard coded test
+	{% for Event in tag_test %}
 		//console.log({{ Event|length }})
 		//change to a clickable link that takes to event page rather than just text name of event
 		['<p>{{ Event.name }} </p>', '<p>{{ Event.description }} </p>', {{ Event.latitude }}, {{ Event.longitude }}],
