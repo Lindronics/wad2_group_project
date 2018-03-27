@@ -211,10 +211,11 @@ def add_event(request):
             data = form.cleaned_data
 
             # Add new tags
-            for raw_tag in data["new_tags"].split(","):
-                tag = raw_tag.strip()
-                t = Tag.objects.get_or_create(name=tag)[0]
-                event.tags.add(t.pk)
+            if data["new_tags"]:
+                for raw_tag in data["new_tags"].split(","):
+                    tag = raw_tag.strip()
+                    t = Tag.objects.get_or_create(name=tag)[0]
+                    event.tags.add(t.pk)
 
             # Add picture
             event.event_picture = data['event_picture']

@@ -4,9 +4,9 @@ from whats_on_dot_com import views
 
 
 urlpatterns = [
-    url(r"^events/$", views.events, name="events"),
-    url(r"^events/add$", views.add_event, name="add_event"),
+    url(r"^events$", views.events, name="events"),
     url(r"^events/query/(?P<query>[\w\ ]+)$", views.events, name="events"),
+    url(r"^events/add$", views.add_event, name="add_event"),
     url(r"^events/details/(?P<event_pk>[\w\-]+)$", views.event_page, name="event_page"),
     url(r"^events/details/(?P<event_pk>[\w\-]+)/interested$", views.interested, name="interested"),
     url(r"^about$", views.about, name="about"),

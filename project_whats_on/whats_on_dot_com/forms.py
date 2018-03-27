@@ -44,15 +44,15 @@ class NewEventForm(forms.ModelForm):
         geodata['lng'] = result['geometry']['location']['lng']
         geodata['address'] = result['formatted_address']
         
-        latitude = geodata["lat"]
-        longitude = geodata["lng"]
+        self.latitude = geodata["lat"]
+        self.longitude = geodata["lng"]
                 
         print(date_time)
-        address = cleaned_data.get('address')
+        self.address = cleaned_data.get('address')
 
     class Meta:
         model = Event
-        exclude = ('number_followers', 'address', 'latitude', 'longtitude', 'host', 'interested',)
+        exclude = ('number_followers', 'host', 'interested',)
 
 # Used for filtering Events on home page
 class FilterEventsForm(forms.ModelForm):
