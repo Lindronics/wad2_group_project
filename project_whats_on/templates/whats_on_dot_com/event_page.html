@@ -1,9 +1,13 @@
 {% extends 'whats_on_dot_com/base.html' %}
+{% load staticfiles %}
 
 {% block title_block %}
     What's On - {{event.name}}
 {% endblock %}
 {% block body_block %}
+<!-- Custom CSS -->
+<link rel="stylesheet" type="text/css" href="{% static 'css/events.css' %}"/>
+
     <br />
     <a href="{% url 'events' %}">Back to overview</a>
     <hr />

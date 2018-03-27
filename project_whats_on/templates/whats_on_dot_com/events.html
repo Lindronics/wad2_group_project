@@ -7,6 +7,9 @@
 
 {% block events_block %}
 
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/events.css' %}"/>
+
     {% if events %}
         <div class="album py-5 bg-light">
             <div class="container">
@@ -16,7 +19,7 @@
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
                             {% if e.event_picture %}
-                                <img class="card-img-top" src="{{e.event_picture.url}}" alt="No image provided" style="width:100%; height:auto">
+                                <img class="card-img-top" src="{{e.event_picture.url}}" alt="No image provided">
                             {% else %}
                                 <img class="card-img-top" src="{% static 'thumbnail.png' %}" alt="No image provided">    
                             {% endif %}

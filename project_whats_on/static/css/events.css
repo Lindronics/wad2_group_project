@@ -47,3 +47,8 @@
   .input-group-btn{
     z-index: 2;
   }
+
+  .card-img-top{
+    width: 100%; 
+    height: auto;
+  }
