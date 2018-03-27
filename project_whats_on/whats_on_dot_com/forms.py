@@ -112,7 +112,7 @@ class FilterEventsForm(forms.ModelForm):
     category = forms.ModelMultipleChoiceField(queryset=Category.objects.all(), required=False, widget=forms.CheckboxSelectMultiple())
     radius = forms.ChoiceField(choices=radius_choices, required=False, widget=forms.RadioSelect)
     people = forms.ChoiceField(choices=people_choices, initial=2, required=False, widget=forms.RadioSelect)
-    date = forms.ChoiceField(choices=date_choices, required=False, widget=forms.RadioSelect)
+    date = forms.ChoiceField(choices=date_choices, initial=4, required=False, widget=forms.RadioSelect)
 
     class Meta:
         model = Event

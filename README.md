@@ -10,6 +10,7 @@ Find what's on where and when: event pages with extroversion!
 |pillow|latest|
 |django-registration-redux|latest|
 |django-bootstrap-toolkit|latest|
+|datetime|latest|
 
 ## Ticketing System
 For task proposal, prioritisation and delegation.

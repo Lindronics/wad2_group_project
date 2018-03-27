@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib import messages
 from django.core.urlresolvers import reverse
+import datetime
 
 #iain funky shit
 import math
@@ -46,6 +47,9 @@ def events(request, query=""):
     events = Event.objects.all()
     categories = Category.objects.all()
 
+    # Exclude past events
+    events = events.exclude(date_time__lt=datetime.datetime.now())
+
     # If filter request
     if request.method == "POST":
         filter_events_form = FilterEventsForm(request.POST)
@@ -71,6 +75,18 @@ def events(request, query=""):
                     up = UserProfile.objects.get(user__username=request.user.username)
                     user_profiles = UserProfile.objects.all().filter(follows=up)
                     events = events.filter(host__in=user_profiles)
+
+            # Filter date
+            if data["date"]:
+                d = int(data["date"])
+                limit = datetime.datetime.combine(datetime.date.today(), datetime.time.max)
+                if d == 2: # This week
+                    limit += datetime.timedelta(days=7)
+                elif d == 3: # This month
+                    limit += datetime.timedelta(days=31)
+                elif d == 4: # This year
+                    limit += datetime.timedelta(days=365)
+                events = events.exclude(date_time__gt=limit)
         else:
             print(filter_events_form.errors)
 
@@ -134,7 +150,6 @@ def events_map(request):
     #testing
     map_points = nearby_locations(55.8, -4.2, 10, 50)
     #map_points = Event.objects.all()
-    #DUMBASS ME DIDNT REMEMBER TO USE CONTEXT DICT
     context_dict = {"map_points": map_points}
     return render(request, 'whats_on_dot_com/events_map.html', context_dict)
 	
@@ -174,7 +189,6 @@ def map_test(request):
     #testing
     map_points = nearby_locations(55.8, -4.2, 10, 50)
     #map_points = Event.objects.all()
-    #DUMBASS ME DIDNT REMEMBER TO USE CONTEXT DICT
     context_dict = {"map_points": map_points}
     return render(request, 'whats_on_dot_com/map_test.html', context_dict)
 
@@ -325,10 +339,14 @@ def profile_setup(request):
             data = profile_setup_form.cleaned_data
             
             # Change attributes
-            profile.forename = data['forename']
-            profile.surname = data['surname']
-            profile.description = data['description']
-            profile.profile_picture = data['profile_picture']
+            if data["forename"]:
+                profile.forename = data['forename']
+            if data["surname"]:
+                profile.surname = data['surname']
+            if data["description"]:
+                profile.description = data['description']
+            if data["profile_picture"]:
+                profile.profile_picture = data['profile_picture']
             profile.save()
 
             return(HttpResponseRedirect(reverse('profile', args=[request.user])))
@@ -338,10 +356,12 @@ def profile_setup(request):
     else:
         # Render form if request not post
         profile_setup_form = ProfileSetupForm()
+        up = UserProfile.objects.get(user__username=request.user.username)
 
         context_dict = {
             "profile_setup_form":profile_setup_form,
-            }
+            "profile":up,
+        }
 
     return render(request, 'whats_on_dot_com/profile_setup.html', context_dict)
 

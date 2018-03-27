@@ -16,15 +16,15 @@
             <div class="form-group">
                 <p class="required">
                     <label class="required" for="id_forename"> Forename</label>
-                    <input class="form-control" id="id_forename" maxlength="30" name="forename" type="text"/>
+                    <input class="form-control" id="id_forename" maxlength="30" value="{{profile.forename}}" name="forename" type="text"/>
                 </p>
                 <p class="required">
                     <label class="required" for="id_surname"> Surname</label>
-                    <input class="form-control" id="id_surname" maxlength="30" name="surname" type="text"/>
+                    <input class="form-control" id="id_surname" maxlength="30" value="{{profile.surname}}" name="surname" type="text"/>
                 </p>
                 <p class="required">
                     <label class="required" for="id_description"> Description </label>
-                    <input class="form-control" id="id_description" maxlength="30" name="description" type="text"/>
+                    <input class="form-control" id="id_description" maxlength="30" value="{{profile.description}}" name="description" type="text"/>
                 </p>
                 <p>
                     <label class="required" for="id_profile_picture"> Profile picture </label>
