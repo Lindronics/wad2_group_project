@@ -34,8 +34,7 @@
 		  var locations = [
 			//locations is populated by the function in view which has parameters defined by the filter bar on the webpage.
 			{% for Event in events %}
-			//<a href="http://www.yahoo.com">here</a>
-			//change to a clickable link that takes to event page rather than just text name of event
+			//for each event populate array with lat lng and details
 			['<a href="{% url 'event_page' Event.pk %}">{{ Event.name }}</a>', '<p>{{ Event.description }} </p>', '<p>{{ Event.address }} </p>', '<p>{{ Event.date_time }} </p>',  {{ Event.latitude }}, {{ Event.longitude }}],
 			{% endfor%}
 			];	

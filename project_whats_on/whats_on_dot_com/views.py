@@ -74,6 +74,10 @@ def events(request, query=""):
 
 # Filter events
 def filter_events(events, data, request):
+    #Default map focus
+    focus_lat = 55.8642
+    focus_lng = -4.2518
+    
     # If search term provided, filter by search bar
     if data["search"]:
         events, sb = search_bar(events, data["search"])
@@ -106,48 +110,48 @@ def filter_events(events, data, request):
         events = events.exclude(date_time__gt=limit)
 
 
-        #Filter for new location (default radius 30)
-        if data["search_location"]:
-            # Iain's code to get the lat long from the address string
-            GOOGLE_MAPS_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json'
-            # Parameters for gmaps api request
-            params = {
-                'address': data["search_location"],
-                'sensor': 'false',
-                'key': 'AIzaSyAzbpDPFJ4xudZnqIsjLH3ltL9og-Sihsk',
-            }
-            # Do the request and get the response
-            req = requests.get(GOOGLE_MAPS_API_URL, params=params)
-            res = req.json()
+    #Filter for new location (default radius 30)
+    if data["search_location"]:
+        # Iain's code to get the lat long from the address string
+        GOOGLE_MAPS_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json'
+        # Parameters for gmaps api request
+        params = {
+            'address': data["search_location"],
+            'sensor': 'false',
+            'key': 'AIzaSyAzbpDPFJ4xudZnqIsjLH3ltL9og-Sihsk',
+        }
+        # Do the request and get the response
+        req = requests.get(GOOGLE_MAPS_API_URL, params=params)
+        res = req.json()
 
-            #Take first result as correct
-            result = res['results'][0]
+        #Take first result as correct
+        result = res['results'][0]
 
-            #address was valid if there exists a result
-            if result:
-                geodata = dict()
-                geodata['lat'] = result['geometry']['location']['lat']
-                geodata['lng'] = result['geometry']['location']['lng']
-                geodata['address'] = result['formatted_address']
+        #address was valid if there exists a result
+        if result:
+            geodata = dict()
+            geodata['lat'] = result['geometry']['location']['lat']
+            geodata['lng'] = result['geometry']['location']['lng']
+            geodata['address'] = result['formatted_address']
     
-                latitude = geodata["lat"]
-                longitude = geodata["lng"]
+            latitude = geodata["lat"]
+            longitude = geodata["lng"]
 
-                focus_lat = latitude
-                focus_lng = longitude
+            focus_lat = latitude
+            focus_lng = longitude
 
-            #if a radius has been supplied use that
-            if data["radius"]:
-                returned_ids = nearby_locations(latitude, longitude, int(data["radius"]))
-                events = events.filter(id__in=returned_ids)
-            else:
-                returned_ids = nearby_locations(latitude, longitude, 30)
-                events = events.filter(id__in=returned_ids)
+    #if a radius has been supplied use that
+    if data["radius"]:
+        returned_ids = nearby_locations(focus_lat, focus_lng, int(data["radius"]))
+        events = events.filter(id__in=returned_ids)
+    else:
+        returned_ids = nearby_locations(latitude, longitude, 30)
+        events = events.filter(id__in=returned_ids)
 
-        #if there is a radius and no search location use glasgow as default
-        if data["radius"] and not data["search_location"]:
-            returned_ids = nearby_locations(55.8642, -4.2518, int(data["radius"]))
-            events = events.filter(id__in=returned_ids)
+    #if there is a radius and no search location use glasgow as default
+    if data["radius"] and not data["search_location"]:
+        returned_ids = nearby_locations(55.8642, -4.2518, int(data["radius"]))
+        events = events.filter(id__in=returned_ids)
     return events, focus_lat, focus_lng
     
 #function for radius search
@@ -223,7 +227,8 @@ def events_map(request, query=""):
 
         if filter_events_form.is_valid():
             data = filter_events_form.cleaned_data
-            events, focus_lat, focus_lng = filter_events(events, data, request)         
+            events, focus_lat, focus_lng = filter_events(events, data, request)
+
         else:
             print(filter_events_form.errors)
 
