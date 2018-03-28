@@ -125,7 +125,10 @@ def filter_events(events, data, request):
         res = req.json()
 
         #Take first result as correct
-        result = res['results'][0]
+        try:
+            result = res['results'][0]
+        except:
+            result = ""
 
         #address was valid if there exists a result
         if result:
