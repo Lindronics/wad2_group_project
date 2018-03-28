@@ -109,6 +109,7 @@ class FilterEventsForm(forms.ModelForm):
     )
     name = forms.CharField(max_length=128, required=False)
     search = forms.CharField(max_length=128, required=False)
+    search_location = forms.CharField(max_length=128, required=False)
     category = forms.ModelMultipleChoiceField(queryset=Category.objects.all(), required=False, widget=forms.CheckboxSelectMultiple())
     radius = forms.ChoiceField(choices=radius_choices, required=False, widget=forms.RadioSelect)
     people = forms.ChoiceField(choices=people_choices, initial=2, required=False, widget=forms.RadioSelect)

@@ -53,7 +53,7 @@
                 </div>
                 {% endif %}
                 <!-- Radius filter -->
-                <!-- <div class="input-group-btn">
+                <div class="input-group-btn">
                     <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Radius
                     </button>
@@ -68,7 +68,7 @@
                             No radius filters available.
                         {% endif %}
                     </div>
-                </div> -->
+                </div>
                 <!-- Date filter -->
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -103,8 +103,10 @@
                         {% endif %}
                     </div>
                 </div>
-                <!-- Search bar -->                       
+                <!-- Search bar -->   
+				<input type="text" class="form-control" placeholder="{{search_bar_location_initial}}" id="id_search_location" name="search_location" style="z-index:2;"/>
                 <input type="text" class="form-control" placeholder="{{search_bar_initial}}" id="id_search" name="search" style="z-index:2;"/>
+				
                 <span class="input-group-btn">
                     <button class="btn btn-secondary" type="submit" name="submit">Go!</button>
                 </span>

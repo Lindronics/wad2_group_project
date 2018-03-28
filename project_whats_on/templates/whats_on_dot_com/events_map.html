@@ -20,49 +20,27 @@
 {% block events_block %}
 
     <!-- Insert map here -->
-	<div>
-         <label for="raddressInput">Search location:</label>
-         <input type="text" id="addressInput" size="15"/>
-        <label for="radiusSelect">Radius:</label>
-        <select id="radiusSelect" label="Radius" onchange="testFn()">
-		  <option value="1000">1000 kms</option>
-		  <option value="500">500 kms</option>
-		  <option value="200">200 kms</option>
-		  <option value="100">100 kms</option>
-		  <option value="50" selected>50 kms</option>
-          <option value="30">30 kms</option>
-          <option value="20">20 kms</option>
-          <option value="10">10 kms</option>
-		  <option value="5">5 kms</option>
-		  <option value="2">2 kms</option>
-        </select>
-
-        <input type="button" id="searchButton" value="Search"/>
-    </div>
     <div><select id="locationSelect" style="width: 10%; visibility: hidden"></select></div>
-    <div id="map" style="width: 100%; height: 50%"></div>
+    <div id="map" style="width: 100%; height: 53%"></div>
     <script>
 	console.log("Being ran")
       var map;
       var markers = [];
       var infoWindow;
       var locationSelect;
+	  // delete test variables
 	  var radius = 30;
 	  var counter = 1
 	  var test_string = "Tim"
-
-		function testFn() {
-		counter = counter + 1
-		console.log("THIS IS A TEST", counter)
-		{% search 55.8642 -4.2518 null 50000 2019 6 16 12 30 null "Tim" as test_test%}
-		console.log("Length of Tim Serach variable in template", {{ test_test|length }});
-		}
+	  
+	  console.log("Length of events in view", {{ events|length }})
+	  
 
         function initMap() {
 		  var locations = [
 		  //django template tag to query db, feed it data from buttons
 			{% search 55.8642 -4.2518 null 50000 2019 6 16 12 30 null null as tag_test%}
-			{% for Event in tag_test %}
+			{% for Event in events %}
 
 			//change to a clickable link that takes to event page rather than just text name of event
 			['<p>{{ Event.name }} </p>', '<p>{{ Event.description }} </p>', {{ Event.latitude }}, {{ Event.longitude }}],
@@ -79,7 +57,7 @@
           });
           infoWindow = new google.maps.InfoWindow();
 
-          searchButton = document.getElementById("searchButton").onclick = searchLocations;
+          //searchButton = document.getElementById("searchButton").onclick = searchLocations;
 
           locationSelect = document.getElementById("locationSelect");
           locationSelect.onchange = function() {
