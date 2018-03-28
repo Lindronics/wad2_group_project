@@ -39,7 +39,6 @@
 			['<a href="{% url 'event_page' Event.pk %}">{{ Event.name }}</a>', '<p>{{ Event.description }} </p>', '<p>{{ Event.address }} </p>', '<p>{{ Event.date_time }} </p>',  {{ Event.latitude }}, {{ Event.longitude }}],
 			{% endfor%}
 			];	
-			console.log("Length of map_points variable in template", {{ tag_test|length }});
 		
 		//centre the map and zoom in to the specified location
           var map_centre = {lat: {{focus_lat}}, lng: {{focus_lng}}};
