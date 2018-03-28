@@ -24,9 +24,6 @@ def index(request):
 def events(request, query=""):
     filter_events_form = FilterEventsForm()
 
-    #test dummy variables
-    dummy1 , dummy2 = "" , ""
-
     # Initial value of search bar
     sb = "Search..."
     sb_loc = "Enter location to search from"
@@ -45,7 +42,7 @@ def events(request, query=""):
         if filter_events_form.is_valid():
             data = filter_events_form.cleaned_data
 
-            events, dummy1, dummy2 = filter_events(events, data, request)
+            events = filter_events(events, data, request)[0]
 
         else:
             print(filter_events_form.errors)
