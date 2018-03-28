@@ -63,7 +63,9 @@
                     <div class="col-sm-6">
                         <!-- Location -->
                         <div class="card" >
-                            <h4 class="card-header">Location</h4>
+                            <h4 class="card-header">Location
+							<!-- Pass the lat and long to map -->
+							<a href="{% url 'interested' event.pk %}" class="btn btn-success">View on Map</a></h4>
                             <div class="card-block">
                                 <p class="card-text">{{event.location_info}}</p>
                                 <p class="card-text">{{event.address}}</p>

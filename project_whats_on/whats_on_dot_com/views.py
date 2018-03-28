@@ -148,7 +148,7 @@ def filter_events(events, data, request):
         if data["radius"] and not data["search_location"]:
             returned_ids = nearby_locations(55.8642, -4.2518, int(data["radius"]))
             events = events.filter(id__in=returned_ids)
-    return events
+    return events, focus_lat, focus_lng
     
 #function for radius search
 def nearby_locations(latitude, longitude, radius, max_results=100, use_miles=True):
@@ -223,7 +223,7 @@ def events_map(request, query=""):
 
         if filter_events_form.is_valid():
             data = filter_events_form.cleaned_data
-            events = filter_events(events, data, request)         
+            events, focus_lat, focus_lng = filter_events(events, data, request)         
         else:
             print(filter_events_form.errors)
 
