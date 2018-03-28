@@ -23,21 +23,16 @@
     <div><select id="locationSelect" style="width: 10%; visibility: hidden"></select></div>
     <div id="map" style="width: 100%; height: 53%"></div>
     <script>
-	console.log("Being ran")
+	// Javascript relies on django and breaks when moved to a seperate file hence inline
       var map;
       var markers = [];
       var infoWindow;
       var locationSelect;
-	  // delete test variables
-	  var radius = 30;
-	  var counter = 1
-	  var test_string = "Tim"
-	  
-	  console.log("Length of events in view", {{ events|length }})
 	  
 
         function initMap() {
 		  var locations = [
+			//locations is populated by the function in view which has parameters defined by the filter bar on the webpage.
 			{% for Event in events %}
 
 			//change to a clickable link that takes to event page rather than just text name of event
@@ -85,84 +80,7 @@
     }
         }
 
-       function searchLocations() {
-		 //currently this takes the value in the box created by this script
-		 //need to change form to have 2 search boxes, one for name contains
-		 //and one for area to search
-         var address = document.getElementById("addressInput").value;
-         var geocoder = new google.maps.Geocoder();
-         geocoder.geocode({address: address}, function(results, status) {
-           if (status == google.maps.GeocoderStatus.OK) {
-		   //replace this function call with call to my python script
-            searchLocationsNear(results[0].geometry.location);
-           } else {
-             alert(address + ' not found');
-           }
-         });
-       }
-
-       function clearLocations() {
-         infoWindow.close();
-         for (var i = 0; i < markers.length; i++) {
-           markers[i].setMap(null);
-         }
-         markers.length = 0;
-
-         locationSelect.innerHTML = "";
-         var option = document.createElement("option");
-         option.value = "none";
-         option.innerHTML = "See all results:";
-         locationSelect.appendChild(option);
-       }
-
-       function searchLocationsNear(center) {
-         clearLocations();
-
-         var radius = document.getElementById('radiusSelect').value;
-
-         downloadUrl(searchUrl, function(data) {
-           var xml = parseXml(data);
-           var markerNodes = xml.documentElement.getElementsByTagName("marker");
-           var bounds = new google.maps.LatLngBounds();
-           for (var i = 0; i < markerNodes.length; i++) {
-             var id = markerNodes[i].getAttribute("id");
-             var name = markerNodes[i].getAttribute("name");
-             var address = markerNodes[i].getAttribute("address");
-             var distance = parseFloat(markerNodes[i].getAttribute("distance"));
-             var latlng = new google.maps.LatLng(
-                  parseFloat(markerNodes[i].getAttribute("lat")),
-                  parseFloat(markerNodes[i].getAttribute("lng")));
-
-             createOption(name, distance, i);
-             createMarker(latlng, name, address);
-             bounds.extend(latlng);
-           }
-           map.fitBounds(bounds);
-           locationSelect.style.visibility = "visible";
-           locationSelect.onchange = function() {
-             var markerNum = locationSelect.options[locationSelect.selectedIndex].value;
-             google.maps.event.trigger(markers[markerNum], 'click');
-           };
-         });
-       }
-
-       function createMarker(latlng, name, address) {
-          var html = "<b>" + name + "</b> <br/>" + address;
-          var marker = new google.maps.Marker({
-            map: map,
-            position: latlng
-          });
-          google.maps.event.addListener(marker, 'click', function() {
-            infoWindow.setContent(html);
-            infoWindow.open(map, marker);
-          });
-          markers.push(marker);
-        }
-
-		function workplease(){
-		
-		}
-	   console.log("Got to end")
+	   
   </script>
   <!-- Think that's all from working maps page -->
   <!-- Need to add a script call at the bottom of body-->

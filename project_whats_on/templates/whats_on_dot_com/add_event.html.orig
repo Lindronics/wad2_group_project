@@ -1,0 +1,126 @@
+{% extends 'whats_on_dot_com/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+	Add Event
+{% endblock %}
+
+{% block nav_block %}
+	<li><a href="{% url 'events' %}" >Events</a></li>
+	<li><a href="{% url 'profiles' %}">Profiles</a></li>
+	<li id="active"><a href="{% url 'add_event'%}">Add Event</a></li>
+{% endblock %}
+
+{% block body_block%}
+	<div class="jumbotron">
+
+		<h1>Add an Event</h1>
+		<hr />
+		
+
+
+		<div class="form-group">
+			<form action="" method="post" id="event_form" enctype="multipart/form-data">
+				{% csrf_token %}
+
+
+				<div>
+				{% if errors %}
+					<h5>Please fix errors in the following fields:<h5>
+					{% for error in errors %}
+						<h6>{{ error }}</h6>
+					{% endfor %}
+				{% endif %}
+
+
+
+				</div>
+				
+				<label for="id_name">Event name</label>
+				<input class="form-control" id="id_name" type="text" name="name" maxlength="100" required />
+				
+				<label for="id_description">Description</label>
+				<textarea class="form-control" id="id_description"  name="description" rows="5" required></textarea>
+				
+				<label for="id_date_time">date and time in YYYY-MM-DD HH:MM format</label>
+				<input class="form-control" id="id_date_time" type="text" name="date_time" maxlength="100" required />
+				
+				<label for="id_address">Address</label>
+				<textarea class="form-control" id="id_address" name="address" rows="2" required></textarea>
+				
+				<label for="id_location_info">Extra address info</label>
+				<input class="form-control" id="id_location_info" type="text" name="location_info" maxlength="100" required />
+				
+				
+				<label for="id_category">Category</label>
+				<select class="form-control" id="id_category" name="category">
+					{% for c in event_form.category.field.queryset.all %}
+						<option value="{{c.pk}}">{{c}}</option>
+					{% endfor %}
+				</select>
+				
+				<label for="id_tags">Tags</label>
+				<ul id="id_tags">
+					{% for t in event_form.tags.field.queryset.all %}
+					<li>
+						<label for="id_tags_{{t.pk}}">
+							<input name="tags" id="id_tags_{{t.pk}}" type="checkbox" value="{{t.pk}}" class="form-check-input"/>
+							{{t.name}}
+						</label>
+					</li>
+					{% endfor %}
+				</ul>
+
+				<label for="id_new_tags">Add new tags (separated by comma)</label>
+				<textarea class="form-control" id="id_new_tags" name="new_tags" rows="3"></textarea>
+				
+				<label for="id_event_picture">Event picture</label>
+				<input class="form-control-file" type="file" name="event_picture" id="id_event_picture" />
+
+
+<<<<<<< HEAD
+	{% block title_block %}
+		Add Event
+	{% endblock %}
+
+	{% block nav_block %}
+		<li><a href="{% url 'events' %}" >Events</a></li>
+		<li><a href="{% url 'profiles' %}">Profiles</a></li>
+		<li id="active"><a href="{% url 'add_event'%}">Add Event</a></li>
+	{% endblock %}
+
+	{% block body_block%}
+		{% if user.is_authenticated %}
+			<h1>Add an Event</h1>
+			<div>
+				<form action="" method="post" id="event_form">
+				{% csrf_token %}
+				<input id="sam" type="text" name="name" maxlength="100" required /></p>
+				<input id="" type="text" name="description" maxlength="100" required /></p>
+				<input id="" type="text" name="date_time" maxlength="100" required /></p>
+				<input id="" type="text" name="address" maxlength="100" required /></p>
+				<input id="" type="text" name="location_info" maxlength="100" required /></p>
+				<input type="file" name="event_picture" id="id_event_picture" />
+
+				<ul id=event_tags>
+					{% for c in categories %}
+						<p>boaby</p>
+						<li><input type="checkbox" name=c.name value="c.name" />
+					{% endfor %}
+
+
+				<input type="submit" name="submit" value="Add Event" />
+				</form>
+			</div>
+		{% else %}
+			You must log in to add an event
+		{% endif %}
+	{% endblock %}
+=======
+				</br>
+				<input type="submit" class="btn btn-primary" name="submit" value="Add Event" />
+			</form>
+		</div>
+	</div>
+{% endblock %}
+>>>>>>> 02d5a596af06be9bef041d8c486bd0cfe8df3a4c
