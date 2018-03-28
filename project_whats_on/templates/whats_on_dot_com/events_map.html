@@ -24,11 +24,17 @@
          <label for="raddressInput">Search location:</label>
          <input type="text" id="addressInput" size="15"/>
         <label for="radiusSelect">Radius:</label>
-        <select id="radiusSelect" label="Radius">
-          <option value="50" selected>50 kms</option>
+        <select id="radiusSelect" label="Radius" onchange="testFn()">
+		  <option value="1000">1000 kms</option>
+		  <option value="500">500 kms</option>
+		  <option value="200">200 kms</option>
+		  <option value="100">100 kms</option>
+		  <option value="50" selected>50 kms</option>
           <option value="30">30 kms</option>
           <option value="20">20 kms</option>
           <option value="10">10 kms</option>
+		  <option value="5">5 kms</option>
+		  <option value="2">2 kms</option>
         </select>
 
         <input type="button" id="searchButton" value="Search"/>
@@ -41,12 +47,21 @@
       var markers = [];
       var infoWindow;
       var locationSelect;
+	  var radius = 30;
+	  var counter = 1
+	  var test_string = "Tim"
 
+		function testFn() {
+		counter = counter + 1
+		console.log("THIS IS A TEST", counter)
+		{% search 55.8642 -4.2518 null 50000 2019 6 16 12 30 null "Tim" as test_test%}
+		console.log("Length of Tim Serach variable in template", {{ test_test|length }});
+		}
 
         function initMap() {
 		  var locations = [
 		  //django template tag to query db, feed it data from buttons
-			{% search 55.8642 -4.2518 null 30 2019 6 16 12 30 null null as tag_test%}
+			{% search 55.8642 -4.2518 null 50000 2019 6 16 12 30 null null as tag_test%}
 			{% for Event in tag_test %}
 
 			//change to a clickable link that takes to event page rather than just text name of event
@@ -78,8 +93,7 @@
 
     var marker, i;
 
-	console.log(locations.length);
-	console.log(locations[0][0])
+
     for (i = 0; i < locations.length; i++) {  
       marker = new google.maps.Marker({
         position: new google.maps.LatLng(locations[i][2], locations[i][3]),
@@ -129,7 +143,7 @@
          clearLocations();
 
          var radius = document.getElementById('radiusSelect').value;
-         var searchUrl = 'storelocator.php?lat=' + center.lat() + '&lng=' + center.lng() + '&radius=' + radius;
+
          downloadUrl(searchUrl, function(data) {
            var xml = parseXml(data);
            var markerNodes = xml.documentElement.getElementsByTagName("marker");
