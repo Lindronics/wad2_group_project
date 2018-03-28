@@ -82,6 +82,19 @@ class NewEventForm(forms.ModelForm):
 
         return(latandlong)
 
+    def clean_date_time(self):
+        from django.utils import timezone
+        date_time = self.date_time
+
+        if date_time<timezone.now():
+            raise forms.ValidationError("please enter a date not in the past")
+            return(False)
+        else:
+            pass
+
+        cleaned_data = super(NewEventForm,self).clean()
+        return cleaned_data
+
     class Meta:
         model = Event
         exclude = ('number_followers', 'host', 'interested',)
