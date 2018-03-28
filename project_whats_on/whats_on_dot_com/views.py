@@ -343,20 +343,16 @@ def add_event(request):
             # Add host
             up = UserProfile.objects.get(user__username=request.user)
             event.host.add(up)
-            event.number_followers = 0
             event.save()
 
             return HttpResponseRedirect(reverse('event_page', args=[event.pk]))
         else:
             print(form.errors)
 
-
     context_dict = {
         "event_form":form,
-        "errors":form.errors,
-        
     }
-    
+
     return render(request, 'whats_on_dot_com/add_event.html', context_dict)
 
 # PROFILES (profiles list including search etc.)

@@ -23,8 +23,9 @@ class NewEventForm(forms.ModelForm):
     new_tags = forms.CharField(max_length=1024, required=False)
     category = forms.ModelChoiceField(queryset=Category.objects.all(), required=True)
 
-    def clean_address(self):
+    def clean(self):
         cleaned_data = super(NewEventForm,self).clean()
+        date_time = cleaned_data.get('date_time')
                 
         # Iain's code to get the lat long from the address string
         GOOGLE_MAPS_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json'
@@ -38,38 +39,37 @@ class NewEventForm(forms.ModelForm):
         req = requests.get(GOOGLE_MAPS_API_URL, params=params)
         res = req.json()
                 
-        #if there are no results raise an error
-        try:
-            result = res['results'][0]
-        except IndexError:
-            raise forms.ValidationError("Enter a valid address")
-
+        result = res['results'][0]
+                
+        geodata = dict()
+        geodata['lat'] = result['geometry']['location']['lat']
+        geodata['lng'] = result['geometry']['location']['lng']
+        geodata['address'] = result['formatted_address']
         
-
+        latitude = geodata["lat"]
+        longitude = geodata["lng"]
         
         self.address = cleaned_data.get('address')
 
         return(self.cleaned_data)
 
     def getlatandlong(self):
-        address = self.address
+        cleaned_data = super(NewEventForm,self).clean()
+        date_time = cleaned_data.get('date_time')
                 
         # Iain's code to get the lat long from the address string
         GOOGLE_MAPS_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json'
         # Parameters fro gmaps api request
         params = {
-        'address': address,
+        'address': cleaned_data.get('address'),
         'sensor': 'false',
         'key': 'AIzaSyAzbpDPFJ4xudZnqIsjLH3ltL9og-Sihsk',
         }
         # Do the request and get the response
         req = requests.get(GOOGLE_MAPS_API_URL, params=params)
         res = req.json()
-
-        if len(res['results']) == 0:
-            return([])
-        else:
-            result = res['results'][0]
+                
+        result = res['results'][0]
                 
         geodata = dict()
         geodata['lat'] = result['geometry']['location']['lat']
@@ -81,22 +81,6 @@ class NewEventForm(forms.ModelForm):
         latandlong = [latitude,longitude]
 
         return(latandlong)
-
-    def clean_date_time(self):
-        from django.utils import timezone
-        
-        cleaned_data = super(NewEventForm,self).clean()
-        date_time = cleaned_data.get('date_time')
-
-        if date_time<timezone.now():
-            raise forms.ValidationError("please enter a date not in the past")
-        else:
-            pass
-        
-        return cleaned_data
-        
-        
-        
 
     class Meta:
         model = Event
@@ -137,18 +121,18 @@ class FilterEventsForm(forms.ModelForm):
 # Filter profiles in profiles list view
 class FilterProfilesForm(forms.ModelForm):
     people_choices = (
-        (1, "People I follow"),
-        (2, "My followers"),
-        (3, "Popular profiles"),
+        (1, "Friends"),
+        (2, "Everyone"),
     )
 
     user = forms.CharField(max_length=128, required=False)
     search = forms.CharField(max_length=128, required=False)
-    people = forms.ChoiceField(choices=people_choices, required=False, widget=forms.RadioSelect)
+    people = forms.ChoiceField(choices=people_choices, required=False, initial=2, widget=forms.RadioSelect)
 
     class Meta:
         model = UserProfile
         fields = ("user", )
+
 
 # Set up profile for registered account
 class ProfileSetupForm(forms.ModelForm):
