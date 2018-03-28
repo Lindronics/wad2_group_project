@@ -38,8 +38,6 @@
 
         function initMap() {
 		  var locations = [
-		  //django template tag to query db, feed it data from buttons
-			{% search 55.8642 -4.2518 null 50000 2019 6 16 12 30 null null as tag_test%}
 			{% for Event in events %}
 
 			//change to a clickable link that takes to event page rather than just text name of event
@@ -48,10 +46,10 @@
 			];	
 			console.log("Length of map_points variable in template", {{ tag_test|length }});
 
-          var glasgow = {lat: 55.8642, lng: -4.2518};
+          var map_centre = {lat: {{focus_lat}}, lng: {{focus_lng}}};
           map = new google.maps.Map(document.getElementById('map'), {
-            center: glasgow,
-            zoom: 11,
+            center: map_centre,
+            zoom: 10,
             mapTypeId: 'roadmap',
             mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
           });

@@ -2,7 +2,6 @@
 # Will wait for the corresponding pages and views to make some progress
 # and then finish this.
 
-
 from django import forms
 from whats_on_dot_com.models import UserProfile, Category, Tag, Event
 from django.contrib.auth.models import User
@@ -24,8 +23,9 @@ class NewEventForm(forms.ModelForm):
     new_tags = forms.CharField(max_length=1024, required=False)
     category = forms.ModelChoiceField(queryset=Category.objects.all(), required=True)
 
-    def clean_address(self):
+    def clean(self):
         cleaned_data = super(NewEventForm,self).clean()
+        date_time = cleaned_data.get('date_time')
                 
         # Iain's code to get the lat long from the address string
         GOOGLE_MAPS_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json'
@@ -39,14 +39,15 @@ class NewEventForm(forms.ModelForm):
         req = requests.get(GOOGLE_MAPS_API_URL, params=params)
         res = req.json()
                 
-        #if there are no results raise an error
-        try:
-            result = res['results'][0]
-        except IndexError:
-            raise forms.ValidationError("Enter a valid address")
-
+        result = res['results'][0]
+                
+        geodata = dict()
+        geodata['lat'] = result['geometry']['location']['lat']
+        geodata['lng'] = result['geometry']['location']['lng']
+        geodata['address'] = result['formatted_address']
         
-
+        latitude = geodata["lat"]
+        longitude = geodata["lng"]
         
         self.address = cleaned_data.get('address')
 
@@ -80,20 +81,6 @@ class NewEventForm(forms.ModelForm):
         latandlong = [latitude,longitude]
 
         return(latandlong)
-
-    def clean_date_time(self):
-        from django.utils import timezone
-        
-        cleaned_data = super(NewEventForm,self).clean()
-        date_time = cleaned_data.get('date_time')
-
-        if date_time<timezone.now():
-            raise forms.ValidationError("please enter a date not in the past")
-        else:
-            pass
-        
-        return cleaned_data
-        
         
         
 
@@ -109,6 +96,7 @@ class FilterEventsForm(forms.ModelForm):
         (5, "5 km"),
         (10, "10 km"),
         (50, "50 km"),
+        (999999999999999999999999, "infinite"),
     )
     people_choices = (
         (1, "Friends"),

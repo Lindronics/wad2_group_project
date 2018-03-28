@@ -176,6 +176,10 @@ def events_map(request, query=""):
     sb = "Search..."
     sb_loc = "Enter location to search from"
 
+    #Default map focus
+    focus_lat = 55.8642
+    focus_lng = -4.2518
+
     # Initial querysets
     events = Event.objects.all()
     categories = Category.objects.all()
@@ -190,8 +194,6 @@ def events_map(request, query=""):
 
         if filter_events_form.is_valid():
             data = filter_events_form.cleaned_data
-
-            print("test", data)
 
             
             # If search term provided, filter by search bar
@@ -253,6 +255,9 @@ def events_map(request, query=""):
                     latitude = geodata["lat"]
                     longitude = geodata["lng"]
 
+                    focus_lat = latitude
+                    focus_lng = longitude
+
                 #if a radius has been supplied use that
                 if data["radius"]:
                     returned_ids = nearby_locations(latitude, longitude, int(data["radius"]))
@@ -282,7 +287,9 @@ def events_map(request, query=""):
     context_dict = {"events":events,
                     "search_bar_initial":sb,
                     "search_bar_location_initial":sb_loc,
-                    "filter_events_form":filter_events_form,}
+                    "filter_events_form":filter_events_form,
+                    "focus_lat":focus_lat,
+                    "focus_lng":focus_lng}
     return render(request, 'whats_on_dot_com/events_map.html', context_dict)
 	
 
@@ -310,7 +317,6 @@ def event_page(request, event_pk):
 def add_event(request):
     form = NewEventForm()
 
-
     # Get data from form, add to model if valid
     if request.method == 'POST':
         form = NewEventForm(request.POST, request.FILES)
@@ -337,20 +343,16 @@ def add_event(request):
             # Add host
             up = UserProfile.objects.get(user__username=request.user)
             event.host.add(up)
-            event.number_followers = 0
             event.save()
 
             return HttpResponseRedirect(reverse('event_page', args=[event.pk]))
         else:
             print(form.errors)
 
-
     context_dict = {
         "event_form":form,
-        "errors":form.errors,
-        
     }
-    
+
     return render(request, 'whats_on_dot_com/add_event.html', context_dict)
 
 # PROFILES (profiles list including search etc.)
