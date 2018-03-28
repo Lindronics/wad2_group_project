@@ -89,6 +89,7 @@ class NewEventForm(forms.ModelForm):
         from django.utils import timezone
         cleaned_data = super(NewEventForm,self).clean()
         date_time = cleaned_data.get('date_time')
+        
         if date_time<timezone.now():
             raise forms.ValidationError("please enter a date not in the past")
         else:

@@ -2,26 +2,6 @@ from django.test import TestCase
 from .models import Event, UserProfile
 from .forms import *
 
-
-
-
-
-
-
-#Things to test
-#Users
-##user following system
-#class UserTests(TestCase):
- #   def test_usersarefollowing_correct(self):
-   #     u1 = UserProfile(user = User(username = "test1"),forename = "bacon" )
-    #    u2 = UserProfile(user = User(username = "test2"),forename = "nocab")
-        
-     #   u1.follows.add(u2)
-
-
-    
-
-
 #Events
 ##events made in the past present and future
 ##event location exists
@@ -85,6 +65,8 @@ class EventFormTests(TestCase):
         newEvent.date_time = "2019-01-01 13:00"
         newEvent.location_info = address
         newEvent.category = Category.objects.filter(name="Test").first()
+
+        newEvent.clean_date_time()
 
         
 
