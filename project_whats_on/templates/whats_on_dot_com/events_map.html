@@ -34,9 +34,9 @@
 		  var locations = [
 			//locations is populated by the function in view which has parameters defined by the filter bar on the webpage.
 			{% for Event in events %}
-
+			//<a href="http://www.yahoo.com">here</a>
 			//change to a clickable link that takes to event page rather than just text name of event
-			['<p>{{ Event.name }} </p>', '<p>{{ Event.description }} </p>', {{ Event.latitude }}, {{ Event.longitude }}],
+			['<a href="{% url 'event_page' Event.pk %}">{{ Event.name }}</a>', '<p>{{ Event.description }} </p>', '<p>{{ Event.address }} </p>', '<p>{{ Event.date_time }} </p>',  {{ Event.latitude }}, {{ Event.longitude }}],
 			{% endfor%}
 			];	
 			console.log("Length of map_points variable in template", {{ tag_test|length }});
@@ -51,6 +51,7 @@
           });
           infoWindow = new google.maps.InfoWindow();
 
+         
 		  
 		  var infowindow = new google.maps.InfoWindow();
 
@@ -59,13 +60,13 @@
 	// create map markers from the locations and populate the map
     for (i = 0; i < locations.length; i++) {  
       marker = new google.maps.Marker({
-        position: new google.maps.LatLng(locations[i][2], locations[i][3]),
+        position: new google.maps.LatLng(locations[i][4], locations[i][5]),
         map: map
       });
 
       google.maps.event.addListener(marker, 'click', (function(marker, i) {
         return function() {
-          infowindow.setContent(locations[i][0] + locations[i][1]);
+          infowindow.setContent(locations[i][0] + locations[i][1] + locations[i][2] + locations[i][3]);
           infowindow.open(map, marker);
         }
       })(marker, i));
