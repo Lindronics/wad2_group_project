@@ -54,22 +54,25 @@ class NewEventForm(forms.ModelForm):
         return(self.cleaned_data)
 
     def getlatandlong(self):
-        cleaned_data = super(NewEventForm,self).clean()
-        date_time = cleaned_data.get('date_time')
+        address = self.address
                 
         # Iain's code to get the lat long from the address string
         GOOGLE_MAPS_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json'
         # Parameters fro gmaps api request
         params = {
-        'address': cleaned_data.get('address'),
+        'address': address,
         'sensor': 'false',
         'key': 'AIzaSyAzbpDPFJ4xudZnqIsjLH3ltL9og-Sihsk',
         }
         # Do the request and get the response
         req = requests.get(GOOGLE_MAPS_API_URL, params=params)
         res = req.json()
-                
-        result = res['results'][0]
+
+        if len(res['results']) ==0:
+            return([])
+        else:
+            result = res['results'][0]
+        
                 
         geodata = dict()
         geodata['lat'] = result['geometry']['location']['lat']
