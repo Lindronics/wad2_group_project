@@ -22,23 +22,6 @@ def index(request):
 
 # EVENTS (events page with events in grid list)
 def events(request, query=""):
-
-    def search_bar(events, search_term):
-        events_buffer = events
-
-        # Consider names
-        events = events_buffer.filter(name__icontains=search_term)
-
-        # Consider tags and hosts
-        for event in events_buffer:
-            if event.tags.filter(name=search_term).exists() or event.host.filter(user__username=search_term).exists():
-                events = events | events_buffer.filter(pk=event.pk)
-
-        # Consider categories
-        events = events | events_buffer.filter(category__name__icontains=search_term)
-        return events, search_term 
-
-
     filter_events_form = FilterEventsForm()
 
     # Initial value of search bar
@@ -59,36 +42,7 @@ def events(request, query=""):
         if filter_events_form.is_valid():
             data = filter_events_form.cleaned_data
 
-            # If search term provided, filter by search bar
-            if data["search"]:
-                events, sb = search_bar(events, data["search"])
-
-            # Filter categories
-            if data["category"]:
-                events_buffer = events
-                events = Event.objects.filter(pk=-1)
-                for c in data["category"]:
-                    events = events | events_buffer.filter(category=c)
-
-            # Filter people
-            if data["people"]:
-                p = int(data["people"])
-                if p == 1:
-                    up = UserProfile.objects.get(user__username=request.user.username)
-                    user_profiles = UserProfile.objects.all().filter(follows=up)
-                    events = events.filter(host__in=user_profiles)
-
-            # Filter date
-            if data["date"]:
-                d = int(data["date"])
-                limit = datetime.datetime.combine(datetime.date.today(), datetime.time.max)
-                if d == 2: # This week
-                    limit += datetime.timedelta(days=7)
-                elif d == 3: # This month
-                    limit += datetime.timedelta(days=31)
-                elif d == 4: # This year
-                    limit += datetime.timedelta(days=365)
-                events = events.exclude(date_time__gt=limit)
+            events = filter_events(events, data, request)
 
         else:
             print(filter_events_form.errors)
@@ -118,57 +72,132 @@ def events(request, query=""):
     #print(events)
     return render(request, 'whats_on_dot_com/events.html', context_dict)
 
+# Filter events
+def filter_events(events, data, request):
+    # If search term provided, filter by search bar
+    if data["search"]:
+        events, sb = search_bar(events, data["search"])
+
+    # Filter categories
+    if data["category"]:
+        events_buffer = events
+        events = Event.objects.filter(pk=-1)
+        for c in data["category"]:
+            events = events | events_buffer.filter(category=c)
+
+    # Filter people
+    if data["people"]:
+        p = int(data["people"])
+        if p == 1:
+            up = UserProfile.objects.get(user__username=request.user.username)
+            user_profiles = UserProfile.objects.all().filter(follows=up)
+            events = events.filter(host__in=user_profiles)
+
+    # Filter date
+    if data["date"]:
+        d = int(data["date"])
+        limit = datetime.datetime.combine(datetime.date.today(), datetime.time.max)
+        if d == 2: # This week
+            limit += datetime.timedelta(days=7)
+        elif d == 3: # This month
+            limit += datetime.timedelta(days=31)
+        elif d == 4: # This year
+            limit += datetime.timedelta(days=365)
+        events = events.exclude(date_time__gt=limit)
+
+
+        #Filter for new location (default radius 30)
+        if data["search_location"]:
+            # Iain's code to get the lat long from the address string
+            GOOGLE_MAPS_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json'
+            # Parameters for gmaps api request
+            params = {
+                'address': data["search_location"],
+                'sensor': 'false',
+                'key': 'AIzaSyAzbpDPFJ4xudZnqIsjLH3ltL9og-Sihsk',
+            }
+            # Do the request and get the response
+            req = requests.get(GOOGLE_MAPS_API_URL, params=params)
+            res = req.json()
+
+            #Take first result as correct
+            result = res['results'][0]
+
+            #address was valid if there exists a result
+            if result:
+                geodata = dict()
+                geodata['lat'] = result['geometry']['location']['lat']
+                geodata['lng'] = result['geometry']['location']['lng']
+                geodata['address'] = result['formatted_address']
+    
+                latitude = geodata["lat"]
+                longitude = geodata["lng"]
+
+                focus_lat = latitude
+                focus_lng = longitude
+
+            #if a radius has been supplied use that
+            if data["radius"]:
+                returned_ids = nearby_locations(latitude, longitude, int(data["radius"]))
+                events = events.filter(id__in=returned_ids)
+            else:
+                returned_ids = nearby_locations(latitude, longitude, 30)
+                events = events.filter(id__in=returned_ids)
+
+        #if there is a radius and no search location use glasgow as default
+        if data["radius"] and not data["search_location"]:
+            returned_ids = nearby_locations(55.8642, -4.2518, int(data["radius"]))
+            events = events.filter(id__in=returned_ids)
+    return events
+    
+#function for radius search
+def nearby_locations(latitude, longitude, radius, max_results=100, use_miles=True):
+    if use_miles:
+            distance_unit = 3959
+    else:
+            distance_unit = 6371
+    
+    from django.db import connection, transaction
+    from project_whats_on import settings
+    cursor = connection.cursor()
+    #print(settings.DATABASES['default']['ENGINE'])
+    #if settings.DATABASE_ENGINE == 'sqlite3':
+    if settings.DATABASES['default']['ENGINE'] == 'django.db.backends.sqlite3':
+        connection.connection.create_function('acos', 1, math.acos)
+        connection.connection.create_function('cos', 1, math.cos)
+        connection.connection.create_function('radians', 1, math.radians)
+        connection.connection.create_function('sin', 1, math.sin)
+
+    sql = """SELECT id, (%f * acos( cos( radians(%f) ) * cos( radians( latitude ) ) *
+    cos( radians( longitude ) - radians(%f) ) + sin( radians(%f) ) * sin( radians( latitude ) ) ) )
+    AS distance FROM Whats_On_Dot_Com_Event WHERE distance < %d
+    ORDER BY distance LIMIT 0 , %d;""" % (distance_unit, latitude, longitude, latitude, int(radius), max_results)
+    cursor.execute(sql)
+    ids = [row[0] for row in cursor.fetchall()]
+    #I have ids of all objects
+    #and return the relevant object
+    #return Event.objects.filter(id__in=ids)
+    return ids
+
+# Configure search bar
+def search_bar(events, search_term):
+    events_buffer = events
+
+    # Consider names
+    events = events_buffer.filter(name__icontains=search_term)
+
+    # Consider tags and hosts
+    for event in events_buffer:
+        if event.tags.filter(name=search_term).exists() or event.host.filter(user__username=search_term).exists():
+            events = events | events_buffer.filter(pk=event.pk)
+
+    # Consider categories
+    events = events | events_buffer.filter(category__name__icontains=search_term)
+    return events, search_term 
+
+
 # EVENTS MAP (map overview of nearby events)
 def events_map(request, query=""):
-
-    def search_bar(events, search_term):
-        events_buffer = events
-
-        # Consider names
-        events = events_buffer.filter(name__icontains=search_term)
-
-        # Consider tags and hosts
-        for event in events_buffer:
-            if event.tags.filter(name=search_term).exists() or event.host.filter(user__username=search_term).exists():
-                events = events | events_buffer.filter(pk=event.pk)
-
-        # Consider categories
-        events = events | events_buffer.filter(category__name__icontains=search_term)
-        return events, search_term 
-
-
-    #function for radius search
-    #Copy from template tag
-    #hopefully this works here
-
-    def nearby_locations(latitude, longitude, radius, max_results=100, use_miles=True):
-        if use_miles:
-             distance_unit = 3959
-        else:
-             distance_unit = 6371
-        
-        from django.db import connection, transaction
-        from project_whats_on import settings
-        cursor = connection.cursor()
-        #print(settings.DATABASES['default']['ENGINE'])
-        #if settings.DATABASE_ENGINE == 'sqlite3':
-        if settings.DATABASES['default']['ENGINE'] == 'django.db.backends.sqlite3':
-           connection.connection.create_function('acos', 1, math.acos)
-           connection.connection.create_function('cos', 1, math.cos)
-           connection.connection.create_function('radians', 1, math.radians)
-           connection.connection.create_function('sin', 1, math.sin)
-
-        sql = """SELECT id, (%f * acos( cos( radians(%f) ) * cos( radians( latitude ) ) *
-        cos( radians( longitude ) - radians(%f) ) + sin( radians(%f) ) * sin( radians( latitude ) ) ) )
-        AS distance FROM Whats_On_Dot_Com_Event WHERE distance < %d
-        ORDER BY distance LIMIT 0 , %d;""" % (distance_unit, latitude, longitude, latitude, int(radius), max_results)
-        cursor.execute(sql)
-        ids = [row[0] for row in cursor.fetchall()]
-        #I have ids of all objects
-        #and return the relevant object
-        #return Event.objects.filter(id__in=ids)
-        return ids
-
     
     filter_events_form = FilterEventsForm()
 
@@ -194,85 +223,7 @@ def events_map(request, query=""):
 
         if filter_events_form.is_valid():
             data = filter_events_form.cleaned_data
-
-            
-            # If search term provided, filter by search bar
-            if data["search"]:
-                events, sb = search_bar(events, data["search"])
-
-            # Filter categories
-            if data["category"]:
-                events_buffer = events
-                events = Event.objects.filter(pk=-1)
-                for c in data["category"]:
-                    events = events | events_buffer.filter(category=c)
-
-            # Filter people
-            if data["people"]:
-                p = int(data["people"])
-                if p == 1:
-                    up = UserProfile.objects.get(user__username=request.user.username)
-                    user_profiles = UserProfile.objects.all().filter(follows=up)
-                    events = events.filter(host__in=user_profiles)
-
-            # Filter date
-            if data["date"]:
-                d = int(data["date"])
-                limit = datetime.datetime.combine(datetime.date.today(), datetime.time.max)
-                if d == 2: # This week
-                    limit += datetime.timedelta(days=7)
-                elif d == 3: # This month
-                    limit += datetime.timedelta(days=31)
-                elif d == 4: # This year
-                    limit += datetime.timedelta(days=365)
-                events = events.exclude(date_time__gt=limit)
-            
-            #Filter for new location (default radius 30)
-            if data["search_location"]:
-                # Iain's code to get the lat long from the address string
-                GOOGLE_MAPS_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json'
-                # Parameters for gmaps api request
-                params = {
-                'address': data["search_location"],
-                'sensor': 'false',
-                'key': 'AIzaSyAzbpDPFJ4xudZnqIsjLH3ltL9og-Sihsk',
-                }
-                # Do the request and get the response
-                req = requests.get(GOOGLE_MAPS_API_URL, params=params)
-                res = req.json()
-
-                #Take first result as correct
-                result = res['results'][0]
-
-                #address was valid if there exists a result
-                if result:
-                    
-                    geodata = dict()
-                    geodata['lat'] = result['geometry']['location']['lat']
-                    geodata['lng'] = result['geometry']['location']['lng']
-                    geodata['address'] = result['formatted_address']
-        
-                    latitude = geodata["lat"]
-                    longitude = geodata["lng"]
-
-                    focus_lat = latitude
-                    focus_lng = longitude
-
-                #if a radius has been supplied use that
-                if data["radius"]:
-                    returned_ids = nearby_locations(latitude, longitude, int(data["radius"]))
-                    events = events.filter(id__in=returned_ids)
-                else:
-                    returned_ids = nearby_locations(latitude, longitude, 30)
-                    events = events.filter(id__in=returned_ids)
-
-            #if there is a radius and no search location use glasgow as default
-            if data["radius"] and not data["search_location"]:
-                returned_ids = nearby_locations(55.8642, -4.2518, int(data["radius"]))
-                events = events.filter(id__in=returned_ids)
-
-            
-                
+            events = filter_events(events, data, request)         
         else:
             print(filter_events_form.errors)
 
@@ -280,9 +231,6 @@ def events_map(request, query=""):
     else:
         if query:
             events, sb = search_bar(events, query)
-        
-    
-    
     
     context_dict = {"events":events,
                     "search_bar_initial":sb,
@@ -292,7 +240,6 @@ def events_map(request, query=""):
                     "focus_lng":focus_lng}
     return render(request, 'whats_on_dot_com/events_map.html', context_dict)
 	
-
 
 # EVENT PAGE (event details page)
 def event_page(request, event_pk):

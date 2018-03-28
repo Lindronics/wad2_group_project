@@ -47,9 +47,6 @@ class NewEventForm(forms.ModelForm):
             geodata['address'] = result['formatted_address']
         except IndexError:
             raise forms.ValidationError("Enter a valid address")
-
-        
-
         
         self.address = cleaned_data.get('address')
 
@@ -127,7 +124,7 @@ class FilterEventsForm(forms.ModelForm):
     search = forms.CharField(max_length=128, required=False)
     search_location = forms.CharField(max_length=128, required=False)
     category = forms.ModelMultipleChoiceField(queryset=Category.objects.all(), required=False, widget=forms.CheckboxSelectMultiple())
-    radius = forms.ChoiceField(choices=radius_choices, required=False, widget=forms.RadioSelect)
+    radius = forms.ChoiceField(choices=radius_choices, initial=999999999999999999999999, required=False, widget=forms.RadioSelect)
     people = forms.ChoiceField(choices=people_choices, initial=2, required=False, widget=forms.RadioSelect)
     date = forms.ChoiceField(choices=date_choices, initial=4, required=False, widget=forms.RadioSelect)
 
