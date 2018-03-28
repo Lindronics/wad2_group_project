@@ -351,6 +351,7 @@ def add_event(request):
 
     context_dict = {
         "event_form":form,
+        "errors":form.errors,
     }
 
     return render(request, 'whats_on_dot_com/add_event.html', context_dict)

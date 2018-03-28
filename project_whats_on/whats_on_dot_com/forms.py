@@ -23,9 +23,8 @@ class NewEventForm(forms.ModelForm):
     new_tags = forms.CharField(max_length=1024, required=False)
     category = forms.ModelChoiceField(queryset=Category.objects.all(), required=True)
 
-    def clean(self):
+    def clean_address(self):
         cleaned_data = super(NewEventForm,self).clean()
-        date_time = cleaned_data.get('date_time')
                 
         # Iain's code to get the lat long from the address string
         GOOGLE_MAPS_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json'
@@ -39,15 +38,14 @@ class NewEventForm(forms.ModelForm):
         req = requests.get(GOOGLE_MAPS_API_URL, params=params)
         res = req.json()
                 
-        result = res['results'][0]
-                
-        geodata = dict()
-        geodata['lat'] = result['geometry']['location']['lat']
-        geodata['lng'] = result['geometry']['location']['lng']
-        geodata['address'] = result['formatted_address']
+        #if there are no results raise an error
+        try:
+            result = res['results'][0]
+        except IndexError:
+            raise forms.ValidationError("Enter a valid address")
+
         
-        latitude = geodata["lat"]
-        longitude = geodata["lng"]
+
         
         self.address = cleaned_data.get('address')
 
