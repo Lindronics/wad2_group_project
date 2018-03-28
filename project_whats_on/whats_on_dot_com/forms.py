@@ -23,7 +23,7 @@ class NewEventForm(forms.ModelForm):
     new_tags = forms.CharField(max_length=1024, required=False)
     category = forms.ModelChoiceField(queryset=Category.objects.all(), required=True)
 
-    def clean_address(self):
+    def clean(self):
         cleaned_data = super(NewEventForm,self).clean()
                 
         # Iain's code to get the lat long from the address string
@@ -41,6 +41,10 @@ class NewEventForm(forms.ModelForm):
         #if there are no results raise an error
         try:
             result = res['results'][0]
+            geodata = dict()
+            geodata['lat'] = result['geometry']['location']['lat']
+            geodata['lng'] = result['geometry']['location']['lng']
+            geodata['address'] = result['formatted_address']
         except IndexError:
             raise forms.ValidationError("Enter a valid address")
 
