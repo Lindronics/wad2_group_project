@@ -1,0 +1,124 @@
+from django.test import TestCase
+from .models import Event, UserProfile
+from .forms import *
+
+
+
+<<<<<<< HEAD
+
+
+
+
+#Things to test
+#Users
+##user following system
+#class UserTests(TestCase):
+ #   def test_usersarefollowing_correct(self):
+   #     u1 = UserProfile(user = User(username = "test1"),forename = "bacon" )
+    #    u2 = UserProfile(user = User(username = "test2"),forename = "nocab")
+        
+     #   u1.follows.add(u2)
+=======
+#Things to test
+#Users
+##user following system
+class UserTests(TestCase):
+    def test_usersarefollowing_correct(self):
+        user1 = User(username = "test1")
+        user2 = User(username = "test2")
+        u1 = UserProfile(user = user1)
+        u2 = UserProfile(user = user2)
+        
+        u1.follows.add(u2)
+>>>>>>> 02d5a596af06be9bef041d8c486bd0cfe8df3a4c
+
+
+    
+
+
+#Events
+##events made in the past present and future
+##event location exists
+##test event followers
+
+class EventFormTests(TestCase):
+    #come back to this because it is fucking up
+    #checks to see if the latitude and longitude retrieved match the correct version
+    def test_getlatandlong_correct(self):
+<<<<<<< HEAD
+        #gets a real address with a correct latitude and longitude
+        address = "47 killermont road bearsden"
+        correctLatandLong = [55.91,-4.32]
+        newEvent = NewEventForm()
+
+        #checks to see if the getlantandlong matches correct value
+        newEvent.address = address
+        newEvent.name = "test"
+        newEvent.description = "test"
+        newEvent.date_time = "2019-01-01 13:00"
+        newEvent.location_info = address
+        newEvent.category = Category.objects.filter(name="Test").first()
+
+        #formatting the output
+        latandlong = newEvent.getlatandlong()
+        latandlong[0] = round(latandlong[0],2)
+        latandlong[1] = round(latandlong[1],2)
+
+        #checks done here
+        self.assertEqual(latandlong[0], correctLatandLong[0])
+        self.assertEqual(latandlong[1], correctLatandLong[1])
+
+    def test_getlatandlong_incorrect(self):
+        #gets a non-existent address and ehcks to see if it returns
+        # a lat or long
+        address = "msamdosamdasodmasod"
+        newEvent = NewEventForm()
+
+        #inputting basic details
+        newEvent.address = address
+        newEvent.name = "test"
+        newEvent.description = "test"
+        newEvent.date_time = "2019-01-01 13:00"
+        newEvent.location_info = address
+        newEvent.category = Category.objects.filter(name="Test").first()
+
+        #checks to see if the getlatandlong return any value
+        latandlong = newEvent.getlatandlong()
+        self.assertIs(len(latandlong) == 0, True)
+        
+
+
+    def test_eventinfuture(self):
+        #ensure the datetimes submittable are valid
+        address = "47 killermont road bearsden"
+        newEvent = NewEventForm()
+
+        #inputting basic details
+=======
+        address = "47 killermont road bearsden"
+        correctLatandLong = [55.910,-4,3165]
+        newEvent = NewEventForm()
+
+        
+>>>>>>> 02d5a596af06be9bef041d8c486bd0cfe8df3a4c
+        newEvent.address = address
+        newEvent.name = "test"
+        newEvent.description = "test"
+        newEvent.date_time = "2019-01-01 13:00"
+        newEvent.location_info = address
+        newEvent.category = Category.objects.filter(name="Test").first()
+
+<<<<<<< HEAD
+        
+
+
+        
+        
+        
+=======
+        newEvent.cleaned_data["address"] = address
+        newEvent.is_valid()
+        latandlong = newEvent.getlatandlong()
+        print(latandlong)
+>>>>>>> 02d5a596af06be9bef041d8c486bd0cfe8df3a4c
+        

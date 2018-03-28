@@ -1,0 +1,12 @@
+certifi==2018.1.18
+chardet==3.0.4
+DateTime==4.2
+Django==1.11.7
+django-bootstrap-toolkit==2.15.0
+django-registration-redux==2.2
+idna==2.6
+Pillow==5.0.0
+pytz==2018.3
+requests==2.18.4
+urllib3==1.22
+zope.interface==4.4.3

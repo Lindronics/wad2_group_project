@@ -2,6 +2,7 @@
 # Will wait for the corresponding pages and views to make some progress
 # and then finish this.
 
+
 from django import forms
 from whats_on_dot_com.models import UserProfile, Category, Tag, Event
 from django.contrib.auth.models import User
@@ -23,8 +24,14 @@ class NewEventForm(forms.ModelForm):
     new_tags = forms.CharField(max_length=1024, required=False)
     category = forms.ModelChoiceField(queryset=Category.objects.all(), required=True)
 
+<<<<<<< HEAD
     def clean_address(self):
         cleaned_data = super(NewEventForm,self).clean()
+=======
+    def clean(self):
+        cleaned_data = super(NewEventForm,self).clean()
+        date_time = cleaned_data.get('date_time')
+>>>>>>> 02d5a596af06be9bef041d8c486bd0cfe8df3a4c
                 
         # Iain's code to get the lat long from the address string
         GOOGLE_MAPS_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json'
@@ -38,6 +45,7 @@ class NewEventForm(forms.ModelForm):
         req = requests.get(GOOGLE_MAPS_API_URL, params=params)
         res = req.json()
                 
+<<<<<<< HEAD
         #if there are no results raise an error
         try:
             result = res['results'][0]
@@ -46,30 +54,55 @@ class NewEventForm(forms.ModelForm):
 
         
 
+=======
+        result = res['results'][0]
+                
+        geodata = dict()
+        geodata['lat'] = result['geometry']['location']['lat']
+        geodata['lng'] = result['geometry']['location']['lng']
+        geodata['address'] = result['formatted_address']
+        
+        latitude = geodata["lat"]
+        longitude = geodata["lng"]
+>>>>>>> 02d5a596af06be9bef041d8c486bd0cfe8df3a4c
         
         self.address = cleaned_data.get('address')
 
         return(self.cleaned_data)
 
     def getlatandlong(self):
+<<<<<<< HEAD
         address = self.address
+=======
+        cleaned_data = super(NewEventForm,self).clean()
+        date_time = cleaned_data.get('date_time')
+>>>>>>> 02d5a596af06be9bef041d8c486bd0cfe8df3a4c
                 
         # Iain's code to get the lat long from the address string
         GOOGLE_MAPS_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json'
         # Parameters fro gmaps api request
         params = {
+<<<<<<< HEAD
         'address': address,
+=======
+        'address': cleaned_data.get('address'),
+>>>>>>> 02d5a596af06be9bef041d8c486bd0cfe8df3a4c
         'sensor': 'false',
         'key': 'AIzaSyAzbpDPFJ4xudZnqIsjLH3ltL9og-Sihsk',
         }
         # Do the request and get the response
         req = requests.get(GOOGLE_MAPS_API_URL, params=params)
         res = req.json()
+<<<<<<< HEAD
 
         if len(res['results']) == 0:
             return([])
         else:
             result = res['results'][0]
+=======
+                
+        result = res['results'][0]
+>>>>>>> 02d5a596af06be9bef041d8c486bd0cfe8df3a4c
                 
         geodata = dict()
         geodata['lat'] = result['geometry']['location']['lat']
@@ -81,6 +114,7 @@ class NewEventForm(forms.ModelForm):
         latandlong = [latitude,longitude]
 
         return(latandlong)
+<<<<<<< HEAD
 
     def clean_date_time(self):
         from django.utils import timezone
@@ -95,6 +129,8 @@ class NewEventForm(forms.ModelForm):
         
         return cleaned_data
         
+=======
+>>>>>>> 02d5a596af06be9bef041d8c486bd0cfe8df3a4c
         
         
 
@@ -137,14 +173,13 @@ class FilterEventsForm(forms.ModelForm):
 # Filter profiles in profiles list view
 class FilterProfilesForm(forms.ModelForm):
     people_choices = (
-        (1, "People I follow"),
-        (2, "My followers"),
-        (3, "Popular profiles"),
+        (1, "Friends"),
+        (2, "Everyone"),
     )
 
     user = forms.CharField(max_length=128, required=False)
     search = forms.CharField(max_length=128, required=False)
-    people = forms.ChoiceField(choices=people_choices, required=False, widget=forms.RadioSelect)
+    people = forms.ChoiceField(choices=people_choices, required=False, initial=2, widget=forms.RadioSelect)
 
     class Meta:
         model = UserProfile
@@ -156,10 +191,15 @@ class ProfileSetupForm(forms.ModelForm):
     surname = forms.CharField(max_length=128)
     description = forms.CharField(max_length=1024)
 
-    # TODO picture upload broken atm
     profile_picture = forms.ImageField(required=False)
 
     class Meta:
         model = UserProfile 
         fields = ("forename", "surname", "description", "profile_picture")
 
+# Register new account (extends django registration redux)
+class UserProfileRegistrationForm(RegistrationForm):
+    forename = forms.CharField()
+    surname = forms.CharField()
+    description = forms.CharField(required=False)
+    profile_picture = forms.ImageField(required=False)

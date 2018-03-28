@@ -11,7 +11,11 @@ class TagAdmin(admin.ModelAdmin):
     list_display = ("name", )
 
 class EventAdmin(admin.ModelAdmin):
+<<<<<<< HEAD
+    list_display = ("name", "description", "date_time", "number_followers", "location_info", "address")
+=======
     list_display = ("name", "description", "date_time", "number_followers", "location_info", "address", "latitude", "longitude")
+>>>>>>> 02d5a596af06be9bef041d8c486bd0cfe8df3a4c
 
 
 

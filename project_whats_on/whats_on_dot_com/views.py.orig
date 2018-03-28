@@ -8,7 +8,10 @@ import datetime
 
 #iain funky shit
 import math
+<<<<<<< HEAD
+=======
 import requests
+>>>>>>> 02d5a596af06be9bef041d8c486bd0cfe8df3a4c
 
 # import my script from main document tree
 #from get_events_in_radius import nearby_locations
@@ -108,8 +111,12 @@ def events(request, query=""):
         "events":events, 
         "categories":categories, 
         "filter_events_form":filter_events_form, 
+<<<<<<< HEAD
+        "search_bar_initial":sb
+=======
         "search_bar_initial":sb,
         "search_bar_location_initial":sb_loc,
+>>>>>>> 02d5a596af06be9bef041d8c486bd0cfe8df3a4c
     }
 
     if UserProfile.objects.filter(user__username=request.user).exists():
@@ -119,6 +126,57 @@ def events(request, query=""):
     return render(request, 'whats_on_dot_com/events.html', context_dict)
 
 # EVENTS MAP (map overview of nearby events)
+<<<<<<< HEAD
+def events_map(request):
+
+    #C+P CODE CAUSE I A SMART BOY
+
+    def nearby_locations(latitude, longitude, radius, max_results=100, use_miles=True):
+        if use_miles:
+            distance_unit = 3959
+        else:
+            distance_unit = 6371
+
+        from django.db import connection, transaction
+        from project_whats_on import settings
+        cursor = connection.cursor()
+        #print(settings.DATABASES['default']['ENGINE'])
+        #if settings.DATABASE_ENGINE == 'sqlite3':
+        if settings.DATABASES['default']['ENGINE'] == 'django.db.backends.sqlite3':
+            connection.connection.create_function('acos', 1, math.acos)
+            connection.connection.create_function('cos', 1, math.cos)
+            connection.connection.create_function('radians', 1, math.radians)
+            connection.connection.create_function('sin', 1, math.sin)
+
+        sql = """SELECT id, (%f * acos( cos( radians(%f) ) * cos( radians( latitude ) ) *
+        cos( radians( longitude ) - radians(%f) ) + sin( radians(%f) ) * sin( radians( latitude ) ) ) )
+        AS distance FROM Whats_On_Dot_Com_Event WHERE distance < %d
+        ORDER BY distance LIMIT 0 , %d;""" % (distance_unit, latitude, longitude, latitude, int(radius), max_results)
+        cursor.execute(sql)
+        ids = [row[0] for row in cursor.fetchall()]
+        #I have ids of all objects
+        #and return the relevant object
+        return Event.objects.filter(id__in=ids)
+	
+
+    #testing
+    map_points = nearby_locations(55.8, -4.2, 10, 50)
+    #map_points = Event.objects.all()
+    context_dict = {"map_points": map_points}
+    return render(request, 'whats_on_dot_com/events_map.html', context_dict)
+	
+#delete after main map works
+def map_test(request):
+
+    #C+P CODE CAUSE I A SMART BOY
+
+    def nearby_locations(latitude, longitude, radius, max_results=100, use_miles=True):
+        if use_miles:
+            distance_unit = 3959
+        else:
+            distance_unit = 6371
+
+=======
 def events_map(request, query=""):
 
     def search_bar(events, search_term):
@@ -147,16 +205,24 @@ def events_map(request, query=""):
         else:
              distance_unit = 6371
         
+>>>>>>> 02d5a596af06be9bef041d8c486bd0cfe8df3a4c
         from django.db import connection, transaction
         from project_whats_on import settings
         cursor = connection.cursor()
         #print(settings.DATABASES['default']['ENGINE'])
         #if settings.DATABASE_ENGINE == 'sqlite3':
         if settings.DATABASES['default']['ENGINE'] == 'django.db.backends.sqlite3':
+<<<<<<< HEAD
+            connection.connection.create_function('acos', 1, math.acos)
+            connection.connection.create_function('cos', 1, math.cos)
+            connection.connection.create_function('radians', 1, math.radians)
+            connection.connection.create_function('sin', 1, math.sin)
+=======
            connection.connection.create_function('acos', 1, math.acos)
            connection.connection.create_function('cos', 1, math.cos)
            connection.connection.create_function('radians', 1, math.radians)
            connection.connection.create_function('sin', 1, math.sin)
+>>>>>>> 02d5a596af06be9bef041d8c486bd0cfe8df3a4c
 
         sql = """SELECT id, (%f * acos( cos( radians(%f) ) * cos( radians( latitude ) ) *
         cos( radians( longitude ) - radians(%f) ) + sin( radians(%f) ) * sin( radians( latitude ) ) ) )
@@ -166,6 +232,16 @@ def events_map(request, query=""):
         ids = [row[0] for row in cursor.fetchall()]
         #I have ids of all objects
         #and return the relevant object
+<<<<<<< HEAD
+        return Event.objects.filter(id__in=ids)
+	
+
+    #testing
+    map_points = nearby_locations(55.8, -4.2, 10, 50)
+    #map_points = Event.objects.all()
+    context_dict = {"map_points": map_points}
+    return render(request, 'whats_on_dot_com/map_test.html', context_dict)
+=======
         #return Event.objects.filter(id__in=ids)
         return ids
 
@@ -292,6 +368,7 @@ def events_map(request, query=""):
                     "focus_lng":focus_lng}
     return render(request, 'whats_on_dot_com/events_map.html', context_dict)
 	
+>>>>>>> 02d5a596af06be9bef041d8c486bd0cfe8df3a4c
 
 
 # EVENT PAGE (event details page)
@@ -316,6 +393,7 @@ def event_page(request, event_pk):
 @login_required
 def add_event(request):
     form = NewEventForm()
+
 
     # Get data from form, add to model if valid
     if request.method == 'POST':
@@ -343,13 +421,17 @@ def add_event(request):
             # Add host
             up = UserProfile.objects.get(user__username=request.user)
             event.host.add(up)
+<<<<<<< HEAD
             event.number_followers = 0
+=======
+>>>>>>> 02d5a596af06be9bef041d8c486bd0cfe8df3a4c
             event.save()
 
             return HttpResponseRedirect(reverse('event_page', args=[event.pk]))
         else:
             print(form.errors)
 
+<<<<<<< HEAD
 
     context_dict = {
         "event_form":form,
@@ -357,6 +439,12 @@ def add_event(request):
         
     }
     
+=======
+    context_dict = {
+        "event_form":form,
+    }
+
+>>>>>>> 02d5a596af06be9bef041d8c486bd0cfe8df3a4c
     return render(request, 'whats_on_dot_com/add_event.html', context_dict)
 
 # PROFILES (profiles list including search etc.)
@@ -388,7 +476,6 @@ def profiles(request):
             sb = data["search"]
             if sb:
                 # Search for usernames and real names
-                # TODO sort of a hack ATM to search for combined fore- and surnames
                 splitted = sb.split(" ")
                 if len(splitted) > 1:
                     user_profiles = user_profiles.filter(forename__icontains=splitted[0]) | user_profiles.filter(surname__icontains=splitted[1])
@@ -476,6 +563,7 @@ def profile_setup(request):
 def interested(request, event_pk):
     up = UserProfile.objects.get(user__username=request.user)
     e = Event.objects.get(pk=event_pk)
+<<<<<<< HEAD
 
     # Toggle following status
     if e.interested.filter(user__username=request.user).exists():
@@ -490,6 +578,22 @@ def interested(request, event_pk):
     # Redirect to where user was coming from
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
+=======
+
+    # Toggle following status
+    if e.interested.filter(user__username=request.user).exists():
+        e.interested.remove(up)
+    else:
+        e.interested.add(up)
+
+    # Update number of followers
+    e.number_followers = e.interested.all().count()
+    e.save()
+
+    # Redirect to where user was coming from
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+>>>>>>> 02d5a596af06be9bef041d8c486bd0cfe8df3a4c
 # FOLLOW (for following or unfollowing a profile)
 @login_required
 def follow(request, username):

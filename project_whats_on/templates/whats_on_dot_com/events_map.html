@@ -1,0 +1,172 @@
+{% extends 'whats_on_dot_com/events_base.html' %}
+{% load staticfiles %}
+{% load whats_on_template_tags %}
+
+{% block title_block %}
+    What's On - Map
+{% endblock %}
+
+{% block toggle_block %}
+<ul class="nav nav-tabs justify-content-end">
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'events' %}">List</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" href="{% url 'events_map' %}">Map</a>
+    </li>
+</ul>
+{% endblock %}
+ 
+{% block events_block %}
+
+    <!-- Insert map here -->
+    <div><select id="locationSelect" style="width: 10%; visibility: hidden"></select></div>
+    <div id="map" style="width: 100%; height: 53%"></div>
+    <script>
+	console.log("Being ran")
+      var map;
+      var markers = [];
+      var infoWindow;
+      var locationSelect;
+	  // delete test variables
+	  var radius = 30;
+	  var counter = 1
+	  var test_string = "Tim"
+	  
+	  console.log("Length of events in view", {{ events|length }})
+	  
+
+        function initMap() {
+		  var locations = [
+			{% for Event in events %}
+
+			//change to a clickable link that takes to event page rather than just text name of event
+			['<p>{{ Event.name }} </p>', '<p>{{ Event.description }} </p>', {{ Event.latitude }}, {{ Event.longitude }}],
+			{% endfor%}
+			];	
+			console.log("Length of map_points variable in template", {{ tag_test|length }});
+
+          var map_centre = {lat: {{focus_lat}}, lng: {{focus_lng}}};
+          map = new google.maps.Map(document.getElementById('map'), {
+            center: map_centre,
+            zoom: 10,
+            mapTypeId: 'roadmap',
+            mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+          });
+          infoWindow = new google.maps.InfoWindow();
+
+          //searchButton = document.getElementById("searchButton").onclick = searchLocations;
+
+          locationSelect = document.getElementById("locationSelect");
+          locationSelect.onchange = function() {
+            var markerNum = locationSelect.options[locationSelect.selectedIndex].value;
+            if (markerNum != "none"){
+              google.maps.event.trigger(markers[markerNum], 'click');
+            }
+          };
+		  
+		  var infowindow = new google.maps.InfoWindow();
+
+    var marker, i;
+
+
+    for (i = 0; i < locations.length; i++) {  
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locations[i][2], locations[i][3]),
+        map: map
+      });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent(locations[i][0] + locations[i][1]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+    }
+        }
+
+       function searchLocations() {
+		 //currently this takes the value in the box created by this script
+		 //need to change form to have 2 search boxes, one for name contains
+		 //and one for area to search
+         var address = document.getElementById("addressInput").value;
+         var geocoder = new google.maps.Geocoder();
+         geocoder.geocode({address: address}, function(results, status) {
+           if (status == google.maps.GeocoderStatus.OK) {
+		   //replace this function call with call to my python script
+            searchLocationsNear(results[0].geometry.location);
+           } else {
+             alert(address + ' not found');
+           }
+         });
+       }
+
+       function clearLocations() {
+         infoWindow.close();
+         for (var i = 0; i < markers.length; i++) {
+           markers[i].setMap(null);
+         }
+         markers.length = 0;
+
+         locationSelect.innerHTML = "";
+         var option = document.createElement("option");
+         option.value = "none";
+         option.innerHTML = "See all results:";
+         locationSelect.appendChild(option);
+       }
+
+       function searchLocationsNear(center) {
+         clearLocations();
+
+         var radius = document.getElementById('radiusSelect').value;
+
+         downloadUrl(searchUrl, function(data) {
+           var xml = parseXml(data);
+           var markerNodes = xml.documentElement.getElementsByTagName("marker");
+           var bounds = new google.maps.LatLngBounds();
+           for (var i = 0; i < markerNodes.length; i++) {
+             var id = markerNodes[i].getAttribute("id");
+             var name = markerNodes[i].getAttribute("name");
+             var address = markerNodes[i].getAttribute("address");
+             var distance = parseFloat(markerNodes[i].getAttribute("distance"));
+             var latlng = new google.maps.LatLng(
+                  parseFloat(markerNodes[i].getAttribute("lat")),
+                  parseFloat(markerNodes[i].getAttribute("lng")));
+
+             createOption(name, distance, i);
+             createMarker(latlng, name, address);
+             bounds.extend(latlng);
+           }
+           map.fitBounds(bounds);
+           locationSelect.style.visibility = "visible";
+           locationSelect.onchange = function() {
+             var markerNum = locationSelect.options[locationSelect.selectedIndex].value;
+             google.maps.event.trigger(markers[markerNum], 'click');
+           };
+         });
+       }
+
+       function createMarker(latlng, name, address) {
+          var html = "<b>" + name + "</b> <br/>" + address;
+          var marker = new google.maps.Marker({
+            map: map,
+            position: latlng
+          });
+          google.maps.event.addListener(marker, 'click', function() {
+            infoWindow.setContent(html);
+            infoWindow.open(map, marker);
+          });
+          markers.push(marker);
+        }
+
+		function workplease(){
+		
+		}
+	   console.log("Got to end")
+  </script>
+  <!-- Think that's all from working maps page -->
+  <!-- Need to add a script call at the bottom of body-->
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDGS0bM93w4YN6uXAWGEoU-H_RwlnfbRk8&callback=initMap">
+    </script>
+{% endblock %}

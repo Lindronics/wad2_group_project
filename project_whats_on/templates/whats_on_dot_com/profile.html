@@ -7,16 +7,81 @@
 
 {% block body_block %}
 
-    <div>
-        <h1> {{profile.user.username}} </h1>
-    </div>
-    <hr/>
-    {{profile.forename}} {{profile.surname}}
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/profiles.css' %}"/>
 
-    <div>
-        {% if user.username == profile.user.username %}
-            <p><a href="{% url 'profile_setup' %}">Change profile values</a></p>
+    <br />
+    <a href="{% url 'profiles' %}">Back to profiles list</a>
+    <hr />
+    <div class="jumbotron">
+        <h1> <span class="badge badge-primary">{{profile.user.username}}</span> {{profile.forename}} {{profile.surname}}</h1>
+        <hr />
+        <br />
+        <div class="row">
+            
+            <div class="col-sm-7">
+                <!-- Description -->
+                <div class="card" >
+                    {% if profile.profile_picture %}
+                        <img class="card-img-top" src="{{profile.profile_picture.url}}"/>
+                    {% endif %}
+                    <div class="card-block">
+                        <div class="card-text">
+                            {{ profile.description }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <!-- Following -->
+                <div class="card" >
+                        <h4 class="card-header">
+                            Friends
+                            {% if this_user %} {% if this_user != profile %}
+                                {% if profile in this_user.follows.all %}
+                                    <a href="{% url 'follow' profile.user.username %}" class="btn btn-danger">Unfriend</a>
+                                {% else %}
+                                    <a href="{% url 'follow' profile.user.username %}" class="btn btn-success">Become friend</a>
+                                {% endif %}
+                            {% endif %} {% endif %}
+                        </h4>
+                        <div class="card-block">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Picture</th>
+                                            <th>Name</th>
+                                            <th>Username</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for p in profile.follows.all %} 
+                                            <tr>
+                                                <td>
+                                                    {% if p.profile_picture %}
+                                                        <img class="profile_picture_small" src="{{p.profile_picture.url}}"/>
+                                                    {% else %}
+                                                        <img class="profile_picture_small" src="{% static 'avatar.png' %}"/>
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{p.forename}} {{p.surname}}</td>
+                                                <td><h5><a href="{% url 'profile' p.user.username %}"><span class="badge badge-primary">{{p.user.username}}</span></a><h5></td>
+                                            </tr> 
+                                        {% endfor %} 
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <br />
+            <p><a href="{% url 'events' profile.user.username %}" type="button" class="btn btn-primary">Events this profile is hosting</a></p>
+        <br />
+        {% if profile == this_user %}
+            <p><a href="{% url 'profile_setup' %}" type="button" class="btn btn-primary">Change profile information</a></p>
         {% endif %}
-    </div>
+    </div>        
     
 {% endblock %}

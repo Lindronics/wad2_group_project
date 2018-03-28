@@ -17,7 +17,7 @@
 
 
     <div class="container">
-        <form role="form" method="post" action="." class="form-sigin"> 
+        <form role="form" method="post" action="." class="form-sigin" id="UserProfileRegistrationForm" enctype="multipart/form-data"> 
             {% csrf_token %}
             <h2 class="form-signin-heading">Register</h2>
             <div class="form-group">
@@ -36,6 +36,22 @@
                     <label class="required" for="id_password2"> Password confirmation:</label>
                     <input class="form-control" id="id_password2" name="password2" type="password"/>
                     <span class="helptext"> Enter the same password as before, for verification. </span>
+                </p>
+                <p class="required">
+                    <label class="required" for="id_forename"> Forename</label>
+                    <input class="form-control" id="id_forename" name="forename" type="text"/>
+                </p>
+                <p class="required">
+                    <label class="required" for="id_surname"> Surname</label>
+                    <input class="form-control" id="id_surname" name="surname" type="text"/>
+                </p>
+                <p>
+                    <label for="id_description"> Description</label>
+                    <textarea class="form-control" id="id_description" name="description" rows="5"></textarea>
+                </p>
+                <p>
+                    <label for="id_profile_picture"> Profile picture</label>
+                    <input class="form-control-file" id="id_profile_picture" name="profile_picture" type="file"/>
                 </p>
             </div>
             <button type="submit" class="btn btn-lg btn-primary btn-block">Submit</button>

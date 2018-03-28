@@ -4,11 +4,16 @@ from whats_on_dot_com import views
 
 
 urlpatterns = [
-    url(r"^event/add$", views.add_event, name="add_event"),
+    url(r"^events/$", views.events, name="events"),
+    url(r"^events/query/(?P<query>[\w\ ]+)$", views.events, name="events"),
+    url(r"^events/add$", views.add_event, name="add_event"),
+    url(r"^events/details/(?P<event_pk>[\w\-]+)$", views.event_page, name="event_page"),
+    url(r"^events/details/(?P<event_pk>[\w\-]+)/interested$", views.interested, name="interested"),
+    url(r"^about$", views.about, name="about"),
     url(r"^profiles$", views.profiles, name="profiles"),
-    url(r"^profile/(?P<username>[\w\-]+)$", views.profile, name="profile"),
-    url(r"^profile/setup$", views.profile_setup, name="profile_setup"),
-    url(r"^events$", views.events, name="events"),
-    url(r"^events/(?P<event_pk>[\w\-]+)$", views.event_page, name="event_page"),
-    url(r"^$", views.index, name="index"),  # Provide a redirect to the events page: <hostname>/ maps to <hostname>/events
+    url(r"^profiles/details/(?P<username>[\w\-]+)$", views.profile, name="profile"),
+    url(r"^profiles/details/(?P<username>[\w\-]+)/follow$", views.follow, name="follow"),
+    url(r"^profiles/setup$", views.profile_setup, name="profile_setup"),
+    url(r"^map$", views.events_map, name="events_map"),
+	    url(r"^$", views.index, name="index"),  # Provide a redirect to the events page: <hostname>/ maps to <hostname>/events
 ]

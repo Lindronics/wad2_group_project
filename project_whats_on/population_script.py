@@ -1,5 +1,5 @@
 # Populate local database with sample data
-from datetime import datetime
+from datetime import datetime as dt #something is fucky
 import json
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE","project_whats_on.settings")
@@ -63,14 +63,15 @@ def add_user(user):
 
 def add_event(event):
     # This will throw a RuntimeWarning during population, which can be ignored for now.
-    time = datetime.now()
+    time = "2018-9-15 12:30"
     e = Event.objects.get_or_create(name=event["name"], date_time=time, category=Category.objects.get(name=event["category"]))[0]
     e.description = event["description"]
     e.address = event["address"]
     e.location_info = event["location_info"]
-    e.city = event["city"]
-    e.post_code = event["post_code"]
+    e.latitude = event["latitude"]
+    e.longitude = event["longitude"]
     e.number_followers = event["number_followers"]
+    e.event_picture = "event_images/" + event["event_picture"]
     for host in event["hosts"]: 
         e.host.add(UserProfile.objects.get(user__username=host["username"]))
     for tag in event["tags"]:

@@ -18,12 +18,15 @@ What's On - Profiles
 <!-- Custom CSS -->
 <link rel="stylesheet" type="text/css" href="{% static 'css/profiles.css' %}"/>
 
-    <h1>Profiles</h1>
-    {% if profiles %}
+    <h1 id="profiles_header">Profiles</h1>
+    <hr />
         <form lass="form-signin" role="form" method="POST" action="" id="filter_profiles_form">
             {% csrf_token %}
             <div id="filter_menu">
                 <div class="input-group">
+                    <span class="input-group-btn">
+                        <a href="{% url 'profiles' %}" class="btn btn-primary" type="button">All profiles</a>
+                    </span>
                     <!-- People filter -->
                     <div class="input-group-btn">
                         <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -37,10 +40,8 @@ What's On - Profiles
                                     </div>
                                 {% endfor %}
                             {% else %}
-                                No people options available.
+                                No people filters available.
                             {% endif %}
-                            <div role="separator" class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Remove filter</a>
                         </div>
                     </div>
                     <!-- Search bar -->                       
@@ -52,22 +53,30 @@ What's On - Profiles
             </div>
         </form>
 
+    {% if profiles %}
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Username</th>
+                        <th>Picture</th>
                         <th>Name</th>
                         <th>Description</th>
+                        <th>Username</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for p in profiles %} 
                         <tr>
-                            <td>{{p.user.username}}</td>
+                            <td>
+                                {% if p.profile_picture %}
+                                    <img class="profile_picture" src="{{p.profile_picture.url}}"/>
+                                {% else %}
+                                    <img class="profile_picture" src="{% static 'avatar.png' %}"/>
+                                {% endif %}
+                            </td>
                             <td>{{p.forename}} {{p.surname}}</td>
                             <td>{{p.description}}</td>
-                            <td><a href="{% url 'profile' p.user.username %}">Details</a></td>
+                            <td><h5><a href="{% url 'profile' p.user.username %}"><span class="badge badge-primary">{{p.user.username}}</span></a></h5></td>
                         </tr> 
                     {% endfor %} 
                 </tbody>

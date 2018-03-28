@@ -43,3 +43,12 @@
     margin-top: 10px;
     font-size: 50pt;
   }
+
+  .input-group-btn{
+    z-index: 2;
+  }
+
+  .card-img-top{
+    width: 100%; 
+    height: auto;
+  }
