@@ -163,3 +163,9 @@ class ProfileSetupForm(forms.ModelForm):
         model = UserProfile 
         fields = ("forename", "surname", "description", "profile_picture")
 
+# Register new account (extends django registration redux)
+class UserProfileRegistrationForm(RegistrationForm):
+    forename = forms.CharField()
+    surname = forms.CharField()
+    description = forms.CharField(required=False)
+    profile_picture = forms.ImageField(required=False)
