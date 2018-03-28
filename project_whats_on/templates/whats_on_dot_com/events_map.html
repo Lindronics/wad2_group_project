@@ -1,6 +1,6 @@
 {% extends 'whats_on_dot_com/events_base.html' %}
 {% load staticfiles %}
-{% load whats_on_template_tags %}
+
 
 {% block title_block %}
     What's On - Map
@@ -40,7 +40,8 @@
 			{% endfor%}
 			];	
 			console.log("Length of map_points variable in template", {{ tag_test|length }});
-
+		
+		//centre the map and zoom in to the specified location
           var map_centre = {lat: {{focus_lat}}, lng: {{focus_lng}}};
           map = new google.maps.Map(document.getElementById('map'), {
             center: map_centre,
@@ -50,21 +51,12 @@
           });
           infoWindow = new google.maps.InfoWindow();
 
-          //searchButton = document.getElementById("searchButton").onclick = searchLocations;
-
-          locationSelect = document.getElementById("locationSelect");
-          locationSelect.onchange = function() {
-            var markerNum = locationSelect.options[locationSelect.selectedIndex].value;
-            if (markerNum != "none"){
-              google.maps.event.trigger(markers[markerNum], 'click');
-            }
-          };
 		  
 		  var infowindow = new google.maps.InfoWindow();
 
     var marker, i;
 
-
+	// create map markers from the locations and populate the map
     for (i = 0; i < locations.length; i++) {  
       marker = new google.maps.Marker({
         position: new google.maps.LatLng(locations[i][2], locations[i][3]),
